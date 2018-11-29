@@ -1,6 +1,6 @@
 CrewChat is a chat plugin developed for the Crew Craft Server.
 
-Features:
+**Features**
  - General chat
  - Chat channels
  - Permissions
@@ -9,13 +9,15 @@ Features:
  - Player info/status messages
  - DiscordSRV integration
 
-Commands:
+**Commands**
+
+CrewChat:
  - `/crewchat` - Shows version
  - `/crewchat reload` - Reloads plugin
  - `/crewchat help` - Shows CrewChat command help
  - Alias: `/cc`
  
- 
+ Chat:
  - `/chat info` - Shows channel list, active channel and subscribed channels
  - `/chat info channel <channel>` - Shows channel name, nickname and color
  - `/chat status <status>` - Sets player status message
@@ -24,19 +26,18 @@ Commands:
  - `/chat switch <channel>` - Switches player's active channel
  - Alias: `/c`
  
- 
+ Me:
  - `/me <message>` - Sends third person chat message
  
- 
+ Msg:
  - `/msg <player> <message>` - Sends a private message to a player
  - Alias: `/tell`, `/whisper`, `/w`
  
- 
+ Reply:
  - `/reply <message>` - Replies to the last received private message.
  - Alias: `/r`
  
- 
-Permissions:
+**Permissions**
  - `crewchat.use` - Allows player to use `/crewchat`
  - `crewchat.chat` - Allows player to use `/chat`
  - `crewchat.me` - Allows player to use `/me`
