@@ -22,7 +22,7 @@ public class CrewChatCommand implements CommandExecutor {
 
         if (strings.length == 0) {
             if (commandSender instanceof Player) {
-                Messages.crewChatBaseCommand().send(commandSender);
+                commandSender.spigot().sendMessage(Messages.crewChatBaseCommand());
             }
             else CrewChat.getInstance().getLogger().info("Version "
                     + Bukkit.getPluginManager().getPlugin("CrewChat").getDescription().getVersion()
@@ -36,9 +36,10 @@ public class CrewChatCommand implements CommandExecutor {
                     channelManager.reloadChannels();
                     playerManager.reloadPlayers();
 
-                    Messages.configReloaded().send(commandSender);
+                    commandSender.spigot().sendMessage(Messages.configReloaded());
                 }
-                else Messages.noPermission().send(commandSender);
+                else commandSender.spigot().sendMessage(Messages.noPermission());
+
             }
             else {
                 configManager.reloadAllConfigs();
@@ -51,9 +52,9 @@ public class CrewChatCommand implements CommandExecutor {
         else if (strings[0].equalsIgnoreCase("help")) {
             if (commandSender instanceof Player) {
                 if (commandSender.hasPermission("crewchat.help")) {
-                    Messages.crewChatHelpCommand().send(commandSender);
+                    commandSender.spigot().sendMessage(Messages.crewChatHelpCommand());
                 }
-                else Messages.noPermission().send(commandSender);
+                else commandSender.spigot().sendMessage(Messages.noPermission());
             }
             else CrewChat.getInstance().getLogger().info("Command Help:\n"
                     + "Alias: /cc <args>\n"

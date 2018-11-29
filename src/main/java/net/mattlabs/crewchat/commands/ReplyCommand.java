@@ -23,23 +23,25 @@ public class ReplyCommand implements CommandExecutor {
         else {
             if (msgManager.playerExists(((Player) commandSender).getDisplayName())) {
                 if (Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getDisplayName())) == null)
-                    Messages.playerNoExist().send(commandSender);
+                    commandSender.spigot().sendMessage(Messages.playerNoExist());
                 else {
                     String message = String.join(" ", strings);
                     Player recipient = Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getDisplayName()));
                     msgManager.updatePlayer(recipient.getDisplayName(), ((Player) commandSender).getDisplayName());
-                    Messages.privateMessageSend(chat.getPlayerPrefix((Player) commandSender),
+                    commandSender.spigot().sendMessage(Messages.privateMessageSend(
+                            chat.getPlayerPrefix((Player) commandSender),
                             chat.getPlayerPrefix(recipient), recipient.getDisplayName(),
                             playerManager.getStatus((Player) commandSender),
-                            playerManager.getStatus(recipient), message).send(commandSender);
-                    Messages.privateMessageReceive(chat.getPlayerPrefix((Player) commandSender),
+                            playerManager.getStatus(recipient), message));
+                    recipient.spigot().sendMessage(Messages.privateMessageReceive(
+                            chat.getPlayerPrefix((Player) commandSender),
                             chat.getPlayerPrefix(recipient),
                             ((Player) commandSender).getDisplayName(),
                             playerManager.getStatus((Player) commandSender),
-                            playerManager.getStatus(recipient), message).send(recipient);
+                            playerManager.getStatus(recipient), message));
                 }
             }
-            else Messages.noPMReceived().send(commandSender);
+            else commandSender.spigot().sendMessage(Messages.noPMReceived());
         }
         return true;
     }

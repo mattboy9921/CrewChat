@@ -24,24 +24,26 @@ public class MsgCommand implements CommandExecutor {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             if (((Player) commandSender).getDisplayName().equalsIgnoreCase(strings[0])) {
-                Messages.cantMessageSelf().send(commandSender);
+                commandSender.spigot().sendMessage(Messages.cantMessageSelf());
             }
             else if (Bukkit.getPlayer(strings[0]) == null)
-                Messages.playerNoExist().send(commandSender);
+                commandSender.spigot().sendMessage(Messages.playerNoExist());
             else {
                 Player recipient = Bukkit.getPlayer(strings[0]);
                 String[] message    = Arrays.copyOfRange(strings, 1, strings.length);
                 String messageStr = String.join(" ", message);
                 msgManager.updatePlayer(strings[0], ((Player) commandSender).getName());
-                Messages.privateMessageSend(chat.getPlayerPrefix((Player) commandSender),
-                                            chat.getPlayerPrefix(recipient), strings[0],
-                                            playerManager.getStatus((Player) commandSender),
-                                            playerManager.getStatus(recipient), messageStr).send(commandSender);
-                Messages.privateMessageReceive(chat.getPlayerPrefix((Player) commandSender),
-                                            chat.getPlayerPrefix(recipient),
-                                            ((Player) commandSender).getName(),
-                                            playerManager.getStatus((Player) commandSender),
-                                            playerManager.getStatus(recipient), messageStr).send(recipient);
+                commandSender.spigot().sendMessage(Messages.privateMessageSend(
+                        chat.getPlayerPrefix((Player) commandSender),
+                        chat.getPlayerPrefix(recipient), strings[0],
+                        playerManager.getStatus((Player) commandSender),
+                        playerManager.getStatus(recipient), messageStr));
+                recipient.spigot().sendMessage(Messages.privateMessageReceive(
+                        chat.getPlayerPrefix((Player) commandSender),
+                        chat.getPlayerPrefix(recipient),
+                        ((Player) commandSender).getName(),
+                        playerManager.getStatus((Player) commandSender),
+                        playerManager.getStatus(recipient), messageStr));
             }
         }
         return true;

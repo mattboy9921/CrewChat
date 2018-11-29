@@ -25,16 +25,16 @@ public class ChatCommand implements CommandExecutor{
             if (strings.length == 1) {
                 if (commandSender instanceof Player) {
                     if (commandSender.hasPermission("crewchat.chat.info")) {
-                        Messages.channelListHeader().send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.channelListHeader());
                         for (Channel channel : channelManager.getChannels())
-                            Messages.channelListEntry(channel.getName(), channel.getChatColor()).send(commandSender);
-                        Messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
-                                channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)).getChatColor()).send(commandSender);
-                        Messages.channelListSubscribedHeader().send(commandSender);
+                            commandSender.spigot().sendMessage(Messages.channelListEntry(channel.getName(), channel.getChatColor()));
+                        commandSender.spigot().sendMessage(Messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
+                                channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)).getChatColor()));
+                        commandSender.spigot().sendMessage(Messages.channelListSubscribedHeader());
                         for (String channel : playerManager.getSubscribedChannels((Player) commandSender))
-                            Messages.channelListEntry(channel, channelManager.channelFromString(channel).getChatColor()).send(commandSender);
+                            commandSender.spigot().sendMessage(Messages.channelListEntry(channel, channelManager.channelFromString(channel).getChatColor()));
                     }
-                    else Messages.noPermission().send(commandSender);
+                    else commandSender.spigot().sendMessage(Messages.noPermission());
                 }
                 else {
                     CrewChat.getInstance().getLogger().info("Channel list: (Run /chat info channel [channel] for more info)");
@@ -51,12 +51,12 @@ public class ChatCommand implements CommandExecutor{
                 if (requestedChannel != null) {
                     if (commandSender instanceof Player) {
                         if (commandSender.hasPermission("crewchat.chat.info.channel")) {
-                            Messages.channelInfo(requestedChannel.getName(),
+                            commandSender.spigot().sendMessage(Messages.channelInfo(requestedChannel.getName(),
                                     requestedChannel.getNickname(),
                                     requestedChannel.getChatColor().name(),
-                                    requestedChannel.getChatColor()).send(commandSender);
+                                    requestedChannel.getChatColor()));
                         }
-                        else Messages.noPermission().send(commandSender);
+                        else commandSender.spigot().sendMessage(Messages.noPermission());
                     }
                     else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
                             + " info: " +
@@ -67,9 +67,9 @@ public class ChatCommand implements CommandExecutor{
                 } else {
                     if (commandSender instanceof Player) {
                         if (commandSender.hasPermission("crewchat.chat.info.channel")) {
-                            Messages.channelNoExist(strings[2]).send(commandSender);
+                            commandSender.spigot().sendMessage(Messages.channelNoExist(strings[2]));
                         }
-                        else Messages.noPermission().send(commandSender);
+                        else commandSender.spigot().sendMessage(Messages.noPermission());
                     }
                     else CrewChat.getInstance().getLogger().info("Channel " + strings[2] + " doesn't exist!");
                 }
@@ -83,9 +83,9 @@ public class ChatCommand implements CommandExecutor{
                     String   statusStr = String.join(" ", status);
                     Player player = (Player) commandSender;
                     playerManager.setStatus(player, statusStr);
-                    Messages.statusSet(statusStr).send(commandSender);
+                    commandSender.spigot().sendMessage(Messages.statusSet(statusStr));
                 }
-                else Messages.noPermission().send(commandSender);
+                else commandSender.spigot().sendMessage(Messages.noPermission());
             }
 
         }
@@ -98,18 +98,18 @@ public class ChatCommand implements CommandExecutor{
                 else if (channelManager.channelFromNickname(strings[1]) != null)
                     channelName = channelManager.channelFromNickname(strings[1]).getName();
                 else {
-                    Messages.channelNoExist(strings[1]).send(commandSender);
+                    commandSender.spigot().sendMessage(Messages.channelNoExist(strings[1]));
                     return true;
                 }
                 if (commandSender.hasPermission("crewchat.chat.subscribe." + channelName)) {
                     if (playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        Messages.alreadySubscribed(channelName).send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.alreadySubscribed(channelName));
                     else {
                         playerManager.addSubscription((Player) commandSender, channelName);
-                        Messages.nowSubscribed(channelName).send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.nowSubscribed(channelName));
                     }
                 }
-                else Messages.cantSubscribe(channelName).send(commandSender);
+                else commandSender.spigot().sendMessage(Messages.cantSubscribe(channelName));
             }
         }
         else if (strings[0].equalsIgnoreCase("unsubscribe")) {
@@ -121,21 +121,21 @@ public class ChatCommand implements CommandExecutor{
                 else if (channelManager.channelFromNickname(strings[1]) != null)
                     channelName = channelManager.channelFromNickname(strings[1]).getName();
                 else {
-                    Messages.channelNoExist(strings[1]).send(commandSender);
+                    commandSender.spigot().sendMessage(Messages.channelNoExist(strings[1]));
                     return true;
                 }
                 if (commandSender.hasPermission("crewchat.chat.unsubscribe." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        Messages.notSubscribed(channelName).send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.notSubscribed(channelName));
                     else if (channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender))
                             .equals(channelManager.channelFromString(channelName)))
-                        Messages.cantUnsubscribeActive(channelName).send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.cantUnsubscribeActive(channelName));
                     else {
                         playerManager.removeSubscription((Player) commandSender, channelName);
-                        Messages.nowUnsubscribed(channelName).send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.nowUnsubscribed(channelName));
                     }
                 }
-                else Messages.cantUnsubscribe(strings[1]).send(commandSender);
+                else commandSender.spigot().sendMessage(Messages.cantUnsubscribe(strings[1]));
             }
         }
         else if (strings[0].equalsIgnoreCase("switch")) {
@@ -147,18 +147,18 @@ public class ChatCommand implements CommandExecutor{
                 else if (channelManager.channelFromNickname(strings[1]) != null)
                     channelName = channelManager.channelFromNickname(strings[1]).getName();
                 else {
-                    Messages.channelNoExist(strings[1]).send(commandSender);
+                    commandSender.spigot().sendMessage(Messages.channelNoExist(strings[1]));
                     return true;
                 }
                 if (commandSender.hasPermission("crewchat.chat.switch." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        Messages.notSubscribed(channelName).send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.notSubscribed(channelName));
                     else {
                         playerManager.setActiveChannel((Player) commandSender, channelName);
-                        Messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getChatColor()).send(commandSender);
+                        commandSender.spigot().sendMessage(Messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getChatColor()));
                     }
                 }
-                else Messages.cantSetActive(channelName).send(commandSender);
+                else commandSender.spigot().sendMessage(Messages.cantSetActive(channelName));
             }
         }
         else return false;

@@ -1,10 +1,14 @@
 package net.mattlabs.crewchat.messaging;
 
-import mkremins.fanciful.FancyMessage;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
-import static org.bukkit.ChatColor.*;
+import static net.md_5.bungee.api.ChatColor.*;
+
 
 public class Messages {
 
@@ -12,432 +16,508 @@ public class Messages {
 
     }
 
-    public static FancyMessage configReloaded() {
+    public static BaseComponent[] configReloaded() {
         // &7[&2CrewChat&7] &fConfiguration reloaded.
-        return new FancyMessage("[")
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("CrewChat")
+                .append("CrewChat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Configuration reloaded.")
-                    .color(WHITE);
+                .append("Configuration reloaded.")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage channelInfo(String name, String nick, String colorS, ChatColor color) {
+    public static BaseComponent[] channelInfo(String name, String nick, String colorS, ChatColor color) {
         // &7[&2Chat&7] &fChannel &l%name%&r info:
         // &2- &fName: %name%
         // &2- &fNickname: %nick%
         // &2- &fChat Color: %color%
         // &2- &fAuto Subscribe: %autosus%
-        return new FancyMessage("[")
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Channel ")
+                .append("Channel ")
                     .color(WHITE)
-                .then(name)
+                .append(name)
                     .color(WHITE)
-                    .style(BOLD)
-                .then(" info:")
+                    .bold(true)
+                .append(" info:")
+                    .reset()
                     .color(WHITE)
-                .then("\n - ")
+                .append("\n - ")
                     .color(DARK_GREEN)
-                .then("Name: " + name)
+                .append("Name: " + name)
                     .color(WHITE)
-                .then("\n - ")
+                .append("\n - ")
                     .color(DARK_GREEN)
-                .then("Nickname: " + nick)
+                .append("Nickname: " + nick)
                     .color(WHITE)
-                .then("\n - ")
+                .append("\n - ")
                     .color(DARK_GREEN)
-                .then("Color: ")
+                .append("Color: ")
                     .color(WHITE)
-                .then(colorS)
-                    .color(color);
+                .append(colorS)
+                    .color(color)
+                .create();
     }
 
-    public static FancyMessage channelNoExist(String name) {
+    public static BaseComponent[] channelNoExist(String name) {
         // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
-        return new FancyMessage("[")
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Channel ")
+                .append("Channel ")
                     .color(WHITE)
-                .then(name)
+                .append(name)
                     .color(WHITE)
-                    .style(BOLD)
-                .then(" doesn't exist!")
-                    .color(WHITE);
+                    .bold(true)
+                .append(" doesn't exist!")
+                    .reset()
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage noPermission() {
+    public static BaseComponent[] noPermission() {
         // I'm sorry but you do not have permission to perform this
         //  command. Please contact the server administrators if you
         //  believe that this is in error.
-        return new FancyMessage("I'm sorry but you do not have permission to perform this")
+        return new ComponentBuilder("I'm sorry but you do not have permission to perform this")
                     .color(RED)
-                .then("\n command. Please contact the server administrators if you")
+                .append("\n command. Please contact the server administrators if you")
                     .color(RED)
-                .then("\n believe that this is in error.")
-                    .color(RED);
+                .append("\n believe that this is in error.")
+                    .color(RED)
+                .create();
     }
 
-    public static String chatMessage(String prefix, String playerName, String status, String message, String activeChannel, ChatColor chatColor) {
+    public static BaseComponent[] chatMessage(String prefix, String playerName, String status, String message, String activeChannel, ChatColor chatColor) {
         // %prefix%%playerName%: %message%
-        return new FancyMessage(prefix + playerName)
-                    .tooltip("Status: " + status + "\nChannel: " + chatColorTranslator(chatColor) + activeChannel)
-                    .suggest("/msg " + playerName + " ")
-                .then(": ")
+        return new ComponentBuilder(prefix + playerName)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Status: " + status + "\nChannel: " + chatColorTranslator(chatColor) + activeChannel)
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + playerName + " "))
+                .append(": ")
                     .color(GRAY)
-                .then(message)
+                .append(message)
                     .color(chatColor)
-                .toJSONString();
+                .create();
     }
 
-    public static FancyMessage privateMessageSend(String senderPrefix, String recipientPrefix, String recipientName,
+    public static BaseComponent[] privateMessageSend(String senderPrefix, String recipientPrefix, String recipientName,
                                                   String senderStatus, String recipientStatus, String message) {
         // &7[%senderPrefix%me &7-> %recipientPrefix%%recipientName%&7] &r%message%
-        return new FancyMessage("[")
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then(colorize(senderPrefix) + "Me")
-                    .tooltip(senderStatus)
-                .then(" -> ")
+                .append(colorize(senderPrefix) + "Me")
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder(senderStatus).create()))
+                .append(" -> ")
                     .color(GRAY)
-                .then(colorize(recipientPrefix) + recipientName)
-                    .tooltip(recipientStatus)
-                    .suggest("/msg " + recipientName + " ")
-                .then("] ")
+                .append(colorize(recipientPrefix) + recipientName)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder(recipientStatus).create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + recipientName + " "))
+                .append("] ")
                     .color(GRAY)
-                .then(message)
+                .append(message)
                     .color(WHITE)
-                    .tooltip(colorize("&b&lClick&r this message to reply."))
-                    .suggest("/r ");
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                        .color(AQUA)
+                                        .bold(true)
+                                    .append(" this message to reply.")
+                                        .reset()
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/r "))
+                .create();
     }
 
-    public static FancyMessage privateMessageReceive(String senderPrefix, String recipientPrefix, String senderName,
+    public static BaseComponent[] privateMessageReceive(String senderPrefix, String recipientPrefix, String senderName,
                                                   String senderStatus, String recipientStatus, String message) {
         // &7[%senderPrefix%%senderName% &7-> %recipientPrefix%Me&7] &r%message%
-        return new FancyMessage("[")
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then(colorize(senderPrefix) + senderName)
-                    .tooltip(senderStatus)
-                    .suggest("/msg " + senderName + " ")
-                .then(" -> ")
+                .append(colorize(senderPrefix) + senderName)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder(senderStatus).create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + senderName + " "))
+                .append(" -> ")
                     .color(GRAY)
-                .then(colorize(recipientPrefix) + "Me")
-                    .tooltip(recipientStatus)
-                .then("] ")
+                .append(colorize(recipientPrefix) + "Me")
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder(recipientStatus).create()))
+                .append("] ")
                     .color(GRAY)
-                .then(message)
+                .append(message)
                     .color(WHITE)
-                    .tooltip(colorize("&b&lClick&r this message to reply."))
-                    .suggest("/r ");
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                        .color(AQUA)
+                                        .bold(true)
+                                    .append(" this message to reply.")
+                                        .reset()
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/r "))
+                .create();
     }
 
-    public static FancyMessage meMessage(String playerName, String message, ChatColor chatColor) {
+    public static BaseComponent[] meMessage(String playerName, String message, ChatColor chatColor) {
         // * %playerName% %message% *
-        return new FancyMessage("* ")
+        return new ComponentBuilder("* ")
                     .color(chatColor)
-                .then(playerName)
+                .append(playerName)
                     .color(chatColor)
-                .then(" ")
-                .then(message)
+                .append(" ")
+                .append(message)
                     .color(chatColor)
-                .then(" *")
-                    .color(chatColor);
+                .append(" *")
+                    .color(chatColor)
+                .create();
     }
 
-    public static FancyMessage crewChatBaseCommand() {
-        return new FancyMessage("[")
+    public static BaseComponent[] crewChatBaseCommand() {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("CrewChat")
+                .append("CrewChat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Version " + Bukkit.getPluginManager().getPlugin("CrewChat").getDescription().getVersion())
+                .append("Version " + Bukkit.getPluginManager().getPlugin("CrewChat").getDescription().getVersion())
                     .color(WHITE)
-                .then(". For help, click ")
+                .append(". For help, click ")
                     .color(WHITE)
-                .then("[Help]")
+                .append("[Help]")
                     .color(BLUE)
-                    .style(BOLD)
-                    .tooltip("§b§lClick§r here for help.")
-                    .suggest("/crewchat help");
+                    .bold(true)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                        .color(AQUA)
+                                        .bold(true)
+                                    .append(" here for help.")
+                                        .reset()
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/crewchat help"))
+                .create();
     }
 
-    public static FancyMessage crewChatHelpCommand() {
-        return new FancyMessage("[")
+    public static BaseComponent[] crewChatHelpCommand() {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("CrewChat")
+                .append("CrewChat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Command Help:\n")
+                .append("Command Help:\n")
                     .color(WHITE)
-                .then(" - Alias: /cc <args> - (Click to run) -\n")
+                .append(" - Alias: /cc <args> - (Click to run) -\n")
                     .color(GRAY)
-                .then("/crewchat")
+                .append("/crewchat")
                     .color(DARK_GREEN)
-                    .tooltip("§b§lClick§r to run.")
-                    .suggest("/crewchat")
-                .then(" - ")
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                        .color(AQUA)
+                                        .bold(true)
+                                    .append(" to run.")
+                                        .reset()
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/crewchat"))
+                .append(" - ")
                     .color(GRAY)
-                .then("Base CrewChat command.\n")
+                .append("Base CrewChat command.\n")
                     .color(WHITE)
-                .then("/crewchat help")
+                .append("/crewchat help")
                     .color(DARK_GREEN)
-                    .tooltip("§b§lClick§r to run.")
-                    .suggest("/crewchat help")
-                .then(" - ")
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                        .color(AQUA)
+                                        .bold(true)
+                                    .append(" to run.")
+                                        .reset()
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/crewchat help"))
+                .append(" - ")
                     .color(GRAY)
-                .then("Shows this screen.\n")
+                .append("Shows this screen.\n")
                     .color(WHITE)
-                .then("/crewchat reload")
+                .append("/crewchat reload")
                     .color(DARK_GREEN)
-                    .tooltip("§b§lClick§r to run.")
-                    .suggest("/crewchat reload")
-                .then(" - ")
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                        .color(AQUA)
+                                        .bold(true)
+                                    .append(" to run")
+                                        .reset()
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/crewchat reload"))
+                .append(" - ")
                     .color(GRAY)
-                .then("Reload CrewChat configuration files.")
-                    .color(WHITE);
+                .append("Reload CrewChat configuration files.")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage channelListHeader() {
-        return new FancyMessage("------------------------")
+    public static BaseComponent[] channelListHeader() {
+        return new ComponentBuilder("------------------------")
                     .color(GRAY)
-                .then("[")
+                .append("[")
                     .color(DARK_GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("]")
+                .append("]")
                     .color(DARK_GRAY)
-                .then("------------------------\n")
+                .append("------------------------\n")
                     .color(GRAY)
-                .then("Channel List: (Click for more info)")
-                    .color(GRAY);
+                .append("Channel List: (Click for more info)")
+                    .color(GRAY)
+                .create();
     }
 
-    public static FancyMessage channelListEntry(String name, ChatColor chatColor) {
-        return new FancyMessage(" - ")
+    public static BaseComponent[] channelListEntry(String name, ChatColor chatColor) {
+        return new ComponentBuilder(" - ")
                     .color(DARK_GREEN)
-                .then(name)
+                .append(name)
                     .color(chatColor)
-                    .style(BOLD)
-                    .tooltip("§b§lClick§r for more info.")
-                    .suggest("/chat info channel " + name);
+                    .bold(true)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                        .color(AQUA)
+                                        .bold(true)
+                                    .append(" for more info.")
+                                        .reset()
+                                    .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/chat info channel " + name))
+                .create();
     }
 
-    public static FancyMessage channelListActive(String name, ChatColor chatColor) {
-        return new FancyMessage("Your active channel is: ")
+    public static BaseComponent[] channelListActive(String name, ChatColor chatColor) {
+        return new ComponentBuilder("Your active channel is: ")
                     .color(GRAY)
-                .then(name)
+                .append(name)
                     .color(chatColor)
-                    .style(BOLD)
-                .then(".")
-                    .color(GRAY);
-    }
-
-    public static FancyMessage channelListSubscribedHeader() {
-        return new FancyMessage("Your subscribed channels are:")
-                    .color(GRAY);
-    }
-
-    public static FancyMessage statusSet(String status) {
-        return new FancyMessage("[")
+                    .bold(true)
+                .append(".")
                     .color(GRAY)
-                .then("Chat")
+                .create();
+    }
+
+    public static BaseComponent[] channelListSubscribedHeader() {
+        return new ComponentBuilder("Your subscribed channels are:")
+                    .color(GRAY)
+                .create();
+    }
+
+    public static BaseComponent[] statusSet(String status) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Your status has been set to: \"")
+                .append("Your status has been set to: \"")
                     .color(WHITE)
-                .then(colorize(status))
+                .append(colorize(status))
                     .color(WHITE)
-                .then("\".")
-                    .color(WHITE);
+                .append("\".")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage alreadySubscribed(String channelName) {
-        return new FancyMessage("[")
+    public static BaseComponent[] alreadySubscribed(String channelName) {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You are already subscribed to ")
+                .append("You are already subscribed to ")
                     .color(WHITE)
-                .then(channelName)
+                .append(channelName)
                     .color(WHITE)
-                    .style(BOLD)
-                .then("!")
-                    .color(WHITE);
+                    .bold(true)
+                .append("!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage nowSubscribed(String channelName) {
-        return new FancyMessage("[")
+    public static BaseComponent[] nowSubscribed(String channelName) {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You are now subscribed to ")
+                .append("You are now subscribed to ")
                     .color(WHITE)
-                .then(channelName)
+                .append(channelName)
                     .color(WHITE)
-                    .style(BOLD)
-                .then("!")
-                    .color(WHITE);
+                    .bold(true)
+                .append("!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage cantSubscribe(String channelName) {
-        return new FancyMessage("[")
+    public static BaseComponent[] cantSubscribe(String channelName) {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You can't subscribe to ")
+                .append("You can't subscribe to ")
                     .color(WHITE)
-                .then(channelName)
+                .append(channelName)
                     .color(WHITE)
-                    .style(BOLD)
-                .then("!")
-                    .color(WHITE);
+                    .bold(true)
+                .append("!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage cantUnsubscribe(String channelName) {
-        return new FancyMessage("[")
+    public static BaseComponent[] cantUnsubscribe(String channelName) {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You can't unsubscribe from ")
+                .append("You can't unsubscribe from ")
                     .color(WHITE)
-                .then(channelName)
+                .append(channelName)
                     .color(WHITE)
-                    .style(BOLD)
-                .then("!")
-                    .color(WHITE);
+                    .bold(true)
+                .append("!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage cantUnsubscribeActive(String channelName) {
-        return new FancyMessage("[")
-                .color(GRAY)
-                .then("Chat")
-                .color(DARK_GREEN)
-                .then("] ")
-                .color(GRAY)
-                .then("You can't unsubscribe from ")
-                .color(WHITE)
-                .then(channelName)
-                .color(WHITE)
-                .style(BOLD)
-                .then(", it is your active channel!")
-                .color(WHITE);
-    }
-
-    public static FancyMessage nowUnsubscribed(String channelName) {
-        return new FancyMessage("[")
+    public static BaseComponent[] cantUnsubscribeActive(String channelName) {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You are no longer subscribed to ")
+                .append("You can't unsubscribe from ")
                     .color(WHITE)
-                .then(channelName)
+                .append(channelName)
                     .color(WHITE)
-                    .style(BOLD)
-                .then("!")
-                    .color(WHITE);
+                    .bold(true)
+                .append(", it is your active channel!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage notSubscribed(String channelName) {
-        return new FancyMessage("[")
+    public static BaseComponent[] nowUnsubscribed(String channelName) {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You aren't subscribed to ")
+                .append("You are no longer subscribed to ")
                     .color(WHITE)
-                .then(channelName)
+                .append(channelName)
                     .color(WHITE)
-                    .style(BOLD)
-                .then("!")
-                    .color(WHITE);
+                    .bold(true)
+                .append("!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage newActiveChannel(String channelName, ChatColor chatColor) {
-        return new FancyMessage("[")
+    public static BaseComponent[] notSubscribed(String channelName) {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Your active channel is now ")
+                .append("You aren't subscribed to ")
                     .color(WHITE)
-                .then(channelName)
+                .append(channelName)
+                    .color(WHITE)
+                    .bold(true)
+                .append("!")
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] newActiveChannel(String channelName, ChatColor chatColor) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("Your active channel is now ")
+                    .color(WHITE)
+                .append(channelName)
                     .color(chatColor)
-                    .style(BOLD)
-                .then("!")
-                    .color(WHITE);
-    }
-
-    public static FancyMessage cantSetActive(String channelName) {
-        return new FancyMessage("[")
-                    .color(GRAY)
-                .then("Chat")
-                    .color(DARK_GREEN)
-                .then("] ")
-                    .color(GRAY)
-                .then("You can't set ")
+                    .bold(true)
+                .append("!")
                     .color(WHITE)
-                .then(channelName)
+                .create();
+    }
+
+    public static BaseComponent[] cantSetActive(String channelName) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("You can't set ")
                     .color(WHITE)
-                    .style(BOLD)
-                .then(" as your active channel!")
-                    .color(WHITE);
+                .append(channelName)
+                    .color(WHITE)
+                    .bold(true)
+                .append(" as your active channel!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage cantMessageSelf() {
-        return new FancyMessage("[")
+    public static BaseComponent[] cantMessageSelf() {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You can't send a message to yourself!")
-                    .color(WHITE);
+                .append("You can't send a message to yourself!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage playerNoExist() {
-        return new FancyMessage("[")
+    public static BaseComponent[] playerNoExist() {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("Player doesn't exist!")
-                    .color(WHITE);
+                .append("Player doesn't exist!")
+                    .color(WHITE)
+                .create();
     }
 
-    public static FancyMessage noPMReceived() {
-        return new FancyMessage("[")
+    public static BaseComponent[] noPMReceived() {
+        return new ComponentBuilder("[")
                     .color(GRAY)
-                .then("Chat")
+                .append("Chat")
                     .color(DARK_GREEN)
-                .then("] ")
+                .append("] ")
                     .color(GRAY)
-                .then("You haven't received any messages!")
-                    .color(WHITE);
+                .append("You haven't received any messages!")
+                    .color(WHITE)
+                .create();
     }
 
     public static String colorize(String s){

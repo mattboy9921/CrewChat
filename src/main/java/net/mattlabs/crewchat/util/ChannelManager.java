@@ -2,7 +2,7 @@ package net.mattlabs.crewchat.util;
 
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;

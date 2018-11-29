@@ -37,8 +37,7 @@ public class ChatSender implements Runnable{
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers)
-            //subbedPlayer.spigot()(Messages.chatMessage(prefix, player.getName(), status, message, activeChannel, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
-              Messages.chatMessage(prefix, player.getName(), status, message, activeChannel, channelManager.getChatColor(channelManager.channelFromString(activeChannel))).send(subbedPlayer);
+            subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix, player.getName(), status, message, activeChannel, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
         CrewChat.getInstance().getLogger().info(player.getDisplayName() + ": " + message);
         //DiscordSRV.getPlugin().processChatMessage(player, message, activeChannel, false);
         if (CrewChat.getInstance().getDiscordSRVEnabled())
