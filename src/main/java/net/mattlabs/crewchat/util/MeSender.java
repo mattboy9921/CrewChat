@@ -29,7 +29,7 @@ public class MeSender implements Runnable {
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers)
-            Messages.meMessage(player.getDisplayName(), message, channelManager.getChatColor(channelManager.channelFromString(activeChannel))).send(subbedPlayer);
+            subbedPlayer.spigot().sendMessage(Messages.meMessage(player.getDisplayName(), message, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
         player = null;
         message = null;
         activeChannel = null;
