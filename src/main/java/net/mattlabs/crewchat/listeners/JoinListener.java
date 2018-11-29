@@ -16,6 +16,7 @@ public class JoinListener implements Listener{
 
     private PlayerManager playerManager;
     private ChannelManager channelManager;
+    private boolean configError;
 
     public JoinListener() {
         playerManager = CrewChat.getInstance().getPlayerManager();
@@ -36,12 +37,23 @@ public class JoinListener implements Listener{
             for (Channel channel : channelManager.getChannels()) {
                 if (channel.isAutoSubscribe()) subscribedChannels.add(channel.getName());
             }
-            playerManager.addPlayer(player, activeChannel, subscribedChannels);
-            playerManager.setOnline(player);
+            addPlayer(player, activeChannel, subscribedChannels);
+            if (!configError) playerManager.setOnline(player);
         }
         else {
             playerManager.setOnline(player);
             playerManager.setActiveChannel(player, activeChannel);
+        }
+    }
+
+    private void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) {
+        try {
+            playerManager.addPlayer(player, activeChannel, subscribedChannels);
+            configError = false;
+        }
+        catch (NullPointerException e) {
+            CrewChat.getInstance().getLogger().warning("Player " + player.getName() + " could not be added, check permissions!");
+            configError = true;
         }
     }
 }

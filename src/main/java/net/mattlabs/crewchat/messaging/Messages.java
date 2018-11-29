@@ -520,6 +520,22 @@ public class Messages {
                 .create();
     }
 
+    public static BaseComponent[] badConfig() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("]")
+                    .color(GRAY)
+                .append(" Plugin not configured correctly.")
+                    .reset()
+                .append("\n - ")
+                    .color(DARK_GREEN)
+                .append(" Permissions/configuration error.")
+                    .reset()
+                .create();
+    }
+
     public static String colorize(String s){
         if(s == null) return null;
         return s.replaceAll("&([0-9a-z])", "\u00A7$1");

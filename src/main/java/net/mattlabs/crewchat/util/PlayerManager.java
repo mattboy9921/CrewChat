@@ -45,9 +45,10 @@ public class PlayerManager {
         return false;
     }
 
-    public void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) {
-        if (activeChannel == null) CrewChat.getInstance().getLogger().warning(
-                "Player " + player.getName() + " could not be added, check permissions!");
+    public void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) throws NullPointerException {
+        if (activeChannel == null) {
+            throw new NullPointerException("Bad config/permissions");
+        }
         else {
             CrewChat.getInstance().getLogger().info("Player \"" + player.getName() + "\" data doesn't exist, creating...");
             String status = "No status...";

@@ -20,7 +20,10 @@ public class ChatCommand implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
-        if (strings.length == 0) return false;
+        if (commandSender instanceof Player)
+            if (!playerManager.playerExists((Player) commandSender))
+                commandSender.spigot().sendMessage(Messages.badConfig());
+        else if (strings.length == 0) return false;
         else if (strings[0].equalsIgnoreCase("info")) {
             if (strings.length == 1) {
                 if (commandSender instanceof Player) {
