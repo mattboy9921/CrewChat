@@ -1,0 +1,8 @@
+# CrewChat Configuration
+
+# Channels
+channels:
+  global:
+    nickname: g
+    chatcolor: WHITE
+    autosubscribe: true

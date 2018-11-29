@@ -1,0 +1,44 @@
+name: ${project.artifactId}
+version: ${project.version}
+description: ${project.description}
+author: mattboy9921 (mattboy9921@aim.com)
+main: net.mattlabs.crewchat.CrewChat
+
+commands:
+  crewchat:
+    aliases: [cc]
+    description: CrewChat command(s).
+    usage: '/crewchat [reload|help]'
+    permission: crewchat.use
+  chat:
+    aliases: [c]
+    description: Chat command(s).
+    usage: '/chat [subscribe|unsubscribe|switch|info|status] <args>'
+    permission: crewchat.chat
+  me:
+    description: Speak in third person.
+    usage: '/me [message]'
+    permission: crewchat.me
+  msg:
+    aliases: [tell, whisper, w]
+    description: Private message a player.
+    usage: '/msg [player] [message]'
+    permission: crewchat.pm
+  reply:
+    aliases: [r]
+    description: Reply to last private message.
+    usage: '/reply [message]'
+    permission: crewchat.pm
+permissions:
+  crewchat.subscribe.channel:
+    description: Allows player to subscribe to [channel].
+  crewchat.unsubscribe.channel:
+    description: Allows player to unsubscribe to [channel].
+  crewchat.active.channel:
+    description: Allows player to set [channel] as active channel.
+  crewchat.speak.channel:
+    description: Allows player to speak in [channel].
+  crewchat.reload:
+    description: Allows player to reload configuration.
+  crewchat.chat.info:
+    description: Allows player to run /chat info.
