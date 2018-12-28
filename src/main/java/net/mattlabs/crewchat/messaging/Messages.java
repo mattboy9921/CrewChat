@@ -305,6 +305,7 @@ public class Messages {
                     .color(chatColor)
                     .bold(true)
                 .append(".")
+                    .reset()
                     .color(GRAY)
                 .create();
     }
@@ -344,6 +345,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append("!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -361,6 +363,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append("!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -378,6 +381,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append("!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -395,6 +399,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append("!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -412,6 +417,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append(", it is your active channel!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -429,6 +435,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append("!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -446,6 +453,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append("!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -463,6 +471,7 @@ public class Messages {
                     .color(chatColor)
                     .bold(true)
                 .append("!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
@@ -480,6 +489,7 @@ public class Messages {
                     .color(WHITE)
                     .bold(true)
                 .append(" as your active channel!")
+                    .reset()
                     .color(WHITE)
                 .create();
     }
