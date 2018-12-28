@@ -38,6 +38,11 @@
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
+        <!-- For ACF -->
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
         <!-- For Vault -->
         <repository>
             <id>vault-repo</id>
@@ -61,6 +66,12 @@
             <artifactId>paper-api</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- For ACF -->
+        <dependency>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-paper</artifactId>
+            <version>0.5.0-SNAPSHOT</version>
         </dependency>
         <!-- For Vault -->
         <dependency>
@@ -133,8 +144,15 @@
                 <version>2.3</version>
 
                 <configuration>
-                    <!-- Disable auto generation of dependency-reduced-pom.xml -->
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <!-- ACF -->
+                    <relocations>
+                        <relocation>
+                            <pattern>co.aikar.commands</pattern>
+                            <shadedPattern>net.mattlabs.crewchat.acf</shadedPattern>
+                        </relocation>
+                    </relocations>
+                    <!-- End ACF -->
                 </configuration>
 
                 <!-- Perform shading for package phase -->

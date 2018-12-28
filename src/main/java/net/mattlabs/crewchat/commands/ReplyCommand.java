@@ -1,24 +1,30 @@
 package net.mattlabs.crewchat.commands;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Description;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.MsgManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class ReplyCommand implements CommandExecutor {
+@CommandPermission("crewchat.pm")
+public class ReplyCommand extends BaseCommand {
 
     MsgManager msgManager = CrewChat.getInstance().getMsgManager();
     PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
     Chat chat = CrewChat.getChat();
 
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    @Default
+    @CommandAlias("reply|r")
+    @Description("Replies to last received private message.")
+    public void onDefault(CommandSender commandSender, String[] strings) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             if (msgManager.playerExists(((Player) commandSender).getDisplayName())) {
@@ -43,6 +49,5 @@ public class ReplyCommand implements CommandExecutor {
             }
             else commandSender.spigot().sendMessage(Messages.noPMReceived());
         }
-        return true;
     }
 }

@@ -1,38 +1,41 @@
 package net.mattlabs.crewchat.commands;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.*;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.MsgManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
-public class MsgCommand implements CommandExecutor {
+@CommandPermission("crewchat.pm")
+public class MsgCommand extends BaseCommand {
 
     MsgManager msgManager = CrewChat.getInstance().getMsgManager();
     PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
     Chat chat = CrewChat.getChat();
 
-    @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    @Default
+    @CommandAlias("msg|pm|tell|whisper|w")
+    @CommandCompletion("@players")
+    @Description("Sends a private message to another player.")
+    public void onDefault(CommandSender commandSender, Player player, String[] strings) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             if (((Player) commandSender).getDisplayName().equalsIgnoreCase(strings[0])) {
                 commandSender.spigot().sendMessage(Messages.cantMessageSelf());
             }
-            else if (Bukkit.getPlayer(strings[0]) == null)
+            else if (player == null)
                 commandSender.spigot().sendMessage(Messages.playerNoExist());
             else {
-                Player recipient = Bukkit.getPlayer(strings[0]);
+                Player recipient = player;
                 String[] message    = Arrays.copyOfRange(strings, 1, strings.length);
                 String messageStr = String.join(" ", message);
-                msgManager.updatePlayer(strings[0], ((Player) commandSender).getName());
+                msgManager.updatePlayer(strings[0], commandSender.getName());
                 commandSender.spigot().sendMessage(Messages.privateMessageSend(
                         chat.getPlayerPrefix((Player) commandSender),
                         chat.getPlayerPrefix(recipient), strings[0],
@@ -41,11 +44,10 @@ public class MsgCommand implements CommandExecutor {
                 recipient.spigot().sendMessage(Messages.privateMessageReceive(
                         chat.getPlayerPrefix((Player) commandSender),
                         chat.getPlayerPrefix(recipient),
-                        ((Player) commandSender).getName(),
+                        commandSender.getName(),
                         playerManager.getStatus((Player) commandSender),
                         playerManager.getStatus(recipient), messageStr));
             }
         }
-        return true;
     }
 }

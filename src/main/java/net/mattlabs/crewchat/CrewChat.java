@@ -1,5 +1,6 @@
 package net.mattlabs.crewchat;
 
+import co.aikar.commands.BukkitCommandManager;
 import github.scarsz.discordsrv.DiscordSRV;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
@@ -9,7 +10,6 @@ import net.mattlabs.crewchat.listeners.QuitListener;
 import net.mattlabs.crewchat.util.*;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,17 +26,16 @@ public class CrewChat extends JavaPlugin{
     private static Chat chat = null;
     private static Permission perms = null;
 
-    private CrewChatCommand crewChatCommand;
-    private ChatCommand chatCommand;
-    private MeCommand meCommand;
-    private MsgCommand msgCommand;
-    private ReplyCommand replyCommand;
-
     private DiscordSRVListener discordSRVListener;
     private boolean discordSRVEnabled;
 
+    public BukkitCommandManager bukkitCommandManager;
+
     public void onEnable() {
         instance = this;
+
+        // Register ACF
+        bukkitCommandManager = new BukkitCommandManager(this);
 
         // Vault Check
         if (!hasVault()) {
@@ -92,17 +91,12 @@ public class CrewChat extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
 
-        // Register Commands
-        crewChatCommand = new CrewChatCommand();
-        getCommand("crewchat").setExecutor(crewChatCommand);
-        chatCommand = new ChatCommand();
-        getCommand("chat").setExecutor(chatCommand);
-        meCommand = new MeCommand();
-        getCommand("me").setExecutor(meCommand);
-        msgCommand = new MsgCommand();
-        getCommand("msg").setExecutor(msgCommand);
-        replyCommand = new ReplyCommand();
-        getCommand("reply").setExecutor(replyCommand);
+        // Register Commands with ACF
+        bukkitCommandManager.registerCommand(new CrewChatCommand());
+        bukkitCommandManager.registerCommand(new ChatCommand());
+        bukkitCommandManager.registerCommand(new MeCommand());
+        bukkitCommandManager.registerCommand(new MsgCommand());
+        bukkitCommandManager.registerCommand(new ReplyCommand());
 
         // DiscordSRV Integration
         if (discordSRVEnabled) {
@@ -156,6 +150,10 @@ public class CrewChat extends JavaPlugin{
 
     public static Chat getChat() {
         return chat;
+    }
+
+    public BukkitCommandManager getBukkitCommandManager() {
+        return bukkitCommandManager;
     }
 
     // Vault Helper Methods

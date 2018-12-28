@@ -39,6 +39,12 @@ public class ChannelManager {
         return channels;
     }
 
+    public ArrayList<String> getChannelNames() {
+        ArrayList<String> channelNames = new ArrayList<>();
+        for (Channel channel : channels) channelNames.add(channel.getName());
+        return channelNames;
+    }
+
     public Channel channelFromString(String channelName) {
         Channel channel = new Channel(channelName, null, null, false);
         if (channels.contains(channel)) return channels.get(channels.indexOf(channel));
