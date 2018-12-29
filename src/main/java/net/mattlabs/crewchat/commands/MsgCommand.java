@@ -23,22 +23,21 @@ public class MsgCommand extends BaseCommand {
     @CommandAlias("msg|pm|tell|whisper|w")
     @CommandCompletion("@players")
     @Description("Sends a private message to another player.")
-    public void onDefault(CommandSender commandSender, Player player, String[] strings) {
+    public void onDefault(CommandSender commandSender, Player recipient, String[] strings) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
-            if (((Player) commandSender).getDisplayName().equalsIgnoreCase(strings[0])) {
+            if (((Player) commandSender).getDisplayName().equalsIgnoreCase(recipient.getDisplayName())) {
                 commandSender.spigot().sendMessage(Messages.cantMessageSelf());
             }
-            else if (player == null)
+            else if (recipient == null)
                 commandSender.spigot().sendMessage(Messages.playerNoExist());
             else {
-                Player recipient = player;
-                String[] message    = Arrays.copyOfRange(strings, 1, strings.length);
+                String[] message = Arrays.copyOfRange(strings, 1, strings.length);
                 String messageStr = String.join(" ", message);
-                msgManager.updatePlayer(strings[0], commandSender.getName());
+                msgManager.updatePlayer(recipient.getDisplayName(), commandSender.getName());
                 commandSender.spigot().sendMessage(Messages.privateMessageSend(
                         chat.getPlayerPrefix((Player) commandSender),
-                        chat.getPlayerPrefix(recipient), strings[0],
+                        chat.getPlayerPrefix(recipient), recipient.getDisplayName(),
                         playerManager.getStatus((Player) commandSender),
                         playerManager.getStatus(recipient), messageStr));
                 recipient.spigot().sendMessage(Messages.privateMessageReceive(
