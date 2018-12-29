@@ -6,6 +6,7 @@ CrewChat is a chat plugin developed for the Crew Craft Server.
  - Permissions
  - Private messages
  - RAW messages with hover and click actions
+ - Support for clickable links in chat
  - Player info/status messages
  - DiscordSRV integration
 
