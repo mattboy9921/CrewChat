@@ -19,8 +19,8 @@ public class MsgManager {
         replyMap.remove(recipient);
     }
 
-    public String getLastSender(String recipient) {
-        return replyMap.get(recipient);
+    public String getLastSender(String sender) {
+        return replyMap.get(sender);
     }
 
     public boolean playerExists(String recipient) {
