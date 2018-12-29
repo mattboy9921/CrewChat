@@ -1,10 +1,7 @@
 package net.mattlabs.crewchat.messaging;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 
 import static net.md_5.bungee.api.ChatColor.*;
@@ -98,7 +95,7 @@ public class Messages {
                 .create();
     }
 
-    public static BaseComponent[] chatMessage(String prefix, String playerName, String status, String message, String activeChannel, ChatColor chatColor) {
+    public static BaseComponent[] chatMessage(String prefix, String playerName, String status, TextComponent message, String activeChannel, ChatColor chatColor) {
         // %prefix%%playerName%: %message%
         return new ComponentBuilder(prefix + playerName)
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -106,6 +103,7 @@ public class Messages {
                                     .create()))
                     .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + playerName + " "))
                 .append(": ")
+                    .reset()
                     .color(GRAY)
                 .append(message)
                     .color(chatColor)
