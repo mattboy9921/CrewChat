@@ -55,8 +55,19 @@ public class CrewChat extends JavaPlugin{
         }
 
         // Vault Setup
-        setupChat();
-        setupPermissions();
+        if (!setupChat()) {
+            this.getLogger().severe(String.format("Disabled due to Vault Chat error!"));
+            this.getLogger().severe(String.format("Is there a permissions plugin installed?"));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        if (!setupPermissions()) {
+            this.getLogger().severe(String.format("Disabled due to Vault Permissions error!"));
+            this.getLogger().severe(String.format("Is there a permissions plugin installed?"));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // Configuration Section
         configManager = new ConfigManager(this);
@@ -164,14 +175,20 @@ public class CrewChat extends JavaPlugin{
 
     private boolean setupChat() {
         RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
+        if (rsp != null) {
+            chat = rsp.getProvider();
+            return chat != null;
+        }
+        else return false;
     }
 
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return perms != null;
+        if (rsp != null) {
+            perms = rsp.getProvider();
+            return perms != null;
+        }
+        else return false;
     }
 
     // DiscordSRV Helper Method
