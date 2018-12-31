@@ -49,7 +49,7 @@ public class ChatSender implements Runnable{
         CrewChat.getInstance().getLogger().info(player.getDisplayName() + ": " + messageString);
         //DiscordSRV.getPlugin().processChatMessage(player, message, activeChannel, false);
         if (CrewChat.getInstance().getDiscordSRVEnabled())
-            DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(), prefix + player.getDisplayName() + "&r: " + message);
+            DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(), prefix + player.getDisplayName() + "&r: " + messageString);
         prefix = null;
         player = null;
         status = null;
