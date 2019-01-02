@@ -7,6 +7,7 @@ import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.MsgManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,16 +22,16 @@ public class MsgCommand extends BaseCommand {
 
     @Default
     @CommandAlias("msg|pm|tell|whisper|w")
-    @CommandCompletion("@players")
+    @CommandCompletion("@players @nothing")
     @Description("Sends a private message to another player.")
-    public void onDefault(CommandSender commandSender, Player recipient, String[] strings) {
+    public void onDefault(CommandSender commandSender, String recipientString, String[] strings) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
-            if (((Player) commandSender).getDisplayName().equalsIgnoreCase(recipient.getDisplayName())) {
+            Player recipient = Bukkit.getPlayerExact(recipientString);
+            if (recipient == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
+            else if (((Player) commandSender).getDisplayName().equalsIgnoreCase(recipient.getDisplayName())) {
                 commandSender.spigot().sendMessage(Messages.cantMessageSelf());
             }
-            else if (recipient == null)
-                commandSender.spigot().sendMessage(Messages.playerNoExist());
             else {
                 String[] message = Arrays.copyOfRange(strings, 1, strings.length);
                 String messageStr = String.join(" ", message);
