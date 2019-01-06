@@ -23,8 +23,8 @@ public class MsgManager {
         return replyMap.get(sender);
     }
 
-    public boolean playerExists(String recipient) {
-        if (replyMap.containsKey(recipient)) return true;
+    public boolean playerExists(String sender) {
+        if (replyMap.containsKey(sender)) return true;
         else return false;
     }
 }
