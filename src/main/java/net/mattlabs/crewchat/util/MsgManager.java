@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MsgManager {
 
-    Map<String, String> replyMap;
+    private Map<String, String> replyMap;
 
     public MsgManager() {
         replyMap = new HashMap<>();
@@ -24,7 +24,6 @@ public class MsgManager {
     }
 
     public boolean playerExists(String sender) {
-        if (replyMap.containsKey(sender)) return true;
-        else return false;
+        return replyMap.containsKey(sender);
     }
 }

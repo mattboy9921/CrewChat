@@ -544,12 +544,12 @@ public class Messages {
                 .create();
     }
 
-    public static String colorize(String s){
+    private static String colorize(String s){
         if(s == null) return null;
         return s.replaceAll("&([0-9a-z])", "\u00A7$1");
     }
 
-    public static String chatColorTranslator(ChatColor color) {
+    private static String chatColorTranslator(ChatColor color) {
         switch (color) {
             case DARK_RED:
                 return colorize("&4");

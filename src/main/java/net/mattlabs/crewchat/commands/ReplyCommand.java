@@ -17,9 +17,9 @@ import org.bukkit.entity.Player;
 @CommandPermission("crewchat.pm")
 public class ReplyCommand extends BaseCommand {
 
-    MsgManager msgManager = CrewChat.getInstance().getMsgManager();
-    PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    Chat chat = CrewChat.getChat();
+    private MsgManager msgManager = CrewChat.getInstance().getMsgManager();
+    private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private Chat chat = CrewChat.getChat();
 
     @Default
     @CommandAlias("reply|r")
