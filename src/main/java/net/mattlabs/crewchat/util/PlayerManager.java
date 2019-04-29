@@ -1,5 +1,6 @@
 package net.mattlabs.crewchat.util;
 
+import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.Chatter;
 import net.mattlabs.crewchat.CrewChat;
 import org.bukkit.Bukkit;
@@ -13,10 +14,12 @@ import java.util.UUID;
 public class PlayerManager {
 
     private ConfigManager configManager;
+    private ChannelManager channelManager;
     private ArrayList<Chatter> chatters, onlineChatters;
 
     public PlayerManager() {
         configManager = CrewChat.getInstance().getConfigManager();
+        channelManager = CrewChat.getInstance().getChannelManager();
         chatters = new ArrayList<>();
         onlineChatters = new ArrayList<>();
     }
@@ -46,7 +49,12 @@ public class PlayerManager {
     }
 
     public void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) throws NullPointerException {
-        if (activeChannel == null) {
+        boolean configError = false;
+        for (Channel channel : channelManager.getChannels()) {
+            if (channel.getName().equals(activeChannel)) configError = false;
+            else configError = true;
+        }
+        if (configError) {
             throw new NullPointerException("Bad config/permissions");
         }
         else {
