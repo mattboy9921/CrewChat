@@ -89,6 +89,7 @@ public class CrewChat extends JavaPlugin{
         // Load Players
         playerManager = new PlayerManager();
         playerManager.loadPlayers();
+        playerManager.loadOnlinePlayers();
 
         // Load Private Messages
         msgManager = new MsgManager();

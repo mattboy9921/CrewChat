@@ -35,9 +35,18 @@ public class PlayerManager {
         }
     }
 
+    public void loadOnlinePlayers() {
+        for (Player player : CrewChat.getInstance().getServer().getOnlinePlayers()) {
+            if (chatters.contains(new Chatter(player.getUniqueId(), null, null, null)))
+                setOnline(player);
+        }
+    }
+
     public void reloadPlayers() {
         chatters.clear();
+        onlineChatters.clear();
         loadPlayers();
+        loadOnlinePlayers();
     }
 
     public boolean playerExists(Player player) {
