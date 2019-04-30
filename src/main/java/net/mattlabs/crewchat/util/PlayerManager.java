@@ -92,8 +92,7 @@ public class PlayerManager {
 
     public boolean isOnline(Player player) {
         if (player.isOnline()) {
-            Chatter chatter = chatters.get(chatters.indexOf(new Chatter(player.getUniqueId(), null, null, null)));
-            return onlineChatters.contains(chatter);
+            return onlineChatters.contains(new Chatter(player.getUniqueId(), null, null, null));
         }
         else return false;
     }

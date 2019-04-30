@@ -33,13 +33,19 @@ public class ChatSender implements Runnable{
 
     public void sendMessage(Player player, String message) {
         this.player = player;
-        messageString = message;
-        prefix = colorize(chat.getPlayerPrefix(player));
-        status = colorize(playerManager.getStatus(player));
-        activeChannel = playerManager.getActiveChannel(player);
-        subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
-        this.message = parseMessage(message, channelManager.getChatColor(channelManager.channelFromString(activeChannel)));
-        CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), this, 0);
+        if (playerManager.isOnline(player)) {
+            messageString = message;
+            prefix = colorize(chat.getPlayerPrefix(player));
+            status = colorize(playerManager.getStatus(player));
+            activeChannel = playerManager.getActiveChannel(player);
+            subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
+            this.message = parseMessage(message, channelManager.getChatColor(channelManager.channelFromString(activeChannel)));
+            CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), this, 0);
+        }
+        else {
+            player.sendMessage(Messages.badConfig());
+            CrewChat.getInstance().getLogger().info("Player " + player.getDisplayName() + " can't send messages, check permissions!");
+        }
     }
 
     public void run() {
