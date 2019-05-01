@@ -33,6 +33,7 @@ public class PlayerManager {
             String status = playersConfig.getConfigurationSection(key).getString("status");
             chatters.add(new Chatter(UUID.fromString(key), activeChannel, subscribedChannels, status));
         }
+        CrewChat.getInstance().getLogger().info(chatters.size() + " player(s) loaded.");
     }
 
     public void loadOnlinePlayers() {
@@ -40,6 +41,12 @@ public class PlayerManager {
             if (chatters.contains(new Chatter(player.getUniqueId(), null, null, null)))
                 setOnline(player);
         }
+        if (CrewChat.getInstance().getServer().getOnlinePlayers().size() == onlineChatters.size())
+            CrewChat.getInstance().getLogger().info(onlineChatters.size() + " online player(s) loaded.");
+        else
+            CrewChat.getInstance().getLogger().warning("Online player mismatch! "
+                    + CrewChat.getInstance().getServer().getOnlinePlayers().size() + " SOP, "
+                    + onlineChatters.size() + " POP. Configuration error!");
     }
 
     public void reloadPlayers() {
