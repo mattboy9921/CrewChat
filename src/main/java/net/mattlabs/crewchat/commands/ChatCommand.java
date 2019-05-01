@@ -195,7 +195,9 @@ public class ChatCommand extends BaseCommand {
                     }
                 }
             }
-            else commandSender.spigot().sendMessage(Messages.cantSetActive(channelName));
+            else {
+                commandSender.spigot().sendMessage(Messages.cantSetActive(string));
+            }
         }
     }
 }
