@@ -1,9 +1,6 @@
 package net.mattlabs.crewchat.commands;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.BukkitCommandIssuer;
-import co.aikar.commands.BukkitCommandManager;
-import co.aikar.commands.ConditionFailedException;
+import co.aikar.commands.*;
 import co.aikar.commands.annotation.*;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
@@ -20,11 +17,11 @@ public class ChatCommand extends BaseCommand {
 
     private ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
     private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    private BukkitCommandManager bukkitCommandManager = CrewChat.getInstance().getBukkitCommandManager();
+    private PaperCommandManager paperCommandManager = CrewChat.getInstance().getPaperCommandManager();
 
     public ChatCommand() {
         // Command Conditions
-        bukkitCommandManager.getCommandConditions().addCondition("badconfig", (context -> {
+        paperCommandManager.getCommandConditions().addCondition("badconfig", (context -> {
             BukkitCommandIssuer issuer = context.getIssuer();
             if (issuer.isPlayer())
                 if (!playerManager.playerExists(issuer.getPlayer())) {
@@ -34,7 +31,7 @@ public class ChatCommand extends BaseCommand {
         }));
 
         // Command Completions
-        bukkitCommandManager.getCommandCompletions().registerStaticCompletion("channels", channelManager.getChannelNames());
+        paperCommandManager.getCommandCompletions().registerStaticCompletion("channels", channelManager.getChannelNames());
     }
 
     @Default

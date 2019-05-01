@@ -1,6 +1,6 @@
 package net.mattlabs.crewchat;
 
-import co.aikar.commands.BukkitCommandManager;
+import co.aikar.commands.PaperCommandManager;
 import github.scarsz.discordsrv.DiscordSRV;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
@@ -29,13 +29,13 @@ public class CrewChat extends JavaPlugin{
     private DiscordSRVListener discordSRVListener;
     private boolean discordSRVEnabled;
 
-    public BukkitCommandManager bukkitCommandManager;
+    public PaperCommandManager paperCommandManager;
 
     public void onEnable() {
         instance = this;
 
         // Register ACF
-        bukkitCommandManager = new BukkitCommandManager(this);
+        paperCommandManager = new PaperCommandManager(this);
 
         // Vault Check
         if (!hasVault()) {
@@ -104,11 +104,11 @@ public class CrewChat extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
 
         // Register Commands with ACF
-        bukkitCommandManager.registerCommand(new CrewChatCommand());
-        bukkitCommandManager.registerCommand(new ChatCommand());
-        bukkitCommandManager.registerCommand(new MeCommand());
-        bukkitCommandManager.registerCommand(new MsgCommand());
-        bukkitCommandManager.registerCommand(new ReplyCommand());
+        paperCommandManager.registerCommand(new CrewChatCommand());
+        paperCommandManager.registerCommand(new ChatCommand());
+        paperCommandManager.registerCommand(new MeCommand());
+        paperCommandManager.registerCommand(new MsgCommand());
+        paperCommandManager.registerCommand(new ReplyCommand());
 
         // DiscordSRV Integration
         if (discordSRVEnabled) {
@@ -164,8 +164,8 @@ public class CrewChat extends JavaPlugin{
         return chat;
     }
 
-    public BukkitCommandManager getBukkitCommandManager() {
-        return bukkitCommandManager;
+    public PaperCommandManager getPaperCommandManager() {
+        return paperCommandManager;
     }
 
     // Vault Helper Methods
