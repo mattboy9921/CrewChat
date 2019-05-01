@@ -32,12 +32,16 @@ public class CrewChatCommand extends BaseCommand {
     @Description("Reloads CrewChat configuration files.")
     @CommandPermission("crewchat.reload")
     public void onReload(CommandSender commandSender) {
+        CrewChat.getInstance().getLogger().info("Reloading CrewChat...");
         configManager.reloadAllConfigs();
+        CrewChat.getInstance().getLogger().info("Configuration reloaded.");
         channelManager.reloadChannels();
+        CrewChat.getInstance().getLogger().info("Channels reloaded.");
         playerManager.reloadPlayers();
+        CrewChat.getInstance().getLogger().info("Players reloaded.");
 
         if (commandSender instanceof Player) commandSender.spigot().sendMessage(Messages.configReloaded());
-        else CrewChat.getInstance().getLogger().info("Configuration reloaded.");
+        CrewChat.getInstance().getLogger().info("CrewChat reloaded.");
     }
 
     @Subcommand("help")
