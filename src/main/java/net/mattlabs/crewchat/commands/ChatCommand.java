@@ -37,7 +37,10 @@ public class ChatCommand extends BaseCommand {
     @Default
     @Description("Chat base command.")
     public void onDefault(CommandSender commandSender) {
-
+        if (commandSender instanceof Player) {
+            commandSender.spigot().sendMessage(Messages.chatBaseCommand());
+        }
+        else CrewChat.getInstance().getLogger().info("Welcome to chat! (Run /chat help for help)");
     }
 
     @Subcommand("info")
@@ -196,5 +199,23 @@ public class ChatCommand extends BaseCommand {
                 commandSender.spigot().sendMessage(Messages.cantSetActive(string));
             }
         }
+    }
+
+    @HelpCommand
+    public void onHelp(CommandSender commandSender) {
+        if (commandSender instanceof Player) {
+            commandSender.spigot().sendMessage(Messages.chatHelpCommand());
+        }
+        else CrewChat.getInstance().getLogger().info("Command Help:\n" +
+                "Alias: /c <args>\n" +
+                "/chat - Base CrewChat command.\n" +
+                "/chat help - Shows this screen.\n" +
+                "/chat info - Lists all channels, active channel and subscribed channels.\n" +
+                "/chat info channel <channel> - Lists info about specified channel.\n" +
+                "Not available through console:\n" +
+                "/chat status <status> - Sets player's status.\n" +
+                "/chat subscribe <channel> - Subscribes player to channel.\n" +
+                "/chat unsubscribe <channel> - Unsubscribes player from channel.\n" +
+                "/chat switch <channel> - Switches active channel.");
     }
 }
