@@ -26,10 +26,9 @@ public class Messages {
                 .create();
     }
 
-    public static BaseComponent[] channelInfo(String name, String nick, String colorS, ChatColor color) {
+    public static BaseComponent[] channelInfo(String name, String colorS, ChatColor color) {
         // &7[&2Chat&7] &fChannel &l%name%&r info:
         // &2- &fName: %name%
-        // &2- &fNickname: %nick%
         // &2- &fChat Color: %color%
         // &2- &fAuto Subscribe: %autosus%
         return new ComponentBuilder("[")
@@ -49,10 +48,6 @@ public class Messages {
                 .append("\n - ")
                     .color(DARK_GREEN)
                 .append("Name: " + name)
-                    .color(WHITE)
-                .append("\n - ")
-                    .color(DARK_GREEN)
-                .append("Nickname: " + nick)
                     .color(WHITE)
                 .append("\n - ")
                     .color(DARK_GREEN)

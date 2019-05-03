@@ -20,7 +20,7 @@ CrewChat:
  
  Chat:
  - `/chat info` - Shows channel list, active channel and subscribed channels
- - `/chat info channel <channel>` - Shows channel name, nickname and color
+ - `/chat info channel <channel>` - Shows channel name and color
  - `/chat status <status>` - Sets player status message
  - `/chat subscribe <channel>` - Subscribes player to `<channel>`
  - `/chat unsubscribe <channel>` - Unsubscribes player from `<channel>`

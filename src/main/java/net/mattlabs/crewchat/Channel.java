@@ -5,13 +5,12 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Channel {
 
-    private String name, nickname;
+    private String name;
     private ChatColor chatColor;
     private boolean autoSubscribe;
 
-    public Channel(String name, String nickname, ChatColor chatColor, boolean autoSubscribe) {
+    public Channel(String name, ChatColor chatColor, boolean autoSubscribe) {
         this.name = name;
-        this.nickname = nickname;
         this.chatColor = chatColor;
         this.autoSubscribe = autoSubscribe;
     }
@@ -24,10 +23,6 @@ public class Channel {
 
     public String getName() {
         return name;
-    }
-
-    public String getNickname() {
-        return nickname;
     }
 
     public ChatColor getChatColor() {

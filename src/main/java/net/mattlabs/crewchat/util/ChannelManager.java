@@ -22,7 +22,6 @@ public class ChannelManager {
                 .getConfigurationSection("channels");
         for (String key : channelsConfig.getKeys(false)) {
             Channel channel = new Channel(key, // Channel Name
-                    channelsConfig.getConfigurationSection(key).getString("nickname"), // Nickname
                     ChatColor.valueOf(channelsConfig.getConfigurationSection(key).getString("chatcolor")), // Chat Color
                     channelsConfig.getConfigurationSection(key).getBoolean("autosubscribe")); // Auto Subscribe
             CrewChat.getInstance().getLogger().info("Channel \"" + key + "\" added!");
@@ -46,17 +45,9 @@ public class ChannelManager {
     }
 
     public Channel channelFromString(String channelName) {
-        Channel channel = new Channel(channelName, null, null, false);
+        Channel channel = new Channel(channelName, null, false);
         if (channels.contains(channel)) return channels.get(channels.indexOf(channel));
         else return null;
-    }
-
-    public Channel channelFromNickname(String nickname) {
-        for (Channel channel : channels) {
-            if (channel.getNickname().equalsIgnoreCase(nickname))
-                    return channel;
-        }
-        return null;
     }
 
     public ChatColor getChatColor(Channel channel) {

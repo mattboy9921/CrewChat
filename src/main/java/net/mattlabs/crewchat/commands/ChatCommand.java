@@ -80,14 +80,12 @@ public class ChatCommand extends BaseCommand {
             if (requestedChannel != null) {
                 if (commandSender instanceof Player) {
                         commandSender.spigot().sendMessage(Messages.channelInfo(requestedChannel.getName(),
-                                requestedChannel.getNickname(),
                                 requestedChannel.getChatColor().name(),
                                 requestedChannel.getChatColor()));
                 }
                 else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
                         + " info: " +
                         "\n - Name: " + requestedChannel.getName() +
-                        "\n - Nickname: " + requestedChannel.getNickname() +
                         "\n - Chat Color: " + requestedChannel.getChatColor().name() +
                         "\n - Auto Subscribe: " + String.valueOf(requestedChannel.isAutoSubscribe()));
             } else {
@@ -119,10 +117,8 @@ public class ChatCommand extends BaseCommand {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             String channelName = null;
-            if (channelManager.getChannels().contains(new Channel(string, null, null, false)))
+            if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
-            else if (channelManager.channelFromNickname(string) != null)
-                channelName = channelManager.channelFromNickname(string).getName();
             else {
                 commandSender.spigot().sendMessage(Messages.channelNoExist(string));
             }
@@ -147,10 +143,8 @@ public class ChatCommand extends BaseCommand {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             String channelName = null;
-            if (channelManager.getChannels().contains(new Channel(string, null, null, false)))
+            if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
-            else if (channelManager.channelFromNickname(string) != null)
-                channelName = channelManager.channelFromNickname(string).getName();
             else {
                 commandSender.spigot().sendMessage(Messages.channelNoExist(string));
             }
@@ -178,10 +172,8 @@ public class ChatCommand extends BaseCommand {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             String channelName = null;
-            if (channelManager.getChannels().contains(new Channel(string, null, null, false)))
+            if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
-            else if (channelManager.channelFromNickname(string) != null)
-                channelName = channelManager.channelFromNickname(string).getName();
             else {
                 commandSender.spigot().sendMessage(Messages.channelNoExist(string));
             }
