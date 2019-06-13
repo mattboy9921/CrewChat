@@ -3,6 +3,7 @@ package net.mattlabs.crewchat.util;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.Chatter;
 import net.mattlabs.crewchat.CrewChat;
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -114,8 +115,13 @@ public class PlayerManager {
     }
 
     public String getActiveChannel(Player player) {
-        return configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players." + player.getUniqueId().toString()).getString("active-channel");
+        if (onlineChatters.contains(new Chatter(player.getUniqueId(), null, null, null))) {
+            Chatter chatter = onlineChatters.get(onlineChatters.indexOf(new Chatter(player.getUniqueId(), null, null, null)));
+            return chatter.getActiveChannel();
+        }
+        else
+            return configManager.getFileConfig("playerdata.yml")
+                    .getConfigurationSection("players." + player.getUniqueId().toString()).getString("active-channel");
     }
 
     public void setActiveChannel(Player player, String channelName) {
@@ -185,5 +191,17 @@ public class PlayerManager {
         subs.remove(channelName);
         playersConfig.set("subscribed-channels", subs);
         configManager.saveConfig("playerdata.yml");
+    }
+
+    public void addParty(Player player, String partyName) {
+        Chatter chatter = new Chatter(player.getUniqueId(), null, null, null);
+        chatter = chatters.get(chatters.indexOf(chatter));
+        chatter.addParty(partyName);
+    }
+
+    public void removeParty(Player player, String partyName) {
+        Chatter chatter = new Chatter(player.getUniqueId(), null, null, null);
+        chatter = chatters.get(chatters.indexOf(chatter));
+        chatter.removeParty(partyName);
     }
 }

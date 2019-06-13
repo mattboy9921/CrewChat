@@ -695,6 +695,274 @@ public class Messages {
                 .create();
     }
 
+    public static BaseComponent[] partyBaseCommand() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Party")
+                    .color(DARK_GREEN)
+                .append("]")
+                    .color(GRAY)
+                .append(" Welcome to parties! ")
+                    .color(WHITE)
+                .append("[Help]")
+                    .bold(true)
+                    .color(BLUE)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                    .color(AQUA)
+                                    .bold(true)
+                                .append(" here for help.")
+                                    .reset()
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party help"))
+                .create();
+    }
+
+    public static BaseComponent[] partyHelpCommand() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Party")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("Command Help:\n")
+                    .color(WHITE)
+                .append(" - Alias: /p <args> - (Click to run) -\n")
+                    .color(GRAY)
+                .append("/party")
+                    .color(DARK_GREEN)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                    .color(AQUA)
+                                    .bold(true)
+                                .append(" to run.")
+                                    .reset()
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/party "))
+                .append(" - ")
+                    .reset()
+                    .color(GRAY)
+                .append("Base Party command.\n")
+                    .color(WHITE)
+                .append("/party help")
+                    .color(DARK_GREEN)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click")
+                                    .color(AQUA)
+                                    .bold(true)
+                                .append(" to run.")
+                                    .reset()
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/chat help "))
+                .append(" - ")
+                    .reset()
+                    .color(GRAY)
+                .append("Shows this screen.\n")
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] createPartyName(String name) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Party")
+                    .color(DARK_GREEN)
+                .append("]")
+                    .color(GRAY)
+                .append(" Creating party ")
+                    .color(WHITE)
+                .append(name)
+                    .bold(true)
+                .append("...")
+                    .reset()
+                .create();
+    }
+
+    public static BaseComponent[] createPartyColor() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Party")
+                    .color(DARK_GREEN)
+                .append("]")
+                    .color(GRAY)
+                .append(" Choose a color:\n")
+                    .color(WHITE)
+                .append("\u2588")
+                    .color(DARK_RED)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Dark Red")
+                                    .color(DARK_RED)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color DARK_RED"))
+                .append("\u2588")
+                    .color(RED)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Red")
+                                    .color(RED)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color RED"))
+                .append("\u2588")
+                    .color(GOLD)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Gold")
+                                    .color(GOLD)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color GOLD"))
+                .append("\u2588")
+                    .color(YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Yellow")
+                                    .color(YELLOW)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color YELLOW"))
+                .append("\u2588")
+                    .color(GREEN)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Green")
+                                    .color(GREEN)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color GREEN"))
+                .append("\u2588")
+                    .color(DARK_GREEN)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Dark Green")
+                                    .color(DARK_GREEN)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color DARK_GREEN"))
+                .append("\u2588")
+                    .color(AQUA)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Aqua")
+                                    .color(AQUA)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color AQUA"))
+                .append("\u2588")
+                    .color(DARK_AQUA)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Dark Aqua")
+                                    .color(DARK_AQUA)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color DARK_AQUA"))
+                .append("\u2588")
+                    .color(BLUE)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Blue")
+                                    .color(BLUE)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color BLUE"))
+                .append("\u2588")
+                    .color(DARK_BLUE)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Dark Blue")
+                                    .color(DARK_BLUE)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color DARK_BLUE"))
+                .append("\u2588")
+                    .color(LIGHT_PURPLE)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Light Purple")
+                                    .color(LIGHT_PURPLE)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color LIGHT_PURPLE"))
+                .append("\u2588")
+                    .color(DARK_PURPLE)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Dark Purple")
+                                    .color(DARK_PURPLE)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color DARK_PURPLE"))
+                .append("\u2588")
+                    .color(WHITE)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("White")
+                                    .color(WHITE)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color WHITE"))
+                .append("\u2588")
+                    .color(GRAY)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Gray")
+                                    .color(GRAY)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color GRAY"))
+                .append("\u2588")
+                    .color(DARK_GRAY)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Dark Gray")
+                                    .color(DARK_GRAY)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color DARK_GRAY"))
+                .append("\u2588")
+                    .color(BLACK)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Black")
+                                    .color(BLACK)
+                                    .bold(true)
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party create color BLACK"))
+                .create();
+    }
+
+    public static BaseComponent[] partyColorInvalid() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Party")
+                    .color(DARK_GREEN)
+                .append("]")
+                    .color(GRAY)
+                .append(" Invalid color!")
+                    .color(RED)
+                .create();
+    }
+
+    public static BaseComponent[] partyCreated(String name, ChatColor chatColor) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Party")
+                    .color(DARK_GREEN)
+                .append("]")
+                    .color(GRAY)
+                .append(" Created ")
+                    .color(WHITE)
+                .append(name)
+                    .color(chatColor)
+                    .bold(true)
+                .append(" party.")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] partyListHeader() {
+        return new ComponentBuilder("Party list:")
+                    .color(GRAY)
+                .create();
+    }
+
+    public static BaseComponent[] partyListEntry(String name, ChatColor chatColor) {
+        return new ComponentBuilder(" - ")
+                    .color(DARK_GREEN)
+                .append(name)
+                    .color(chatColor)
+                    .bold(true)
+                .create();
+    }
+
     private static String colorize(String s){
         if(s == null) return null;
         return s.replaceAll("&([0-9a-z])", "\u00A7$1");

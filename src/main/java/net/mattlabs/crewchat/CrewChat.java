@@ -21,6 +21,7 @@ public class CrewChat extends JavaPlugin{
     private ChannelManager channelManager;
     private PlayerManager playerManager;
     private MsgManager msgManager;
+    private PartyManager partyManager;
     private ChatSender chatSender;
     private MeSender meSender;
     private static Chat chat = null;
@@ -91,6 +92,9 @@ public class CrewChat extends JavaPlugin{
         playerManager.loadPlayers();
         playerManager.loadOnlinePlayers();
 
+        // Load Parties
+        partyManager = new PartyManager();
+
         // Load Private Messages
         msgManager = new MsgManager();
 
@@ -106,6 +110,7 @@ public class CrewChat extends JavaPlugin{
         // Register Commands with ACF
         paperCommandManager.registerCommand(new CrewChatCommand());
         paperCommandManager.registerCommand(new ChatCommand());
+        paperCommandManager.registerCommand(new PartyCommand());
         paperCommandManager.registerCommand(new MeCommand());
         paperCommandManager.registerCommand(new MsgCommand());
         paperCommandManager.registerCommand(new ReplyCommand());
@@ -138,6 +143,10 @@ public class CrewChat extends JavaPlugin{
 
     public PlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    public PartyManager getPartyManager() {
+        return partyManager;
     }
 
     public MsgManager getMsgManager() {

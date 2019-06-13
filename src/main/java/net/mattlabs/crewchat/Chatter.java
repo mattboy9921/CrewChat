@@ -9,13 +9,14 @@ public class Chatter {
 
     private UUID uuid;
     private String activeChannel, status;
-    private ArrayList<String> subscribedChannels;
+    private ArrayList<String> subscribedChannels, parties;
 
     public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, String status) {
         this.uuid = uuid;
         this.activeChannel = activeChannel;
         this.subscribedChannels = subscribedChannels;
         this.status = status;
+        parties = new ArrayList<>();
     }
 
     public UUID getUuid() {
@@ -31,6 +32,9 @@ public class Chatter {
 
     public boolean isSubscribedTo(String activeChannel) {
         for (String channel : subscribedChannels) {
+            if (channel.equalsIgnoreCase(activeChannel)) return true;
+        }
+        for (String channel : parties) {
             if (channel.equalsIgnoreCase(activeChannel)) return true;
         }
         return false;
@@ -57,6 +61,18 @@ public class Chatter {
 
     public void removeSubscription(String channelName) {
         subscribedChannels.remove(channelName);
+    }
+
+    public void addParty(String partyName) {
+        parties.add(partyName);
+    }
+
+    public void removeParty(String partyName) {
+        parties.remove(partyName);
+    }
+
+    public String getActiveChannel() {
+        return activeChannel;
     }
 
     public void setActiveChannel(String activeChannel) {
