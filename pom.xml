@@ -8,7 +8,7 @@
 
     <groupId>net.mattlabs.crewchat</groupId>
     <artifactId>CrewChat</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <description>
         Chat plugin for CCS
@@ -45,8 +45,8 @@
         </repository>
         <!-- For Vault -->
         <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <!-- For DiscordSRV -->
         <repository>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- For ACF -->
