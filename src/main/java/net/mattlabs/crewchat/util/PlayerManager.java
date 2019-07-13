@@ -65,10 +65,9 @@ public class PlayerManager {
     }
 
     public void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) throws NullPointerException {
-        boolean configError = false;
+        boolean configError = true;
         for (Channel channel : channelManager.getChannels()) {
             if (channel.getName().equals(activeChannel)) configError = false;
-            else configError = true;
         }
         if (configError) {
             throw new NullPointerException("Bad config/permissions");
