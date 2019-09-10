@@ -24,14 +24,13 @@ public class ReplyCommand extends BaseCommand {
 
     @Default
     @Description("Replies to last received private message.")
-    public void onDefault(CommandSender commandSender, String[] strings) {
+    public void onDefault(CommandSender commandSender, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             if (msgManager.playerExists(((Player) commandSender).getDisplayName())) {
                 if (Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getDisplayName())) == null)
                     commandSender.spigot().sendMessage(Messages.playerNoExist());
                 else {
-                    String message = String.join(" ", strings);
                     Player recipient = Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getDisplayName()));
                     msgManager.updatePlayer(recipient.getDisplayName(), ((Player) commandSender).getDisplayName());
                     commandSender.spigot().sendMessage(Messages.privateMessageSend(

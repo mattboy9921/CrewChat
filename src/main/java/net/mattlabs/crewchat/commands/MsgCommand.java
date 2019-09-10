@@ -24,7 +24,7 @@ public class MsgCommand extends BaseCommand {
     @Default
     @CommandCompletion("@players @nothing")
     @Description("Sends a private message to another player.")
-    public void onDefault(CommandSender commandSender, String recipientString, String[] message) {
+    public void onDefault(CommandSender commandSender, String recipientString, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             Player recipient = Bukkit.getPlayerExact(recipientString);
@@ -33,19 +33,18 @@ public class MsgCommand extends BaseCommand {
                 commandSender.spigot().sendMessage(Messages.cantMessageSelf());
             }
             else {
-                String messageStr = String.join(" ", message);
                 msgManager.updatePlayer(recipient.getDisplayName(), commandSender.getName());
                 commandSender.spigot().sendMessage(Messages.privateMessageSend(
                         chat.getPlayerPrefix((Player) commandSender),
                         chat.getPlayerPrefix(recipient), recipient.getDisplayName(),
                         playerManager.getStatus((Player) commandSender),
-                        playerManager.getStatus(recipient), messageStr));
+                        playerManager.getStatus(recipient), message));
                 recipient.spigot().sendMessage(Messages.privateMessageReceive(
                         chat.getPlayerPrefix((Player) commandSender),
                         chat.getPlayerPrefix(recipient),
                         commandSender.getName(),
                         playerManager.getStatus((Player) commandSender),
-                        playerManager.getStatus(recipient), messageStr));
+                        playerManager.getStatus(recipient), message));
             }
         }
     }

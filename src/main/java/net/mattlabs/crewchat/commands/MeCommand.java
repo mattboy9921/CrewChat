@@ -15,11 +15,8 @@ public class MeCommand extends BaseCommand {
 
     @Default
     @Description("Sends message in third person.")
-    public void onDefault(CommandSender commandSender, String[] strings) {
+    public void onDefault(CommandSender commandSender, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
-        else {
-            String messageStr = String.join(" ", strings);
-            meSender.sendMe((Player) commandSender, messageStr);
-        }
+        else meSender.sendMe((Player) commandSender, message);
     }
 }
