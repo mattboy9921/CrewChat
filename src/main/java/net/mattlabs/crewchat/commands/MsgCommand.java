@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+@CommandAlias("msg|pm|tell|whisper|w")
 @CommandPermission("crewchat.pm")
 public class MsgCommand extends BaseCommand {
 
@@ -21,7 +22,6 @@ public class MsgCommand extends BaseCommand {
     Chat chat = CrewChat.getChat();
 
     @Default
-    @CommandAlias("msg|pm|tell|whisper|w")
     @CommandCompletion("@players @nothing")
     @Description("Sends a private message to another player.")
     public void onDefault(CommandSender commandSender, String recipientString, String[] message) {

@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@CommandAlias("reply|r")
 @CommandPermission("crewchat.pm")
 public class ReplyCommand extends BaseCommand {
 
@@ -22,7 +23,6 @@ public class ReplyCommand extends BaseCommand {
     private Chat chat = CrewChat.getChat();
 
     @Default
-    @CommandAlias("reply|r")
     @Description("Replies to last received private message.")
     public void onDefault(CommandSender commandSender, String[] strings) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
