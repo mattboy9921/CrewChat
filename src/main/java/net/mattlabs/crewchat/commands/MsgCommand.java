@@ -29,14 +29,14 @@ public class MsgCommand extends BaseCommand {
         else {
             Player recipient = Bukkit.getPlayerExact(recipientString);
             if (recipient == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
-            else if (((Player) commandSender).getDisplayName().equalsIgnoreCase(recipient.getDisplayName())) {
+            else if (((Player) commandSender).getName().equalsIgnoreCase(recipient.getName())) {
                 commandSender.spigot().sendMessage(Messages.cantMessageSelf());
             }
             else {
-                msgManager.updatePlayer(recipient.getDisplayName(), commandSender.getName());
+                msgManager.updatePlayer(recipient.getName(), commandSender.getName());
                 commandSender.spigot().sendMessage(Messages.privateMessageSend(
                         chat.getPlayerPrefix((Player) commandSender),
-                        chat.getPlayerPrefix(recipient), recipient.getDisplayName(),
+                        chat.getPlayerPrefix(recipient), recipient.getName(),
                         playerManager.getStatus((Player) commandSender),
                         playerManager.getStatus(recipient), message));
                 recipient.spigot().sendMessage(Messages.privateMessageReceive(
