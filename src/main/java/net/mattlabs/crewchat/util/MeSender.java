@@ -31,7 +31,7 @@ public class MeSender implements Runnable {
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers)
-            subbedPlayer.spigot().sendMessage(Messages.meMessage(player.getDisplayName(), message, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+            subbedPlayer.spigot().sendMessage(Messages.meMessage(player.getName(), message, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
         if (CrewChat.getInstance().getDiscordSRVEnabled())
             DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(), "_* " + player.getDisplayName() + " " + message + " *_");
         player = null;
