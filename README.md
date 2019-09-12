@@ -52,4 +52,4 @@ CrewChat:
  - `crewchat.reload` - Allows player to use `/crewchat reload`
  - `crewchat.chat.info` -  Allows player to run `/chat info`
  
-Tested working on Paper 1.13.2.
+Tested working on Paper 1.13, 1.14.
