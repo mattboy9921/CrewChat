@@ -9,6 +9,7 @@ import net.mattlabs.crewchat.listeners.QuitListener;
 import net.mattlabs.crewchat.util.*;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -107,6 +108,9 @@ public class CrewChat extends JavaPlugin{
         paperCommandManager.registerCommand(new MeCommand());
         paperCommandManager.registerCommand(new MsgCommand());
         paperCommandManager.registerCommand(new ReplyCommand());
+
+        // bStats
+        Metrics metrics = new Metrics(this);
 
         this.getLogger().info("CrewChat loaded - By mattboy9921");
     }
