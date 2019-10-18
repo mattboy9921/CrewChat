@@ -7,9 +7,8 @@ import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.Party;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
-import net.mattlabs.crewchat.util.PartyManager;
+import net.mattlabs.crewchat.util.PartyChatManager;
 import net.mattlabs.crewchat.util.PlayerManager;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -19,7 +18,7 @@ import org.bukkit.entity.Player;
 public class ChatCommand extends BaseCommand {
 
     private ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
-    private PartyManager partyManager = CrewChat.getInstance().getPartyManager();
+    private PartyChatManager partyChatManager = CrewChat.getInstance().getPartyChatManager();
     private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
     private PaperCommandManager paperCommandManager = CrewChat.getInstance().getPaperCommandManager();
 
@@ -59,14 +58,14 @@ public class ChatCommand extends BaseCommand {
                 for (Channel channel : channelManager.getChannels())
                     commandSender.spigot().sendMessage(Messages.channelListEntry(channel.getName(), channel.getChatColor()));
                 commandSender.spigot().sendMessage(Messages.partyListHeader());
-                for (Party party : partyManager.getParties())
+                for (Party party : partyChatManager.getParties())
                     commandSender.spigot().sendMessage(Messages.partyListEntry(party.getName(), party.getChatColor()));
                 if (channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)) != null)
                     commandSender.spigot().sendMessage(Messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
                             channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)).getChatColor()));
                 else
                     commandSender.spigot().sendMessage(Messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
-                            partyManager.partyFromString(playerManager.getActiveChannel((Player) commandSender)).getChatColor()));
+                            partyChatManager.partyFromString(playerManager.getActiveChannel((Player) commandSender)).getChatColor()));
                 commandSender.spigot().sendMessage(Messages.channelListSubscribedHeader());
                 for (String channel : playerManager.getSubscribedChannels((Player) commandSender))
                     commandSender.spigot().sendMessage(Messages.channelListEntry(channel, channelManager.channelFromString(channel).getChatColor()));

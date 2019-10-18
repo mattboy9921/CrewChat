@@ -5,11 +5,11 @@ import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
 
-public class PartyManager {
+public class PartyChatManager {
 
     private ArrayList<Party> parties;
 
-    public PartyManager() {
+    public PartyChatManager() {
         parties = new ArrayList<>();
     }
 

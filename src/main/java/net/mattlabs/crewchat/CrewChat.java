@@ -1,7 +1,6 @@
 package net.mattlabs.crewchat;
 
 import co.aikar.commands.PaperCommandManager;
-import github.scarsz.discordsrv.DiscordSRV;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
 import net.mattlabs.crewchat.listeners.JoinListener;
@@ -20,7 +19,7 @@ public class CrewChat extends JavaPlugin{
     private ChannelManager channelManager;
     private PlayerManager playerManager;
     private MsgManager msgManager;
-    private PartyManager partyManager;
+    private PartyChatManager partyChatManager;
     private ChatSender chatSender;
     private MeSender meSender;
     private static Chat chat = null;
@@ -91,7 +90,7 @@ public class CrewChat extends JavaPlugin{
         playerManager.loadOnlinePlayers();
 
         // Load Parties
-        partyManager = new PartyManager();
+        partyChatManager = new PartyChatManager();
 
         // Load Private Messages
         msgManager = new MsgManager();
@@ -108,7 +107,7 @@ public class CrewChat extends JavaPlugin{
         // Register Commands with ACF
         paperCommandManager.registerCommand(new CrewChatCommand());
         paperCommandManager.registerCommand(new ChatCommand());
-        paperCommandManager.registerCommand(new PartyCommand());
+        paperCommandManager.registerCommand(new PartyChatCommand());
         paperCommandManager.registerCommand(new MeCommand());
         paperCommandManager.registerCommand(new MsgCommand());
         paperCommandManager.registerCommand(new ReplyCommand());
@@ -135,8 +134,8 @@ public class CrewChat extends JavaPlugin{
         return playerManager;
     }
 
-    public PartyManager getPartyManager() {
-        return partyManager;
+    public PartyChatManager getPartyChatManager() {
+        return partyChatManager;
     }
 
     public MsgManager getMsgManager() {

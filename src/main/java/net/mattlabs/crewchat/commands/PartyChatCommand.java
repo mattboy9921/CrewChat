@@ -4,7 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
-import net.mattlabs.crewchat.util.PartyManager;
+import net.mattlabs.crewchat.util.PartyChatManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
 
 @CommandAlias("party|p")
 @CommandPermission("crewchat.party")
-public class PartyCommand extends BaseCommand {
+public class PartyChatCommand extends BaseCommand {
 
-    private PartyManager partyManager = CrewChat.getInstance().getPartyManager();
+    private PartyChatManager partyChatManager = CrewChat.getInstance().getPartyChatManager();
     private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
 
     @Default
@@ -64,7 +64,7 @@ public class PartyCommand extends BaseCommand {
                     error = true;
                 }
                 if (!error) {
-                    partyManager.addParty(name, chatColor);
+                    partyChatManager.addParty(name, chatColor);
                     playerManager.addParty((Player) commandSender, name);
                     playerManager.setActiveChannel((Player) commandSender, name);
                     commandSender.spigot().sendMessage(Messages.partyCreated(name, chatColor));
