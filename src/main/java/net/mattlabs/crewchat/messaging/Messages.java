@@ -90,11 +90,11 @@ public class Messages {
                 .create();
     }
 
-    public static BaseComponent[] chatMessage(String prefix, String playerName, String status, TextComponent message, String activeChannel, ChatColor chatColor) {
+    public static BaseComponent[] chatMessage(String prefix, String playerName, String time, String status, TextComponent message, String activeChannel, ChatColor chatColor) {
         // %prefix%%playerName%: %message%
         return new ComponentBuilder(prefix + playerName)
                     .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            new ComponentBuilder("Status: " + status + "\nChannel: " + chatColorTranslator(chatColor) + activeChannel)
+                            new ComponentBuilder(time + "\nStatus: " + status + "\nChannel: " + chatColorTranslator(chatColor) + activeChannel)
                                     .create()))
                     .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + playerName + " "))
                 .append(": ")

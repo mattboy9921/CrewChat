@@ -12,7 +12,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 public class ChatSender implements Runnable{
@@ -20,7 +22,7 @@ public class ChatSender implements Runnable{
     private PlayerManager playerManager;
     private ChannelManager channelManager;
     private Chat chat;
-    private String prefix, status, activeChannel, messageString;
+    private String prefix, time, status, activeChannel, messageString;
     private Player player;
     private ArrayList<Player> subscribedPlayers;
     private TextComponent message;
@@ -36,6 +38,8 @@ public class ChatSender implements Runnable{
         if (playerManager.isOnline(player)) {
             messageString = message;
             prefix = colorize(chat.getPlayerPrefix(player));
+            SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
+            time = format.format(new Date());
             status = colorize(playerManager.getStatus(player));
             activeChannel = playerManager.getActiveChannel(player);
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
@@ -50,7 +54,7 @@ public class ChatSender implements Runnable{
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers)
-            subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix, player.getName(), status, message, activeChannel, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+            subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix, player.getName(), time, status, message, activeChannel, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
             //subbedPlayer.spigot().sendMessage(message);
         CrewChat.getInstance().getLogger().info(player.getDisplayName() + ": " + messageString);
         //DiscordSRV.getPlugin().processChatMessage(player, message, activeChannel, false);
