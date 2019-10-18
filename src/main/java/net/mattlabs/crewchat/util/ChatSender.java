@@ -40,7 +40,7 @@ public class ChatSender implements Runnable{
             activeChannel = playerManager.getActiveChannel(player);
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
             this.message = parseMessage(message, channelManager.getChatColor(channelManager.channelFromString(activeChannel)));
-            CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), this, 0);
+            CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
             player.sendMessage(Messages.badConfig());

@@ -4,7 +4,6 @@ import co.aikar.commands.PaperCommandManager;
 import github.scarsz.discordsrv.DiscordSRV;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
-import net.mattlabs.crewchat.listeners.DiscordSRVListener;
 import net.mattlabs.crewchat.listeners.JoinListener;
 import net.mattlabs.crewchat.listeners.QuitListener;
 import net.mattlabs.crewchat.util.*;
@@ -27,7 +26,6 @@ public class CrewChat extends JavaPlugin{
     private static Chat chat = null;
     private static Permission perms = null;
 
-    private DiscordSRVListener discordSRVListener;
     private boolean discordSRVEnabled;
 
     public PaperCommandManager paperCommandManager;
@@ -115,18 +113,10 @@ public class CrewChat extends JavaPlugin{
         paperCommandManager.registerCommand(new MsgCommand());
         paperCommandManager.registerCommand(new ReplyCommand());
 
-        // DiscordSRV Integration
-        if (discordSRVEnabled) {
-            discordSRVListener = new DiscordSRVListener();
-            DiscordSRV.api.subscribe(discordSRVListener);
-        }
-
         this.getLogger().info("CrewChat loaded - By mattboy9921");
     }
 
     public void onDisable() {
-        // DiscordSRV Integration
-        if (discordSRVEnabled) DiscordSRV.api.unsubscribe(discordSRVListener);
     }
 
     public ConfigManager getConfigManager() {

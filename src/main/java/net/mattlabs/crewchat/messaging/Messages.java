@@ -167,6 +167,7 @@ public class Messages {
         // * %playerName% %message% *
         return new ComponentBuilder("* ")
                     .color(chatColor)
+                    .italic(true)
                 .append(playerName)
                     .color(chatColor)
                 .append(" ")

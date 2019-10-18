@@ -1,5 +1,7 @@
 CrewChat is a chat plugin developed for the Crew Craft Server.
 
+[![Build Status](https://travis-ci.org/mattboy9921/CrewChat.svg?branch=master)](https://travis-ci.org/mattboy9921/CrewChat)
+
 **Features**
  - General chat
  - Chat channels
@@ -50,4 +52,4 @@ CrewChat:
  - `crewchat.reload` - Allows player to use `/crewchat reload`
  - `crewchat.chat.info` -  Allows player to run `/chat info`
  
-Tested working on Paper 1.13.2.
+Tested working on Paper 1.13, 1.14.

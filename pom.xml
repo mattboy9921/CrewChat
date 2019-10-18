@@ -8,7 +8,7 @@
 
     <groupId>net.mattlabs.crewchat</groupId>
     <artifactId>CrewChat</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
 
     <description>
         Chat plugin for CCS
@@ -45,8 +45,8 @@
         </repository>
         <!-- For Vault -->
         <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
         <!-- For DiscordSRV -->
         <repository>
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.14.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- For ACF -->
@@ -71,7 +71,7 @@
         </dependency>
         <!-- For Vault -->
         <dependency>
-            <groupId>net.milkbowl.vault</groupId>
+            <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
@@ -161,30 +161,40 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <target>
-                                <delete>
-                                    <fileset dir="${basedir}\..\..\Test Server\plugins" includes="${project.artifactId}-*.jar" />
-                                </delete>
-                                <echo>Copying ${project.artifactId}-${project.version}.jar to test server...</echo>
-                                <copy todir="${basedir}\..\..\Test Server\plugins" overwrite="true" flatten="true">
-                                    <fileset dir="${basedir}/target" includes="${project.artifactId}-${project.version}.jar" />
-                                </copy>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+    <profiles>
+        <!-- Profile to copy JAR to test server -->
+        <profile>
+            <id>testServer</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>copy</id>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <delete>
+                                            <fileset dir="${basedir}\..\..\Test Server\plugins" includes="${project.artifactId}-*.jar" />
+                                        </delete>
+                                        <echo>Copying ${project.artifactId}-${project.version}.jar to test server...</echo>
+                                        <copy todir="${basedir}\..\..\Test Server\plugins" overwrite="true" flatten="true">
+                                            <fileset dir="${basedir}/target" includes="${project.artifactId}-${project.version}.jar" />
+                                        </copy>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

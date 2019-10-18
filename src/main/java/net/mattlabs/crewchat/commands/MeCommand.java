@@ -7,19 +7,16 @@ import net.mattlabs.crewchat.util.MeSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@CommandAlias("me")
 @CommandPermission("crewchat.me")
 public class MeCommand extends BaseCommand {
 
     MeSender meSender = CrewChat.getInstance().getMeSender();
 
     @Default
-    @CommandAlias("me")
     @Description("Sends message in third person.")
-    public void onDefault(CommandSender commandSender, @Optional String[] strings) {
+    public void onDefault(CommandSender commandSender, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
-        else {
-            String   messageStr = String.join(" ", strings);
-            meSender.sendMe((Player) commandSender, messageStr);
-        }
+        else meSender.sendMe((Player) commandSender, message);
     }
 }

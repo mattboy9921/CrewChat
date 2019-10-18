@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@CommandAlias("reply|r")
 @CommandPermission("crewchat.pm")
 public class ReplyCommand extends BaseCommand {
 
@@ -22,27 +23,25 @@ public class ReplyCommand extends BaseCommand {
     private Chat chat = CrewChat.getChat();
 
     @Default
-    @CommandAlias("reply|r")
     @Description("Replies to last received private message.")
-    public void onDefault(CommandSender commandSender, String[] strings) {
+    public void onDefault(CommandSender commandSender, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
-            if (msgManager.playerExists(((Player) commandSender).getDisplayName())) {
-                if (Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getDisplayName())) == null)
+            if (msgManager.playerExists(((Player) commandSender).getName())) {
+                if (Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getName())) == null)
                     commandSender.spigot().sendMessage(Messages.playerNoExist());
                 else {
-                    String message = String.join(" ", strings);
-                    Player recipient = Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getDisplayName()));
-                    msgManager.updatePlayer(recipient.getDisplayName(), ((Player) commandSender).getDisplayName());
+                    Player recipient = Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getName()));
+                    msgManager.updatePlayer(recipient.getName(), ((Player) commandSender).getName());
                     commandSender.spigot().sendMessage(Messages.privateMessageSend(
                             chat.getPlayerPrefix((Player) commandSender),
-                            chat.getPlayerPrefix(recipient), recipient.getDisplayName(),
+                            chat.getPlayerPrefix(recipient), recipient.getName(),
                             playerManager.getStatus((Player) commandSender),
                             playerManager.getStatus(recipient), message));
                     recipient.spigot().sendMessage(Messages.privateMessageReceive(
                             chat.getPlayerPrefix((Player) commandSender),
                             chat.getPlayerPrefix(recipient),
-                            ((Player) commandSender).getDisplayName(),
+                            ((Player) commandSender).getName(),
                             playerManager.getStatus((Player) commandSender),
                             playerManager.getStatus(recipient), message));
                 }
