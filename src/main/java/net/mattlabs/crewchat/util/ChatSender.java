@@ -10,6 +10,8 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.chat.Chat;
+import org.bukkit.Instrument;
+import org.bukkit.Note;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
@@ -24,7 +26,7 @@ public class ChatSender implements Runnable{
     private Chat chat;
     private String prefix, time, status, activeChannel, messageString;
     private Player player;
-    private ArrayList<Player> subscribedPlayers;
+    private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private TextComponent message;
 
     public ChatSender(){
@@ -53,8 +55,19 @@ public class ChatSender implements Runnable{
     }
 
     public void run() {
-        for (Player subbedPlayer : subscribedPlayers)
+        for (Player subbedPlayer : subscribedPlayers) {
+            for (Player mentionedPlayer : mentionedPlayers)
+                if (mentionedPlayer.equals(subbedPlayer)) {
+                    subbedPlayer.playNote(subbedPlayer.getLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(0, Note.Tone.C));
+                    CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), () -> {
+                        subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(1, Note.Tone.F));
+                        CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), () -> {
+                            subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.natural(1, Note.Tone.B));
+                        }, 2);
+                    }, 2);
+                }
             subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix, player.getName(), time, status, message, activeChannel, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+        }
             //subbedPlayer.spigot().sendMessage(message);
         CrewChat.getInstance().getLogger().info(player.getDisplayName() + ": " + messageString);
         //DiscordSRV.getPlugin().processChatMessage(player, message, activeChannel, false);
@@ -76,9 +89,31 @@ public class ChatSender implements Runnable{
     private TextComponent parseMessage(String message, ChatColor chatColor) {
         String[] parts = message.split(" ");
         TextComponent componentMessage = new TextComponent("");
+
         for (String part : parts) {
             TextComponent nextComponent = new TextComponent(part);
-            if (Pattern.matches("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?.*", part)) {
+            Player mentionedPlayer = null;
+
+            // Match player names
+            mentionedPlayers = new ArrayList<>();
+            for (Player player : subscribedPlayers)
+                if (Pattern.matches(player.getName() + ".?", part)) {
+                    mentionedPlayers.add(player);
+                    mentionedPlayer = player;
+                }
+
+            if (mentionedPlayer != null) {
+                String[] mentionParts = part.split(mentionedPlayer.getName());
+                nextComponent = new TextComponent("@" + mentionedPlayer.getName());
+                nextComponent.setColor(ChatColor.GOLD);
+                if (mentionParts.length > 0) {
+                    TextComponent afterMention = new TextComponent(mentionParts[1]);
+                    afterMention.setColor(chatColor);
+                    nextComponent.addExtra(afterMention);
+                }
+            }
+            // Match links
+            else if (Pattern.matches("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?.*", part)) {
                 part = part.replaceAll("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?", "$0 ");
                 String[] linkParts = part.split(" ");
                 part = linkParts[0];
