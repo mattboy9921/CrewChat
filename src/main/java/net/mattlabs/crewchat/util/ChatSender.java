@@ -66,13 +66,31 @@ public class ChatSender implements Runnable{
                         }, 2);
                     }, 2);
                 }
-            subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix, player.getName(), time, status, message, activeChannel, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+            subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix,
+                    player.getName(),
+                    time,
+                    status,
+                    message,
+                    activeChannel,
+                    channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
         }
-            //subbedPlayer.spigot().sendMessage(message);
-        CrewChat.getInstance().getLogger().info(player.getDisplayName() + ": " + messageString);
-        //DiscordSRV.getPlugin().processChatMessage(player, message, activeChannel, false);
+        CrewChat.getInstance().getLogger().info(TextComponent.toPlainText(Messages.chatMessage(prefix,
+                player.getName(),
+                time,
+                status,
+                message,
+                activeChannel,
+                channelManager.getChatColor(channelManager.channelFromString(activeChannel)))));
         if (CrewChat.getInstance().getDiscordSRVEnabled())
-            DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(), prefix + player.getDisplayName() + "&r: " + messageString);
+            DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(),
+                    DiscordUtil.convertMentionsFromNames(TextComponent.toPlainText(Messages.chatMessage(prefix,
+                            player.getName(),
+                            time,
+                            status,
+                            message,
+                            activeChannel,
+                            channelManager.getChatColor(channelManager.channelFromString(activeChannel)))
+                    ), DiscordSRV.getPlugin().getMainGuild()));
         prefix = null;
         player = null;
         status = null;
