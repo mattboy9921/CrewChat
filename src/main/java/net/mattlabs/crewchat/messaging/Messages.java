@@ -699,11 +699,11 @@ public class Messages {
     public static BaseComponent[] partyBaseCommand() {
         return new ComponentBuilder("[")
                     .color(GRAY)
-                .append("Party")
+                .append("Chat")
                     .color(DARK_GREEN)
                 .append("]")
                     .color(GRAY)
-                .append(" Welcome to parties! ")
+                .append(" Welcome to party chat! ")
                     .color(WHITE)
                 .append("[Help]")
                     .bold(true)
@@ -715,7 +715,7 @@ public class Messages {
                                 .append(" here for help.")
                                     .reset()
                                 .create()))
-                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/party help"))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/chat help"))
                 .create();
     }
 

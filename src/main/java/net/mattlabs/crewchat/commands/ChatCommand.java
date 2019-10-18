@@ -9,6 +9,7 @@ import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PartyChatManager;
 import net.mattlabs.crewchat.util.PlayerManager;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -47,7 +48,7 @@ public class ChatCommand extends BaseCommand {
     }
 
     @Subcommand("info")
-    public class Info extends BaseCommand {
+    public class InfoSubcommand extends BaseCommand {
 
         @Default
         @Description("Lists all channels, parties, active channel, subscribed channels and parties.")
@@ -199,6 +200,58 @@ public class ChatCommand extends BaseCommand {
             }
             else {
                 commandSender.spigot().sendMessage(Messages.cantSetActive(string));
+            }
+        }
+    }
+
+    @Subcommand("party")
+    @Description("Party chat commands.")
+    public class PartySubcommand extends BaseCommand {
+
+        @Default
+        @Description("Party base command.")
+        public void onDefault(CommandSender commandSender) {
+            if (commandSender instanceof Player) commandSender.spigot().sendMessage(Messages.partyBaseCommand());
+            else CrewChat.getInstance().getLogger().info("Welcome to parties! (Run /chat help for help)");
+        }
+
+        @Subcommand("create")
+        public class CreateSubcommand extends BaseCommand {
+
+            private String name;
+
+            @Default
+            @Description("Creates a party.")
+            @CommandPermission("crewchat.party.create")
+            public void onCreate(CommandSender commandSender, String name) {
+                if (commandSender instanceof Player) {
+                    commandSender.spigot().sendMessage(Messages.createPartyName(name));
+                    commandSender.spigot().sendMessage(Messages.createPartyColor());
+                    this.name = name;
+                }
+                else CrewChat.getInstance().getLogger().info("Can't be run from console!");
+            }
+
+            @Subcommand("color")
+            @Private
+            public void onColor(CommandSender commandSender, String color) {
+                if (commandSender instanceof Player) {
+                    ChatColor chatColor = null;
+                    boolean error = false;
+                    try {
+                        chatColor = ChatColor.valueOf(color);
+                    }
+                    catch (IllegalArgumentException e) {
+                        commandSender.spigot().sendMessage(Messages.partyColorInvalid());
+                        error = true;
+                    }
+                    if (!error) {
+                        partyChatManager.addParty(name, chatColor);
+                        playerManager.addParty((Player) commandSender, name);
+                        playerManager.setActiveChannel((Player) commandSender, name);
+                        commandSender.spigot().sendMessage(Messages.partyCreated(name, chatColor));
+                    }
+                }
             }
         }
     }

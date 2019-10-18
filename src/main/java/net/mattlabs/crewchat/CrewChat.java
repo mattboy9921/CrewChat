@@ -107,7 +107,6 @@ public class CrewChat extends JavaPlugin{
         // Register Commands with ACF
         paperCommandManager.registerCommand(new CrewChatCommand());
         paperCommandManager.registerCommand(new ChatCommand());
-        paperCommandManager.registerCommand(new PartyChatCommand());
         paperCommandManager.registerCommand(new MeCommand());
         paperCommandManager.registerCommand(new MsgCommand());
         paperCommandManager.registerCommand(new ReplyCommand());
