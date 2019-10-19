@@ -107,13 +107,13 @@ public class ChatSender implements Runnable{
     private TextComponent parseMessage(String message, ChatColor chatColor) {
         String[] parts = message.split(" ");
         TextComponent componentMessage = new TextComponent("");
+        mentionedPlayers = new ArrayList<>();
 
         for (String part : parts) {
             TextComponent nextComponent = new TextComponent(part);
             Player mentionedPlayer = null;
 
             // Match player names
-            mentionedPlayers = new ArrayList<>();
             for (Player player : subscribedPlayers)
                 if (Pattern.matches(player.getName() + ".?", part)) {
                     mentionedPlayers.add(player);
