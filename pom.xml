@@ -85,7 +85,7 @@
         <dependency>
             <groupId>com.discordsrv</groupId>
             <artifactId>discordsrv</artifactId>
-            <version>1.16.6</version>
+            <version>1.18.3</version>
             <scope>provided</scope>
         </dependency>
         <!-- For bStats -->
