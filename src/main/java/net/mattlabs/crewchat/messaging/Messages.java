@@ -702,50 +702,50 @@ public class Messages {
     }
 
     private static String chatColorTranslator(ChatColor color) {
-        switch (color) {
-            case DARK_RED:
+        switch (color.toString()) {
+            case "§4":
                 return colorize("&4");
-            case RED:
+            case "§c":
                 return colorize("&c");
-            case GOLD:
+            case "§6":
                 return colorize("&6");
-            case YELLOW:
+            case "§e":
                 return colorize("&e");
-            case DARK_GREEN:
+            case "§2":
                 return colorize("&2");
-            case GREEN:
+            case "§a":
                 return colorize("&a");
-            case AQUA:
+            case "§b":
                 return colorize("&b");
-            case DARK_AQUA:
+            case "§3":
                 return colorize("&3");
-            case DARK_BLUE:
+            case "§1":
                 return colorize("&1");
-            case BLUE:
+            case "§9":
                 return colorize("&9");
-            case LIGHT_PURPLE:
+            case "§d":
                 return colorize("&d");
-            case DARK_PURPLE:
+            case "§5":
                 return colorize("&5");
-            case WHITE:
+            case "§f":
                 return colorize("&f");
-            case GRAY:
+            case "§7":
                 return colorize("&7");
-            case DARK_GRAY:
+            case "§8":
                 return colorize("&8");
-            case BLACK:
+            case "§0":
                 return colorize("&0");
-            case BOLD:
+            case "§l":
                 return colorize("&l");
-            case STRIKETHROUGH:
+            case "§m":
                 return colorize("&m");
-            case UNDERLINE:
+            case "§n":
                 return colorize("&n");
-            case ITALIC:
+            case "§o":
                 return colorize("&o");
-            case MAGIC:
+            case "§k":
                 return colorize("&k");
-            case RESET:
+            case "§r":
                 return colorize("&r");
             default:
                 return "ChatColor Error";

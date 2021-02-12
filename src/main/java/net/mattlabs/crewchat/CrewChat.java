@@ -110,7 +110,7 @@ public class CrewChat extends JavaPlugin{
         paperCommandManager.registerCommand(new ReplyCommand());
 
         // bStats
-        Metrics metrics = new Metrics(this);
+        Metrics metrics = new Metrics(this, 5799);
 
         this.getLogger().info("CrewChat loaded - By mattboy9921");
     }
