@@ -13,6 +13,9 @@ public class Chatter {
     private String activeChannel, status;
     private ArrayList<String> subscribedChannels;
 
+    // Empty constructor for Configurate
+    public Chatter() {}
+
     public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, String status) {
         this.uuid = uuid;
         this.activeChannel = activeChannel;
