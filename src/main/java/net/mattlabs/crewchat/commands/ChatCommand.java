@@ -131,6 +131,9 @@ public class ChatCommand extends BaseCommand {
                         commandSender.spigot().sendMessage(Messages.nowSubscribed(channelName));
                     }
                 }
+                else {
+                    commandSender.spigot().sendMessage(Messages.noPermission());
+                }
             }
             else commandSender.spigot().sendMessage(Messages.cantSubscribe(string));
         }
@@ -160,6 +163,9 @@ public class ChatCommand extends BaseCommand {
                         commandSender.spigot().sendMessage(Messages.nowUnsubscribed(channelName));
                     }
                 }
+                else {
+                    commandSender.spigot().sendMessage(Messages.noPermission());
+                }
             }
             else commandSender.spigot().sendMessage(Messages.cantUnsubscribe(string));
         }
@@ -185,6 +191,9 @@ public class ChatCommand extends BaseCommand {
                         playerManager.setActiveChannel((Player) commandSender, channelName);
                         commandSender.spigot().sendMessage(Messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getChatColor()));
                     }
+                }
+                else {
+                    commandSender.spigot().sendMessage(Messages.noPermission());
                 }
             }
             else {
