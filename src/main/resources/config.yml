@@ -1,7 +1,0 @@
-# CrewChat Configuration
-
-# Channels
-channels:
-  global:
-    chatcolor: WHITE
-    autosubscribe: true

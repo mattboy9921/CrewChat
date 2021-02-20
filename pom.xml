@@ -58,6 +58,11 @@
             <id>CodeMC</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
         </repository>
+        <!-- For Configurate -->
+        <repository>
+            <id>sponge</id>
+            <url>https://repo.spongepowered.org/maven</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -94,6 +99,12 @@
             <artifactId>bstats-bukkit</artifactId>
             <version>1.8</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- For Configurate -->
+        <dependency>
+            <groupId>org.spongepowered</groupId>
+            <artifactId>configurate-hocon</artifactId>
+            <version>4.0.0</version>
         </dependency>
     </dependencies>
 
@@ -165,6 +176,16 @@
                             <shadedPattern>net.mattlabs.crewchat</shadedPattern>
                         </relocation>
                     </relocations>
+                    <!-- Fix signed dependency JARs -->
+                    <filters>
+                        <filter>
+                            <artifact>*:*:*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.RSA</exclude>
+                                <exclude>META-INF/*.SF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
                 </configuration>
 
                 <!-- Perform shading for package phase -->

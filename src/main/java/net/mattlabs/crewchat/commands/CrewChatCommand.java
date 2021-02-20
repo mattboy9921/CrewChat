@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.*;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
-import net.mattlabs.crewchat.util.ConfigManager;
+import net.mattlabs.crewchat.util.ConfigurateManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 @CommandPermission("crewchat.use")
 public class CrewChatCommand extends BaseCommand {
 
-    private ConfigManager configManager = CrewChat.getInstance().getConfigManager();
+    private ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
     private ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
     private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
 
@@ -33,7 +33,7 @@ public class CrewChatCommand extends BaseCommand {
     @CommandPermission("crewchat.reload")
     public void onReload(CommandSender commandSender) {
         CrewChat.getInstance().getLogger().info("Reloading CrewChat...");
-        configManager.reloadAllConfigs();
+        configurateManager.reload();
         CrewChat.getInstance().getLogger().info("Configuration reloaded.");
         channelManager.reloadChannels();
         CrewChat.getInstance().getLogger().info("Channels reloaded.");

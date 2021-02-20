@@ -2,12 +2,17 @@ package net.mattlabs.crewchat;
 
 
 import net.md_5.bungee.api.ChatColor;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+@ConfigSerializable
 public class Channel {
 
-    private String name;
+    private transient String name;
     private ChatColor chatColor;
     private boolean autoSubscribe;
+
+    // Empty constructor for Configurate
+    public Channel() { }
 
     public Channel(String name, ChatColor chatColor, boolean autoSubscribe) {
         this.name = name;

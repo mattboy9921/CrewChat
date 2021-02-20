@@ -1,32 +1,27 @@
 package net.mattlabs.crewchat.util;
 
 import net.mattlabs.crewchat.Channel;
+import net.mattlabs.crewchat.Config;
 import net.mattlabs.crewchat.CrewChat;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 
 public class ChannelManager {
 
-    private ConfigManager configManager;
+    private ConfigurateManager configurateManager;
     private ArrayList<Channel> channels;
 
     public ChannelManager() {
-        configManager = CrewChat.getInstance().getConfigManager();
+        configurateManager = CrewChat.getInstance().getConfigurateManager();
         channels = new ArrayList<>();
     }
 
     public void loadChannels() {
-        ConfigurationSection channelsConfig = configManager.getFileConfig("config.yml")
-                .getConfigurationSection("channels");
-        for (String key : channelsConfig.getKeys(false)) {
-            Channel channel = new Channel(key, // Channel Name
-                    ChatColor.valueOf(channelsConfig.getConfigurationSection(key).getString("chatcolor")), // Chat Color
-                    channelsConfig.getConfigurationSection(key).getBoolean("autosubscribe")); // Auto Subscribe
-            CrewChat.getInstance().getLogger().info("Channel \"" + key + "\" added!");
-            channels.add(channel);
-        }
+        Config config = configurateManager.get("config.conf");
+        channels = (ArrayList<Channel>) config.getChannels();
+        for (Channel channel : channels)
+            CrewChat.getInstance().getLogger().info("Channel \"" + channel.getName() + "\" added!");
     }
 
     public void reloadChannels() {

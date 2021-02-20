@@ -3,36 +3,28 @@ package net.mattlabs.crewchat.util;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.Chatter;
 import net.mattlabs.crewchat.CrewChat;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
+import net.mattlabs.crewchat.PlayerData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class PlayerManager {
 
-    private ConfigManager configManager;
+    private ConfigurateManager configurateManager;
     private ChannelManager channelManager;
     private ArrayList<Chatter> chatters, onlineChatters;
 
     public PlayerManager() {
-        configManager = CrewChat.getInstance().getConfigManager();
+        configurateManager = CrewChat.getInstance().getConfigurateManager();
         channelManager = CrewChat.getInstance().getChannelManager();
         chatters = new ArrayList<>();
         onlineChatters = new ArrayList<>();
     }
 
     public void loadPlayers() {
-        ConfigurationSection playersConfig = configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players");
-        for (String key : playersConfig.getKeys(false)) {
-            String activeChannel = playersConfig.getConfigurationSection(key).getString("active-channel");
-            ArrayList<String> subscribedChannels = new ArrayList<>(playersConfig.getConfigurationSection(key).getStringList("subscribed-channels"));
-            String status = playersConfig.getConfigurationSection(key).getString("status");
-            chatters.add(new Chatter(UUID.fromString(key), activeChannel, subscribedChannels, status));
-        }
+        PlayerData playerData = configurateManager.get("playerdata.conf");
+        chatters = playerData.getChatters();
         CrewChat.getInstance().getLogger().info(chatters.size() + " player(s) loaded.");
     }
 
@@ -74,24 +66,14 @@ public class PlayerManager {
         }
         else {
             CrewChat.getInstance().getLogger().info("Player \"" + player.getName() + "\" data doesn't exist, creating...");
-            String status = "No status...";
+            Chatter chatter = new Chatter(player.getUniqueId(), activeChannel, subscribedChannels, "No status...");
 
-            ConfigurationSection playersConfig = configManager.getFileConfig("playerdata.yml")
-                    .getConfigurationSection("players");
-            ConfigurationSection playerConfig = playersConfig.createSection(player.getUniqueId().toString());
+            PlayerData playerData = configurateManager.get("playerdata.conf");
+            playerData.addChatter(chatter);
 
-            playerConfig.createSection("active-channel");
-            playerConfig.set("active-channel", activeChannel);
+            chatters.add(chatter);
 
-            playerConfig.createSection("subscribed-channels");
-            playerConfig.set("subscribed-channels", subscribedChannels);
-
-            playerConfig.createSection("status");
-            playerConfig.set("status", status);
-
-            chatters.add(new Chatter(player.getUniqueId(), activeChannel, subscribedChannels, status));
-
-            configManager.saveConfig("playerdata.yml");
+            configurateManager.save("playerdata.conf");
         }
     }
 
@@ -113,8 +95,7 @@ public class PlayerManager {
     }
 
     public String getActiveChannel(Player player) {
-        return configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players." + player.getUniqueId().toString()).getString("active-channel");
+        return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId(), null, null, null))).getActiveChannel();
     }
 
     public void setActiveChannel(Player player, String channelName) {
@@ -122,15 +103,13 @@ public class PlayerManager {
         chatter = chatters.get(chatters.indexOf(chatter));
         chatter.setActiveChannel(channelName);
         // Save to config
-        ConfigurationSection playersConfig = configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players." + player.getUniqueId().toString());
-        playersConfig.set("active-channel", channelName);
-        configManager.saveConfig("playerdata.yml");
+        PlayerData playerData = configurateManager.get("playerdata.conf");
+        playerData.setChatter(chatter);
+        configurateManager.save("playerdata.conf");
     }
 
     public List<String> getSubscribedChannels(Player player) {
-        return configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players." + player.getUniqueId().toString()).getStringList("subscribed-channels");
+        return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId(), null, null, null))).getSubscribedChannels();
     }
 
     public ArrayList<Player> getSubscribedPlayers(String activeChannel) {
@@ -148,16 +127,13 @@ public class PlayerManager {
         chatter = chatters.get(chatters.indexOf(chatter));
         chatter.setStatus(status);
         // Save to config
-        ConfigurationSection playersConfig = configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players." + player.getUniqueId().toString());
-        playersConfig.set("status", status);
-        configManager.saveConfig("playerdata.yml");
+        PlayerData playerData = configurateManager.get("playerdata.conf");
+        playerData.setChatter(chatter);
+        configurateManager.save("playerdata.conf");
     }
 
     public String getStatus(Player player) {
-        Chatter chatter = new Chatter(player.getUniqueId(), null, null, null);
-        chatter = chatters.get(chatters.indexOf(chatter));
-        return chatter.getStatus();
+        return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId(), null, null, null))).getStatus();
     }
 
     public void addSubscription(Player player, String channelName) {
@@ -165,12 +141,9 @@ public class PlayerManager {
         chatter = chatters.get(chatters.indexOf(chatter));
         chatter.addSubscription(channelName);
         // Save to config
-        ConfigurationSection playersConfig = configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players." + player.getUniqueId().toString());
-        List<String> subs = playersConfig.getStringList("subscribed-channels");
-        subs.add(channelName);
-        playersConfig.set("subscribed-channels", subs);
-        configManager.saveConfig("playerdata.yml");
+        PlayerData playerData = configurateManager.get("playerdata.conf");
+        playerData.setChatter(chatter);
+        configurateManager.save("playerdata.conf");
     }
 
     public void removeSubscription(Player player, String channelName) {
@@ -178,11 +151,8 @@ public class PlayerManager {
         chatter = chatters.get(chatters.indexOf(chatter));
         chatter.removeSubscription(channelName);
         // Save to config
-        ConfigurationSection playersConfig = configManager.getFileConfig("playerdata.yml")
-                .getConfigurationSection("players." + player.getUniqueId().toString());
-        List<String> subs = playersConfig.getStringList("subscribed-channels");
-        subs.remove(channelName);
-        playersConfig.set("subscribed-channels", subs);
-        configManager.saveConfig("playerdata.yml");
+        PlayerData playerData = configurateManager.get("playerdata.conf");
+        playerData.setChatter(chatter);
+        configurateManager.save("playerdata.conf");
     }
 }
