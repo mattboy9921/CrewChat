@@ -46,11 +46,11 @@ CrewChat:
  - `crewchat.chat` - Allows player to use `/chat`
  - `crewchat.me` - Allows player to use `/me`
  - `crewchat.pm` - Allows player to use `/msg` and `/reply`
- - `crewchat.subscribe.<channel>` - Allows player to subscribe to `<channel>`
- - `crewchat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
- - `crewchat.active.<channel>` - Allows player to set `<channel>` as active channel
+ - `crewchat.chat.subscribe.<channel>` - Allows player to subscribe to `<channel>`
+ - `crewchat.chat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
+ - `crewchat.chat.switch.<channel>` - Allows player to switch `<channel>` as active channel
+ - `crewchat.chat.info` -  Allows player to run `/chat info`
  - `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
  - `crewchat.reload` - Allows player to use `/crewchat reload`
- - `crewchat.chat.info` -  Allows player to run `/chat info`
  
 Tested working on Paper 1.13, 1.14.

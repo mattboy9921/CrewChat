@@ -6,12 +6,12 @@ author: mattboy9921 (mattboy9921@aim.com)
 main: net.mattlabs.crewchat.CrewChat
 
 permissions:
-  crewchat.subscribe.channel:
+  crewchat.chat.subscribe.channel:
     description: Allows player to subscribe to [channel].
-  crewchat.unsubscribe.channel:
+  crewchat.chat.unsubscribe.channel:
     description: Allows player to unsubscribe to [channel].
-  crewchat.active.channel:
-    description: Allows player to set [channel] as active channel.
+  crewchat.chat.switch.channel:
+    description: Allows player to switch to [channel] as active channel.
   crewchat.speak.channel:
     description: Allows player to speak in [channel].
   crewchat.reload:
