@@ -1,12 +1,13 @@
 package net.mattlabs.crewchat;
 
 import co.aikar.commands.PaperCommandManager;
-import github.scarsz.discordsrv.DiscordSRV;
+import io.leangen.geantyref.TypeToken;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
 import net.mattlabs.crewchat.listeners.JoinListener;
 import net.mattlabs.crewchat.listeners.QuitListener;
 import net.mattlabs.crewchat.util.*;
+import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
@@ -17,7 +18,6 @@ public class CrewChat extends JavaPlugin{
 
     private static CrewChat instance;
 
-    private ConfigManager configManager;
     private ChannelManager channelManager;
     private PlayerManager playerManager;
     private MsgManager msgManager;
@@ -25,6 +25,7 @@ public class CrewChat extends JavaPlugin{
     private MeSender meSender;
     private static Chat chat = null;
     private static Permission perms = null;
+    private ConfigurateManager configurateManager;
 
     private boolean discordSRVEnabled;
 
@@ -68,18 +69,21 @@ public class CrewChat extends JavaPlugin{
             return;
         }
 
-        // Configuration Section
-        configManager = new ConfigManager(this);
-        configManager.loadConfigFiles(
-                new ConfigManager.ConfigPath(
-                        "config.yml",
-                        "config.yml",
-                        "config.yml"),
-                new ConfigManager.ConfigPath(
-                        "playerdata.yml",
-                        "playerdata.yml",
-                        "playerdata.yml"));
-        configManager.saveAllConfigs(false);
+        // Configuration Section - New
+        configurateManager = new ConfigurateManager();
+
+        configurateManager.add("config.conf", TypeToken.get(Config.class), new Config(), Config::new,
+                opts -> opts.serializers(build -> build.register(ChatColor.class, ChatColorSerializer.INSTANCE)));
+        configurateManager.add("playerdata.conf", TypeToken.get(PlayerData.class), new PlayerData(), PlayerData::new);
+
+        configurateManager.saveDefaults("config.conf");
+        configurateManager.saveDefaults("playerdata.conf");
+
+        configurateManager.load("config.conf");
+        configurateManager.load("playerdata.conf");
+
+        configurateManager.save("config.conf");
+        configurateManager.save("playerdata.conf");
 
         // Load Channels
         channelManager = new ChannelManager();
@@ -118,8 +122,8 @@ public class CrewChat extends JavaPlugin{
     public void onDisable() {
     }
 
-    public ConfigManager getConfigManager() {
-        return configManager;
+    public ConfigurateManager getConfigurateManager() {
+        return configurateManager;
     }
 
     public static CrewChat getInstance() {

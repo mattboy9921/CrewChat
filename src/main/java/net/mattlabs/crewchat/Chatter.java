@@ -1,13 +1,15 @@
 package net.mattlabs.crewchat;
 
 import org.bukkit.entity.Player;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+@ConfigSerializable
 public class Chatter {
 
-    private UUID uuid;
+    private transient UUID uuid;
     private String activeChannel, status;
     private ArrayList<String> subscribedChannels;
 
@@ -49,6 +51,14 @@ public class Chatter {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getActiveChannel() {
+        return activeChannel;
+    }
+
+    public ArrayList<String> getSubscribedChannels() {
+        return subscribedChannels;
     }
 
     public void addSubscription(String channelName) {

@@ -3,7 +3,6 @@ package net.mattlabs.crewchat.listeners;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.ChannelManager;
-import net.mattlabs.crewchat.util.ConfigManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
