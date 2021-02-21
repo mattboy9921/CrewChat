@@ -69,7 +69,7 @@ public class CrewChat extends JavaPlugin{
             return;
         }
 
-        // Configuration Section - New
+        // Configuration Section
         configurateManager = new ConfigurateManager();
 
         configurateManager.add("config.conf", TypeToken.get(Config.class), new Config(), Config::new,
