@@ -574,7 +574,7 @@ public class Messages {
                 .append("")
                     .reset()
                 .append(colorize(playerPrefix) + player)
-                .append(" is already muted!")
+                .append(" is already unmuted!")
                     .reset()
                     .color(WHITE)
                 .create();
