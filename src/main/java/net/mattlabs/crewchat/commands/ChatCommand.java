@@ -1,12 +1,17 @@
 package net.mattlabs.crewchat.commands;
 
-import co.aikar.commands.*;
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.BukkitCommandIssuer;
+import co.aikar.commands.ConditionFailedException;
+import co.aikar.commands.PaperCommandManager;
 import co.aikar.commands.annotation.*;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
+import net.milkbowl.vault.chat.Chat;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,6 +23,7 @@ public class ChatCommand extends BaseCommand {
     private ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
     private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
     private PaperCommandManager paperCommandManager = CrewChat.getInstance().getPaperCommandManager();
+    private Chat chat = CrewChat.getChat();
 
     public ChatCommand() {
         // Command Conditions
@@ -198,6 +204,46 @@ public class ChatCommand extends BaseCommand {
             }
             else {
                 commandSender.spigot().sendMessage(Messages.cantSetActive(string));
+            }
+        }
+    }
+
+    @Subcommand("mute")
+    @Description("Mutes another player.")
+    @CommandCompletion("@players")
+    @CommandPermission("crewchat.chat.mute")
+    public void onMute(CommandSender commandSender, String string) {
+        if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
+        else {
+            // Check if player exists
+            Player mutee = Bukkit.getPlayerExact(string);
+            if (mutee == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
+            // Check if muting self
+            else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
+                commandSender.spigot().sendMessage(Messages.cantMuteSelf());
+            else {
+                playerManager.addMutedPlayer((Player) commandSender, mutee);
+                commandSender.spigot().sendMessage(Messages.playerMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+            }
+        }
+    }
+
+    @Subcommand("unmute")
+    @Description("Unmutes another player.")
+    @CommandCompletion("@players")
+    @CommandPermission("crewchat.chat.mute")
+    public void onUnmute(CommandSender commandSender, String string) {
+        if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
+        else {
+            // Check if player exists
+            Player mutee = Bukkit.getPlayerExact(string);
+            if (mutee == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
+                // Check if muting self
+            else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
+                commandSender.spigot().sendMessage(Messages.cantUnmuteSelf());
+            else {
+                playerManager.removeMutedPlayer((Player) commandSender, mutee);
+                commandSender.spigot().sendMessage(Messages.playerUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             }
         }
     }

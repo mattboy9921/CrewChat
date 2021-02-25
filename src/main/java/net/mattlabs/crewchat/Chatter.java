@@ -12,14 +12,24 @@ public class Chatter {
     private transient UUID uuid;
     private String activeChannel, status;
     private ArrayList<String> subscribedChannels;
+    private ArrayList<UUID> mutedPlayers;
 
     // Empty constructor for Configurate
     public Chatter() {}
 
-    public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, String status) {
+    public Chatter(UUID uuid) {
+        this.uuid = uuid;
+        activeChannel = null;
+        subscribedChannels = null;
+        mutedPlayers = null;
+        status = null;
+    }
+
+    public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, ArrayList<UUID> mutedPlayers, String status) {
         this.uuid = uuid;
         this.activeChannel = activeChannel;
         this.subscribedChannels = subscribedChannels;
+        this.mutedPlayers = mutedPlayers;
         this.status = status;
     }
 
@@ -74,6 +84,18 @@ public class Chatter {
 
     public void setActiveChannel(String activeChannel) {
         this.activeChannel = activeChannel;
+    }
+
+    public ArrayList<UUID> getMutedPlayers() {
+        return mutedPlayers;
+    }
+
+    public void addMutedPlayer(UUID uuid) {
+        mutedPlayers.add(uuid);
+    }
+
+    public void removeMutedPlayer(UUID uuid) {
+        mutedPlayers.remove(uuid);
     }
 
     @Override

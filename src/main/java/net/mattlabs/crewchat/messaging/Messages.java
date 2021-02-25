@@ -524,6 +524,58 @@ public class Messages {
                 .create();
     }
 
+    public static BaseComponent[] cantMuteSelf() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("You can't mute yourself!")
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] cantUnmuteSelf() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("You can't unmute yourself!")
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerMuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append(playerPrefix + player)
+                .append(" has been muted.")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerUnmuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append(playerPrefix + player)
+                .append(" has been unmuted.")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
     public static BaseComponent[] badConfig() {
         return new ComponentBuilder("[")
                     .color(GRAY)
