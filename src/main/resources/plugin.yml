@@ -4,6 +4,9 @@ api-version: 1.13
 description: ${project.description}
 author: mattboy9921 (mattboy9921@aim.com)
 main: net.mattlabs.crewchat.CrewChat
+softdepend:
+  - DiscordSRV
+  - Vault
 
 permissions:
   crewchat.chat.subscribe.channel:
