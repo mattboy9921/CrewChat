@@ -548,6 +548,38 @@ public class Messages {
                 .create();
     }
 
+    public static BaseComponent[] playerAlreadyMuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("")
+                    .reset()
+                .append(colorize(playerPrefix) + player)
+                .append(" is already muted!")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerAlreadyUnmuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("")
+                    .reset()
+                .append(colorize(playerPrefix) + player)
+                .append(" is already muted!")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
     public static BaseComponent[] playerMuted(String playerPrefix, String player) {
         return new ComponentBuilder("[")
                     .color(GRAY)

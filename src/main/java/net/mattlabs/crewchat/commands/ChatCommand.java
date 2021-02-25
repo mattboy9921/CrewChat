@@ -221,6 +221,9 @@ public class ChatCommand extends BaseCommand {
             // Check if muting self
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
                 commandSender.spigot().sendMessage(Messages.cantMuteSelf());
+            // Check if mutee already muted
+            else if (playerManager.getMutedPlayers((Player) commandSender).contains(mutee.getUniqueId()))
+                commandSender.spigot().sendMessage(Messages.playerAlreadyMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             else {
                 playerManager.addMutedPlayer((Player) commandSender, mutee);
                 commandSender.spigot().sendMessage(Messages.playerMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
@@ -238,9 +241,12 @@ public class ChatCommand extends BaseCommand {
             // Check if player exists
             Player mutee = Bukkit.getPlayerExact(string);
             if (mutee == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
-                // Check if muting self
+            // Check if muting self
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
                 commandSender.spigot().sendMessage(Messages.cantUnmuteSelf());
+            // Check if mutee already unmuted
+            else if (playerManager.getMutedPlayers((Player) commandSender).contains(mutee.getUniqueId()))
+                commandSender.spigot().sendMessage(Messages.playerAlreadyUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             else {
                 playerManager.removeMutedPlayer((Player) commandSender, mutee);
                 commandSender.spigot().sendMessage(Messages.playerUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
