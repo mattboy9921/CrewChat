@@ -15,6 +15,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 @CommandAlias("chat|c")
 @CommandPermission("crewchat.chat")
 @Conditions("badconfig")
@@ -65,6 +67,11 @@ public class ChatCommand extends BaseCommand {
                 commandSender.spigot().sendMessage(Messages.channelListSubscribedHeader());
                 for (String channel : playerManager.getSubscribedChannels((Player) commandSender))
                     commandSender.spigot().sendMessage(Messages.channelListEntry(channel, channelManager.channelFromString(channel).getChatColor()));
+                if (!playerManager.getMutedPlayers((Player) commandSender).isEmpty()) {
+                    commandSender.spigot().sendMessage(Messages.mutedListHeader());
+                    for (UUID uuid : playerManager.getMutedPlayers((Player) commandSender))
+                        commandSender.spigot().sendMessage(Messages.mutedListEntry(Bukkit.getOfflinePlayer(uuid).getName()));
+                }
             }
             else {
                 CrewChat.getInstance().getLogger().info("Channel list: (Run /chat info channel [channel] for more info)");
