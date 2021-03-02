@@ -1,5 +1,6 @@
 package net.mattlabs.crewchat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -12,7 +13,7 @@ public class Chatter {
     private transient UUID uuid;
     private String activeChannel, status;
     private ArrayList<String> subscribedChannels;
-    private ArrayList<UUID> mutedPlayers;
+    private ArrayList<Mutee> mutedPlayers;
 
     // Empty constructor for Configurate
     public Chatter() {}
@@ -25,7 +26,7 @@ public class Chatter {
         status = null;
     }
 
-    public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, ArrayList<UUID> mutedPlayers, String status) {
+    public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, ArrayList<Mutee> mutedPlayers, String status) {
         this.uuid = uuid;
         this.activeChannel = activeChannel;
         this.subscribedChannels = subscribedChannels;
@@ -86,16 +87,21 @@ public class Chatter {
         this.activeChannel = activeChannel;
     }
 
-    public ArrayList<UUID> getMutedPlayers() {
+    public ArrayList<Mutee> getMutedPlayers() {
         return mutedPlayers;
     }
 
     public void addMutedPlayer(UUID uuid) {
-        mutedPlayers.add(uuid);
+        if (mutedPlayers.contains(new Mutee(uuid, null)))
+            mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid, null))).updateTime();
+        else {
+            mutedPlayers.add(new Mutee(uuid, Bukkit.getPlayer(uuid).getName()));
+            CrewChat.getInstance().getLogger().info(mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid, null))).getTime().toString());
+        }
     }
 
     public void removeMutedPlayer(UUID uuid) {
-        mutedPlayers.remove(uuid);
+        mutedPlayers.remove(new Mutee(uuid, null));
     }
 
     @Override

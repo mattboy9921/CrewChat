@@ -56,7 +56,7 @@ public class ChatSender implements Runnable{
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers) {
-            if (!playerManager.getMutedPlayers(subbedPlayer).contains(player.getUniqueId())) {
+            if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(player.getName())) {
                 for (Player mentionedPlayer : mentionedPlayers)
                     if (mentionedPlayer.equals(subbedPlayer)) {
                         subbedPlayer.playNote(subbedPlayer.getLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(0, Note.Tone.C));

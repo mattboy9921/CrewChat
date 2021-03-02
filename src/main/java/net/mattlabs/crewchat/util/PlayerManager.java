@@ -1,9 +1,6 @@
 package net.mattlabs.crewchat.util;
 
-import net.mattlabs.crewchat.Channel;
-import net.mattlabs.crewchat.Chatter;
-import net.mattlabs.crewchat.CrewChat;
-import net.mattlabs.crewchat.PlayerData;
+import net.mattlabs.crewchat.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -137,8 +134,12 @@ public class PlayerManager {
         return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getStatus();
     }
 
-    public ArrayList<UUID> getMutedPlayers(Player player) {
-        return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getMutedPlayers();
+    public ArrayList<String> getMutedPlayerNames(Player player) {
+        ArrayList<String> mutedPlayerNames = new ArrayList<>();
+        chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getMutedPlayers().forEach(mutee -> {
+            mutedPlayerNames.add(mutee.getName());
+        });
+        return mutedPlayerNames;
     }
 
     public void addSubscription(Player player, String channelName) {

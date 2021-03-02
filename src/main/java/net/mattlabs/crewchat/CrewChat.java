@@ -14,6 +14,8 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.time.LocalDateTime;
+
 public class CrewChat extends JavaPlugin{
 
     private static CrewChat instance;
@@ -70,11 +72,13 @@ public class CrewChat extends JavaPlugin{
         }
 
         // Configuration Section
+        getLogger().info(LocalDateTime.now().toString());
         configurateManager = new ConfigurateManager();
 
         configurateManager.add("config.conf", TypeToken.get(Config.class), new Config(), Config::new,
                 opts -> opts.serializers(build -> build.register(ChatColor.class, ChatColorSerializer.INSTANCE)));
-        configurateManager.add("playerdata.conf", TypeToken.get(PlayerData.class), new PlayerData(), PlayerData::new);
+        configurateManager.add("playerdata.conf", TypeToken.get(PlayerData.class), new PlayerData(), PlayerData::new,
+                opts -> opts.serializers(build -> build.register(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE)));
 
         configurateManager.saveDefaults("config.conf");
         configurateManager.saveDefaults("playerdata.conf");
