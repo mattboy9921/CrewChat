@@ -248,7 +248,7 @@ public class ChatCommand extends BaseCommand {
             // Check if player exists
             Player mutee = Bukkit.getPlayerExact(string);
             if (mutee == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
-            // Check if muting self
+            // Check if unmuting self
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
                 commandSender.spigot().sendMessage(Messages.cantUnmuteSelf());
             // Check if mutee already unmuted
