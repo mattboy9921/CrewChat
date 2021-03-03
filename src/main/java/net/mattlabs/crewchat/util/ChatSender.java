@@ -36,6 +36,8 @@ public class ChatSender implements Runnable{
     }
 
     public void sendMessage(Player player, String message) {
+        playerManager.updateMutedPlayers();
+
         this.player = player;
         if (playerManager.isOnline(player)) {
             messageString = message;
@@ -56,23 +58,25 @@ public class ChatSender implements Runnable{
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers) {
-            for (Player mentionedPlayer : mentionedPlayers)
-                if (mentionedPlayer.equals(subbedPlayer)) {
-                    subbedPlayer.playNote(subbedPlayer.getLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(0, Note.Tone.C));
-                    CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), () -> {
-                        subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(1, Note.Tone.F));
+            if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(player.getName())) {
+                for (Player mentionedPlayer : mentionedPlayers)
+                    if (mentionedPlayer.equals(subbedPlayer)) {
+                        subbedPlayer.playNote(subbedPlayer.getLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(0, Note.Tone.C));
                         CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), () -> {
-                            subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.natural(1, Note.Tone.B));
+                            subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(1, Note.Tone.F));
+                            CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), () -> {
+                                subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.natural(1, Note.Tone.B));
+                            }, 2);
                         }, 2);
-                    }, 2);
-                }
-            subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix,
-                    player.getName(),
-                    time,
-                    status,
-                    message,
-                    activeChannel,
-                    channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+                    }
+                subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix,
+                        player.getName(),
+                        time,
+                        status,
+                        message,
+                        activeChannel,
+                        channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+            }
         }
         CrewChat.getInstance().getLogger().info(TextComponent.toPlainText(Messages.chatMessage(prefix,
                 player.getName(),

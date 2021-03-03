@@ -1,5 +1,6 @@
 package net.mattlabs.crewchat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -12,14 +13,24 @@ public class Chatter {
     private transient UUID uuid;
     private String activeChannel, status;
     private ArrayList<String> subscribedChannels;
+    private ArrayList<Mutee> mutedPlayers;
 
     // Empty constructor for Configurate
     public Chatter() {}
 
-    public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, String status) {
+    public Chatter(UUID uuid) {
+        this.uuid = uuid;
+        activeChannel = null;
+        subscribedChannels = null;
+        mutedPlayers = null;
+        status = null;
+    }
+
+    public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, ArrayList<Mutee> mutedPlayers, String status) {
         this.uuid = uuid;
         this.activeChannel = activeChannel;
         this.subscribedChannels = subscribedChannels;
+        this.mutedPlayers = mutedPlayers;
         this.status = status;
     }
 
@@ -74,6 +85,27 @@ public class Chatter {
 
     public void setActiveChannel(String activeChannel) {
         this.activeChannel = activeChannel;
+    }
+
+    public ArrayList<Mutee> getMutedPlayers() {
+        return mutedPlayers;
+    }
+
+    public void addMutedPlayer(UUID uuid) {
+        if (mutedPlayers.contains(new Mutee(uuid, null, null)))
+            mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid, null, null))).updateTime();
+        else {
+            mutedPlayers.add(new Mutee(uuid, CrewChat.getChat().getPlayerPrefix(Bukkit.getPlayer(uuid)), Bukkit.getPlayer(uuid).getName()));
+            CrewChat.getInstance().getLogger().info(mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid,null, null))).getTime().toString());
+        }
+    }
+
+    public void removeMutedPlayer(UUID uuid) {
+        mutedPlayers.remove(new Mutee(uuid, null, null));
+    }
+
+    public boolean hasMuted(UUID uuid) {
+        return mutedPlayers.contains(new Mutee(uuid, null, null));
     }
 
     @Override

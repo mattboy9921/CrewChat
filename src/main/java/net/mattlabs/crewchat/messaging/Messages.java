@@ -310,6 +310,28 @@ public class Messages {
                 .create();
     }
 
+    public static BaseComponent[] mutedListHeader() {
+        return new ComponentBuilder("Your muted players are:")
+                    .color(GRAY)
+                .create();
+    }
+
+    public static BaseComponent[] mutedListEntry(String player) {
+        return new ComponentBuilder(" - ")
+                    .color(DARK_GREEN)
+                .append(player)
+                    .color(WHITE)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder("Click")
+                                    .color(AQUA)
+                                    .bold(true)
+                                .append(" to unmute.")
+                                    .reset()
+                                .create()))
+                    .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/chat unmute " + player))
+                .create();
+    }
+
     public static BaseComponent[] statusSet(String status) {
         return new ComponentBuilder("[")
                     .color(GRAY)
@@ -520,6 +542,94 @@ public class Messages {
                 .append("] ")
                     .color(GRAY)
                 .append("You haven't received any messages!")
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] cantMuteSelf() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("You can't mute yourself!")
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] cantUnmuteSelf() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("You can't unmute yourself!")
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerAlreadyMuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("")
+                    .reset()
+                .append(colorize(playerPrefix) + player)
+                .append(" is already muted!")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerAlreadyUnmuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("")
+                    .reset()
+                .append(colorize(playerPrefix) + player)
+                .append(" is already unmuted!")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerMuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("")
+                    .reset()
+                .append(colorize(playerPrefix) + player)
+                .append(" has been muted.")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerUnmuted(String playerPrefix, String player) {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append("")
+                    .reset()
+                .append(colorize(playerPrefix) + player)
+                .append(" has been unmuted.")
+                    .reset()
                     .color(WHITE)
                 .create();
     }

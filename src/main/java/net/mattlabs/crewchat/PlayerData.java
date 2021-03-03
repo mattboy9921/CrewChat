@@ -27,7 +27,7 @@ public class PlayerData {
 
         // Convert map to arraylist
         ArrayList<Chatter> chatters = new ArrayList<>();
-        chattersMap.forEach((uuid, chatter) -> chatters.add(new Chatter(uuid, chatter.getActiveChannel(), chatter.getSubscribedChannels(), chatter.getStatus())));
+        chattersMap.forEach((uuid, chatter) -> chatters.add(new Chatter(uuid, chatter.getActiveChannel(), chatter.getSubscribedChannels(), chatter.getMutedPlayers(), chatter.getStatus())));
         return chatters;
     }
 

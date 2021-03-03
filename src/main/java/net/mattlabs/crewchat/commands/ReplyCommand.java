@@ -27,6 +27,8 @@ public class ReplyCommand extends BaseCommand {
     public void onDefault(CommandSender commandSender, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
+            playerManager.updateMutedPlayers();
+
             if (msgManager.playerExists(((Player) commandSender).getName())) {
                 if (Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getName())) == null)
                     commandSender.spigot().sendMessage(Messages.playerNoExist());
@@ -38,12 +40,13 @@ public class ReplyCommand extends BaseCommand {
                             chat.getPlayerPrefix(recipient), recipient.getName(),
                             playerManager.getStatus((Player) commandSender),
                             playerManager.getStatus(recipient), message));
-                    recipient.spigot().sendMessage(Messages.privateMessageReceive(
-                            chat.getPlayerPrefix((Player) commandSender),
-                            chat.getPlayerPrefix(recipient),
-                            ((Player) commandSender).getName(),
-                            playerManager.getStatus((Player) commandSender),
-                            playerManager.getStatus(recipient), message));
+                    if (!playerManager.hasMuted(recipient, (Player) commandSender))
+                        recipient.spigot().sendMessage(Messages.privateMessageReceive(
+                                chat.getPlayerPrefix((Player) commandSender),
+                                chat.getPlayerPrefix(recipient),
+                                ((Player) commandSender).getName(),
+                                playerManager.getStatus((Player) commandSender),
+                                playerManager.getStatus(recipient), message));
                 }
             }
             else commandSender.spigot().sendMessage(Messages.noPMReceived());
