@@ -36,6 +36,8 @@ public class ChatSender implements Runnable{
     }
 
     public void sendMessage(Player player, String message) {
+        playerManager.updateMutedPlayers();
+
         this.player = player;
         if (playerManager.isOnline(player)) {
             messageString = message;

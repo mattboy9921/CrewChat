@@ -27,6 +27,8 @@ public class ReplyCommand extends BaseCommand {
     public void onDefault(CommandSender commandSender, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
+            playerManager.updateMutedPlayers();
+
             if (msgManager.playerExists(((Player) commandSender).getName())) {
                 if (Bukkit.getPlayer(msgManager.getLastSender(((Player) commandSender).getName())) == null)
                     commandSender.spigot().sendMessage(Messages.playerNoExist());

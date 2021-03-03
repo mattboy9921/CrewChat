@@ -1,6 +1,8 @@
 package net.mattlabs.crewchat.util;
 
 import net.mattlabs.crewchat.*;
+import net.mattlabs.crewchat.messaging.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -174,5 +176,17 @@ public class PlayerManager {
         muter = chatters.get(chatters.indexOf(muter));
         muter.removeMutedPlayer(muteePlayer.getUniqueId());
         configurateManager.save("playerdata.conf");
+    }
+
+    public void updateMutedPlayers() {
+        CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
+            for (Chatter chatter : onlineChatters)
+                for (Mutee mutee : chatter.getMutedPlayers())
+                    if (mutee.getTime().isAfter(mutee.getTime().plusHours(24))) {
+                        chatter.removeMutedPlayer(mutee.getUuid());
+                        if (Bukkit.getOfflinePlayer(chatter.getUuid()).isOnline())
+                            Bukkit.getPlayer(chatter.getUuid()).spigot().sendMessage(Messages.playerUnmuted(mutee.getPrefix(), mutee.getName()));
+                    }
+        });
     }
 }

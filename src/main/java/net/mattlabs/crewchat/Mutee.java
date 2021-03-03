@@ -9,20 +9,25 @@ import java.util.UUID;
 public class Mutee {
 
     private UUID uuid;
-    private String name;
+    private String prefix, name;
     private LocalDateTime time;
 
     // Empty constructor for Configurate
     public Mutee() {}
 
-    public Mutee(UUID uuid, String name) {
+    public Mutee(UUID uuid, String prefix, String name) {
         this.uuid = uuid;
+        this.prefix = prefix;
         this.name = name;
         time = LocalDateTime.now();
     }
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 
     public String getName() {

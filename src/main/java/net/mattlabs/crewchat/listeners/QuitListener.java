@@ -20,6 +20,8 @@ public class QuitListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        playerManager.updateMutedPlayers();
+
         Player player = event.getPlayer();
         msgManager.removePlayer(player.getDisplayName());
         if (playerManager.isOnline(player)) playerManager.setOffline(player);

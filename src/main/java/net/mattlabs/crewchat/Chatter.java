@@ -92,16 +92,16 @@ public class Chatter {
     }
 
     public void addMutedPlayer(UUID uuid) {
-        if (mutedPlayers.contains(new Mutee(uuid, null)))
-            mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid, null))).updateTime();
+        if (mutedPlayers.contains(new Mutee(uuid, null, null)))
+            mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid, null, null))).updateTime();
         else {
-            mutedPlayers.add(new Mutee(uuid, Bukkit.getPlayer(uuid).getName()));
-            CrewChat.getInstance().getLogger().info(mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid, null))).getTime().toString());
+            mutedPlayers.add(new Mutee(uuid, CrewChat.getChat().getPlayerPrefix(Bukkit.getPlayer(uuid)), Bukkit.getPlayer(uuid).getName()));
+            CrewChat.getInstance().getLogger().info(mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid,null, null))).getTime().toString());
         }
     }
 
     public void removeMutedPlayer(UUID uuid) {
-        mutedPlayers.remove(new Mutee(uuid, null));
+        mutedPlayers.remove(new Mutee(uuid, null, null));
     }
 
     @Override

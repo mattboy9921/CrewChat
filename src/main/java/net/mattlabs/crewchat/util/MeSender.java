@@ -22,6 +22,8 @@ public class MeSender implements Runnable {
     }
 
     public void sendMe(Player player, String message) {
+        playerManager.updateMutedPlayers();
+
         this.player = player;
         this.message = message;
         activeChannel = playerManager.getActiveChannel(player);

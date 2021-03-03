@@ -27,6 +27,8 @@ public class MsgCommand extends BaseCommand {
     public void onDefault(CommandSender commandSender, String recipientString, String message) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
+            playerManager.updateMutedPlayers();
+
             Player recipient = Bukkit.getPlayerExact(recipientString);
             if (recipient == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
             else if (((Player) commandSender).getName().equalsIgnoreCase(recipient.getName())) {

@@ -24,6 +24,8 @@ public class JoinListener implements Listener{
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        playerManager.updateMutedPlayers();
+
         Player player = event.getPlayer();
         String activeChannel = null;
         for (Channel channel : channelManager.getChannels()) {
