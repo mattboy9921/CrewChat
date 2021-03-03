@@ -5,6 +5,7 @@ import net.mattlabs.crewchat.util.ChatSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
 
 public class ChatListener implements Listener {
 
@@ -16,5 +17,15 @@ public class ChatListener implements Listener {
             chatSender.sendMessage(event.getPlayer(), event.getMessage());
             event.setCancelled(true);
         }
+    }
+
+    // Catch any plugin trying to send non-async chat messages
+    @EventHandler
+    public void onPlayerSyncChat(PlayerChatEvent event) {
+        event.setCancelled(true);
+        CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
+            CrewChat.getInstance().getServer().getPluginManager().callEvent(
+                    new AsyncPlayerChatEvent(true, event.getPlayer(), event.getMessage(), event.getRecipients()));
+        });
     }
 }
