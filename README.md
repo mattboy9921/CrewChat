@@ -53,4 +53,4 @@ CrewChat:
  - `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
  - `crewchat.reload` - Allows player to use `/crewchat reload`
  
-Tested working on Paper 1.13, 1.14.
+Tested working on Paper 1.16.
