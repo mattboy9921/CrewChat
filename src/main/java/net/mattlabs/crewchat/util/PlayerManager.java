@@ -193,4 +193,12 @@ public class PlayerManager {
     public boolean hasMuted(Player muter, Player mutee) {
         return onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(muter.getUniqueId()))).hasMuted(mutee.getUniqueId());
     }
+
+    public boolean isDeafened(Player player) {
+        return onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(player.getUniqueId()))).isDeafened();
+    }
+
+    public void setDeafened(Player player, boolean deafen) {
+        onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(player.getUniqueId()))).setDeafened(deafen);
+    }
 }

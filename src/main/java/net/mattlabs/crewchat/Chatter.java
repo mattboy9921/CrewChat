@@ -14,6 +14,7 @@ public class Chatter {
     private String activeChannel, status;
     private ArrayList<String> subscribedChannels;
     private ArrayList<Mutee> mutedPlayers;
+    private transient boolean deafened;
 
     // Empty constructor for Configurate
     public Chatter() {}
@@ -24,6 +25,7 @@ public class Chatter {
         subscribedChannels = null;
         mutedPlayers = null;
         status = null;
+        deafened = false;
     }
 
     public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, ArrayList<Mutee> mutedPlayers, String status) {
@@ -32,6 +34,7 @@ public class Chatter {
         this.subscribedChannels = subscribedChannels;
         this.mutedPlayers = mutedPlayers;
         this.status = status;
+        deafened = false;
     }
 
     public UUID getUuid() {
@@ -106,6 +109,14 @@ public class Chatter {
 
     public boolean hasMuted(UUID uuid) {
         return mutedPlayers.contains(new Mutee(uuid, null, null));
+    }
+
+    public boolean isDeafened() {
+        return deafened;
+    }
+
+    public void setDeafened(boolean deafened) {
+        this.deafened = deafened;
     }
 
     @Override

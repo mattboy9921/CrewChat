@@ -634,6 +634,45 @@ public class Messages {
                 .create();
     }
 
+    public static BaseComponent[] playerDeafened() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append(" You have been deafened. You will not receive any chat messages.")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerUndeafened() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append(" You are no longer deafened. You will receive all chat messages.")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
+    public static BaseComponent[] playerIsDeafened() {
+        return new ComponentBuilder("[")
+                    .color(GRAY)
+                .append("Chat")
+                    .color(DARK_GREEN)
+                .append("] ")
+                    .color(GRAY)
+                .append(" You are deafened and cannot see chat messages.")
+                    .reset()
+                    .color(WHITE)
+                .create();
+    }
+
     public static BaseComponent[] badConfig() {
         return new ComponentBuilder("[")
                     .color(GRAY)
