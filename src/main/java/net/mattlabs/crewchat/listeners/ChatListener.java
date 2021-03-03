@@ -1,10 +1,7 @@
 package net.mattlabs.crewchat.listeners;
 
-import github.scarsz.discordsrv.api.events.GameChatMessagePreProcessEvent;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.ChatSender;
-import net.mattlabs.crewchat.util.PlayerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
