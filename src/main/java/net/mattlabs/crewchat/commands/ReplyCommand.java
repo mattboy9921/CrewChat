@@ -40,12 +40,13 @@ public class ReplyCommand extends BaseCommand {
                             chat.getPlayerPrefix(recipient), recipient.getName(),
                             playerManager.getStatus((Player) commandSender),
                             playerManager.getStatus(recipient), message));
-                    recipient.spigot().sendMessage(Messages.privateMessageReceive(
-                            chat.getPlayerPrefix((Player) commandSender),
-                            chat.getPlayerPrefix(recipient),
-                            ((Player) commandSender).getName(),
-                            playerManager.getStatus((Player) commandSender),
-                            playerManager.getStatus(recipient), message));
+                    if (!playerManager.hasMuted(recipient, (Player) commandSender))
+                        recipient.spigot().sendMessage(Messages.privateMessageReceive(
+                                chat.getPlayerPrefix((Player) commandSender),
+                                chat.getPlayerPrefix(recipient),
+                                ((Player) commandSender).getName(),
+                                playerManager.getStatus((Player) commandSender),
+                                playerManager.getStatus(recipient), message));
                 }
             }
             else commandSender.spigot().sendMessage(Messages.noPMReceived());

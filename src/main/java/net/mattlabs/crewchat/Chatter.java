@@ -104,6 +104,10 @@ public class Chatter {
         mutedPlayers.remove(new Mutee(uuid, null, null));
     }
 
+    public boolean hasMuted(UUID uuid) {
+        return mutedPlayers.contains(new Mutee(uuid, null, null));
+    }
+
     @Override
     public boolean equals(Object object){
         if (object instanceof Chatter) return uuid.equals(((Chatter) object).uuid);

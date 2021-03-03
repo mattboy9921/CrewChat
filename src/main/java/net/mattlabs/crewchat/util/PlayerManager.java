@@ -189,4 +189,8 @@ public class PlayerManager {
                     }
         });
     }
+
+    public boolean hasMuted(Player muter, Player mutee) {
+        return onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(muter.getUniqueId()))).hasMuted(mutee.getUniqueId());
+    }
 }

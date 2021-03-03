@@ -41,12 +41,13 @@ public class MsgCommand extends BaseCommand {
                         chat.getPlayerPrefix(recipient), recipient.getName(),
                         playerManager.getStatus((Player) commandSender),
                         playerManager.getStatus(recipient), message));
-                recipient.spigot().sendMessage(Messages.privateMessageReceive(
-                        chat.getPlayerPrefix((Player) commandSender),
-                        chat.getPlayerPrefix(recipient),
-                        commandSender.getName(),
-                        playerManager.getStatus((Player) commandSender),
-                        playerManager.getStatus(recipient), message));
+                if (!playerManager.hasMuted(recipient, (Player) commandSender))
+                    recipient.spigot().sendMessage(Messages.privateMessageReceive(
+                            chat.getPlayerPrefix((Player) commandSender),
+                            chat.getPlayerPrefix(recipient),
+                            commandSender.getName(),
+                            playerManager.getStatus((Player) commandSender),
+                            playerManager.getStatus(recipient), message));
             }
         }
     }
