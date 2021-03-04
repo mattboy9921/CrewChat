@@ -24,7 +24,7 @@ public class QuitListener implements Listener {
 
         Player player = event.getPlayer();
         msgManager.removePlayer(player.getDisplayName());
-        if (playerManager.isOnline(player)) playerManager.setOffline(player);
         if (playerManager.isDeafened(player)) playerManager.setDeafened(player, false);
+        if (playerManager.isOnline(player)) playerManager.setOffline(player);
     }
 }
