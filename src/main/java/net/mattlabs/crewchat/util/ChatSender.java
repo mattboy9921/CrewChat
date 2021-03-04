@@ -40,7 +40,7 @@ public class ChatSender implements Runnable{
 
         this.player = player;
         if (playerManager.isOnline(player)) {
-            player.spigot().sendMessage(Messages.playerIsDeafened());
+            if (playerManager.isDeafened(player)) player.spigot().sendMessage(Messages.playerIsDeafened());
             messageString = message;
             prefix = colorize(chat.getPlayerPrefix(player));
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
