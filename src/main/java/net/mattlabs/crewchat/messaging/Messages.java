@@ -641,7 +641,7 @@ public class Messages {
                     .color(DARK_GREEN)
                 .append("] ")
                     .color(GRAY)
-                .append(" You have been deafened. You will not receive any chat messages.")
+                .append("You have been deafened. You will not receive any chat messages.")
                     .reset()
                     .color(WHITE)
                 .create();
@@ -654,7 +654,7 @@ public class Messages {
                     .color(DARK_GREEN)
                 .append("] ")
                     .color(GRAY)
-                .append(" You are no longer deafened. You will receive all chat messages.")
+                .append("You are no longer deafened. You will receive all chat messages.")
                     .reset()
                     .color(WHITE)
                 .create();
@@ -667,7 +667,7 @@ public class Messages {
                     .color(DARK_GREEN)
                 .append("] ")
                     .color(GRAY)
-                .append(" You are deafened and cannot see chat messages.")
+                .append("You are deafened and cannot see chat messages.")
                     .reset()
                     .color(WHITE)
                 .create();
