@@ -17,15 +17,16 @@ public class ChatListener implements Listener {
             chatSender.sendMessage(event.getPlayer(), event.getMessage());
             event.setCancelled(true);
         }
-    }
-
-    // Catch any plugin trying to send non-async chat messages
-    @EventHandler
-    public void onPlayerSyncChat(PlayerChatEvent event) {
-        event.setCancelled(true);
-        CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
+        // Catch any plugin trying to send non-async chat messages
+        else CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
             CrewChat.getInstance().getServer().getPluginManager().callEvent(
                     new AsyncPlayerChatEvent(true, event.getPlayer(), event.getMessage(), event.getRecipients()));
         });
+    }
+
+    // Cancel synchronous chat messages
+    @EventHandler
+    public void onPlayerSyncChat(PlayerChatEvent event) {
+        event.setCancelled(true);
     }
 }
