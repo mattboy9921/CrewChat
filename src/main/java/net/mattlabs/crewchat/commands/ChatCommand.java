@@ -262,7 +262,7 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("deafen")
     @Description("Surpresses all chat messages for player.")
     @CommandPermission("crewchat.chat.deafen")
-    public void onUnmute(CommandSender commandSender) {
+    public void onDeafen(CommandSender commandSender) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             if (!playerManager.isDeafened((Player) commandSender)) {
