@@ -40,6 +40,7 @@ public class ChatSender implements Runnable{
 
         this.player = player;
         if (playerManager.isOnline(player)) {
+            if (playerManager.isDeafened(player)) player.spigot().sendMessage(Messages.playerIsDeafened());
             messageString = message;
             prefix = colorize(chat.getPlayerPrefix(player));
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
@@ -58,7 +59,7 @@ public class ChatSender implements Runnable{
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers) {
-            if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(player.getName())) {
+            if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(player.getName()) && !playerManager.isDeafened(subbedPlayer)) {
                 for (Player mentionedPlayer : mentionedPlayers)
                     if (mentionedPlayer.equals(subbedPlayer)) {
                         subbedPlayer.playNote(subbedPlayer.getLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(0, Note.Tone.C));
