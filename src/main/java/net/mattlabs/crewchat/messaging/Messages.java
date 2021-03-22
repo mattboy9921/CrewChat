@@ -270,7 +270,7 @@ public class Messages {
         return crewChatHeader.append(configReloaded);
     }
 
-    // TODO Make this part of CrewChat commands, simplify color
+    // TODO Make this part of CrewChat commands
     public Component channelInfo(String name, TextColor color) {
         // &7[&2Chat&7] &fChannel &l%name%&r info:
         // &2- &fName: %name%
