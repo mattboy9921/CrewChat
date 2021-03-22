@@ -271,16 +271,22 @@ public class Messages {
     }
 
     // TODO Make this part of CrewChat commands, simplify color
-    public Component channelInfo(String name, String colorS, TextColor color) {
+    public Component channelInfo(String name, TextColor color) {
         // &7[&2Chat&7] &fChannel &l%name%&r info:
         // &2- &fName: %name%
         // &2- &fChat Color: %color%
         // &2- &fAuto Subscribe: %autosus% TODO Fix this...
-        return MiniMessage.get().parse(chatHeader + channelInfoHeader + "\n" +
-                hyphenHeader + channelInfoName + "\n" +
-                hyphenHeader + channelInfoColor + "\n",
-                "channel_name", name,
-                "channel_color", "<" + color.toString() + ">" + colorS);
+
+        // Get closest color to hex code, format with capital first letter
+        String closestColor = NamedTextColor.nearestTo(color).toString();
+        closestColor = closestColor.substring(0, 1).toUpperCase() + closestColor.substring(1);
+
+        return chatHeader
+                .append(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", name))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(channelInfoName + "\n", "channel_name", name))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(channelInfoColor, "channel_color", "<color:" + color.toString() + ">" + closestColor + " (" + color.asHexString() + ")"));
     }
 
     public Component channelNoExist(String name) {

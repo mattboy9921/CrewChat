@@ -99,7 +99,6 @@ public class ChatCommand extends BaseCommand {
             if (requestedChannel != null) {
                 if (commandSender instanceof Player) {
                     platform.player((Player) commandSender).sendMessage(messages.channelInfo(requestedChannel.getName(),
-                            requestedChannel.getTextColor().toString(),
                             requestedChannel.getTextColor()));
                 }
                 else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
