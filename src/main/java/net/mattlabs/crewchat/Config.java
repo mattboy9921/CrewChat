@@ -18,7 +18,7 @@ public class Config {
 
     @Setting(value = "channels")
     @Comment("\nChannel Configuration\n" +
-            "Define each channel here.")
+            "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
     private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", NamedTextColor.WHITE, true)));
 
     public List<Channel> getChannels() {
