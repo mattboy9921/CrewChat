@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.mattlabs.crewchat.CrewChat;
 import org.bukkit.Bukkit;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
@@ -445,7 +446,7 @@ public class Messages {
     public Component crewChatBaseCommand() {
         return crewChatHeader
                 .append(Component.text("Version " +
-                    Bukkit.getPluginManager().getPlugin("CrewChat").getDescription().getVersion() +
+                    CrewChat.getInstance().getDescription().getVersion() +
                     ". For help, click ")
                     .color(WHITE))
                 .append(Component.text("[Help]")

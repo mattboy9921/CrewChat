@@ -31,8 +31,7 @@ public class CrewChatCommand extends BaseCommand {
     public void onDefault(CommandSender commandSender) {
         if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(messages.crewChatBaseCommand());
         else CrewChat.getInstance().getLogger().info("Version " +
-                Bukkit.getPluginManager().getPlugin("CrewChat").getDescription().getVersion() +
-                ". For help, run '/crewchat help'");
+                CrewChat.getInstance().getDescription().getVersion() + ". For help, run '/crewchat help'");
     }
 
     @Subcommand("reload")
