@@ -34,7 +34,7 @@ public class Messages {
     public Component chatBaseCommand() {
         return chatHeader
                 .append(MiniMessage.get().parse(welcomeToChat))
-                .append(Component.text("[Help]")
+                .append(Component.text("[" + help + "]")
                     .decoration(BOLD, true)
                     .color(BLUE)
                     .hoverEvent(HoverEvent.showText(
