@@ -6,6 +6,7 @@ import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.PaperCommandManager;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
@@ -143,17 +144,17 @@ public class ChatCommand extends BaseCommand {
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.subscribe." + channelName)) {
                     if (playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        platform.player((Player) commandSender).sendMessage(messages.alreadySubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.alreadySubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else {
                         playerManager.addSubscription((Player) commandSender, channelName);
-                        platform.player((Player) commandSender).sendMessage(messages.nowSubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.nowSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     }
                 }
                 else {
                     platform.player((Player) commandSender).sendMessage(messages.noPermission());
                 }
             }
-            else platform.player((Player) commandSender).sendMessage(messages.cantSubscribe(string));
+            else platform.player((Player) commandSender).sendMessage(messages.cantSubscribe(string, NamedTextColor.WHITE));
         }
     }
 
@@ -173,20 +174,20 @@ public class ChatCommand extends BaseCommand {
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.unsubscribe." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else if (channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender))
                             .equals(channelManager.channelFromString(channelName)))
-                        platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribeActive(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribeActive(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else {
                         playerManager.removeSubscription((Player) commandSender, channelName);
-                        platform.player((Player) commandSender).sendMessage(messages.nowUnsubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.nowUnsubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     }
                 }
                 else {
                     platform.player((Player) commandSender).sendMessage(messages.noPermission());
                 }
             }
-            else platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribe(string));
+            else platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribe(string, NamedTextColor.WHITE));
         }
     }
     
@@ -205,7 +206,7 @@ public class ChatCommand extends BaseCommand {
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.switch." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else {
                         playerManager.setActiveChannel((Player) commandSender, channelName);
                         platform.player((Player) commandSender).sendMessage(messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getTextColor()));
@@ -216,7 +217,7 @@ public class ChatCommand extends BaseCommand {
                 }
             }
             else {
-                platform.player((Player) commandSender).sendMessage(messages.cantSetActive(string));
+                platform.player((Player) commandSender).sendMessage(messages.cantSetActive(string, NamedTextColor.WHITE));
             }
         }
     }

@@ -291,11 +291,10 @@ public class Messages {
             "Possible tags: <player_prefix>, <player_name>")
     private String playerAlreadyMuted = "<white><player_prefix><player_name> is already muted!";
 
-    // TODO: Fix "player" string name
-    public Component playerAlreadyMuted(String playerPrefix, String player) {
+    public Component playerAlreadyMuted(String playerPrefix, String playerName) {
         return chatHeader.append(MiniMessage.get().parse(playerAlreadyMuted,
                 "player_prefix", playerPrefix,
-                "player_name", player));
+                "player_name", playerName));
     }
 
     // Chat Player Already Unmuted
@@ -303,11 +302,10 @@ public class Messages {
             "Possible tags: <player_prefix>, <player_name>")
     private String playerAlreadyUnmuted = "<white><player_prefix><player_name> is not muted!";
 
-    // TODO: Fix "player" string name
-    public Component playerAlreadyUnmuted(String playerPrefix, String player) {
+    public Component playerAlreadyUnmuted(String playerPrefix, String playerName) {
         return chatHeader.append(MiniMessage.get().parse(playerAlreadyUnmuted,
                 "player_prefix", playerPrefix,
-                "player_name", player));
+                "player_name", playerName));
     }
 
     // Chat Player Muted
@@ -349,8 +347,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String alreadySubscribed = "<white>You are already subscribed to <bold><channel_name></bold>.";
 
-    public Component alreadySubscribed(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(alreadySubscribed, "channel_name", channelName));
+    public Component alreadySubscribed(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(alreadySubscribed, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Can't Subscribe
@@ -358,8 +356,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String cantSubscribe = "<white>You can't subscribe to <bold><channel_name></bold>!";
 
-    public Component cantSubscribe(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(cantSubscribe, "channel_name", channelName));
+    public Component cantSubscribe(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(cantSubscribe, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Can't Unsubscribe
@@ -367,8 +365,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String cantUnsubscribe = "<white>You can't unsubscribe from <bold><channel_name></bold>!";
 
-    public Component cantUnsubscribe(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(cantUnsubscribe, "channel_name", channelName));
+    public Component cantUnsubscribe(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(cantUnsubscribe, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Can't Unsubscribe Active
@@ -376,8 +374,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String cantUnsubscribeActive = "<white>You can't unsubscribe from <bold><channel_name></bold>, it is your active channel!";
 
-    public Component cantUnsubscribeActive(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(cantUnsubscribeActive, "channel_name", channelName));
+    public Component cantUnsubscribeActive(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(cantUnsubscribeActive, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Not Subscribed
@@ -385,8 +383,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String notSubscribed = "<white>You aren't subscribed to <bold><channel_name></bold>.";
 
-    public Component notSubscribed(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(notSubscribed, "channel_name", channelName));
+    public Component notSubscribed(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(notSubscribed, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Now Subscribed
@@ -394,8 +392,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String nowSubscribed = "<white>You are now subscribed to <bold><channel_name></bold>.";
 
-    public Component nowSubscribed(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(nowSubscribed, "channel_name", channelName));
+    public Component nowSubscribed(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(nowSubscribed, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Now Unsubscribed
@@ -403,8 +401,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String nowUnsubscribed = "<white>You are no longer subscribed to <bold><channel_name></bold>.";
 
-    public Component nowUnsubscribed(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(nowUnsubscribed, "channel_name", channelName));
+    public Component nowUnsubscribed(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(nowUnsubscribed, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // ** Switch **
@@ -416,7 +414,7 @@ public class Messages {
 
     // TODO: Add chat color to other messages that reference a channel, possibly consolidate method signature to just use the channel
     public Component newActiveChannel(String channelName, TextColor textColor) {
-        return chatHeader.append(MiniMessage.get().parse(newActiveChannel, "channel_name", "<" +textColor.toString() + ">" + channelName));
+        return chatHeader.append(MiniMessage.get().parse(newActiveChannel, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Can't Set Active
@@ -424,8 +422,8 @@ public class Messages {
             "Possibe tags: <channel_name>")
     private String cantSetActive = "<white>You can't set <bold><channel_name></bold> as your active channel!";
 
-    public Component cantSetActive(String channelName) {
-        return chatHeader.append(MiniMessage.get().parse(cantSetActive, "channel_name", channelName));
+    public Component cantSetActive(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(cantSetActive, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // *** CrewChat ***
