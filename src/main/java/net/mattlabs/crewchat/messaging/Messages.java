@@ -3,15 +3,16 @@ package net.mattlabs.crewchat.messaging;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
+
+import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextDecoration.*;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ConfigSerializable
@@ -33,15 +34,15 @@ public class Messages {
         return chatHeader
                 .append(MiniMessage.get().parse(welcomeToChat))
                 .append(Component.text("[Help]")
-                    .decoration(TextDecoration.BOLD, true)
-                    .color(NamedTextColor.BLUE)
+                    .decoration(BOLD, true)
+                    .color(BLUE)
                     .hoverEvent(HoverEvent.showText(
                         Component.text("Click")
-                            .color(NamedTextColor.AQUA)
-                            .decoration(TextDecoration.BOLD, true)
+                            .color(AQUA)
+                            .decoration(BOLD, true)
                             .append(Component.text(" here for help.")
-                                .color(NamedTextColor.WHITE)
-                                .decoration(TextDecoration.BOLD, false))))
+                                .color(WHITE)
+                                .decoration(BOLD, false))))
                     .clickEvent(ClickEvent.runCommand("/chat help")));
     }
 
@@ -87,73 +88,73 @@ public class Messages {
     public Component chatHelpCommand() {
         return chatHeader
                 .append(Component.text("Command Help:\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text(" - Alias: /c <args> - (Click to run) -\n")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("/chat")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.runCommand("/chat ")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Base Chat command.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/chat help")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.runCommand("/chat help")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Shows this screen.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/chat info")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.runCommand("/chat info")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Lists all channels, active channel and subscribed channels.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/chat info channel <channel>")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.suggestCommand("/chat info channel ")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Lists info about specified channel.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/chat status <status>")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.suggestCommand("/chat status ")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Sets player's status.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/chat subscribe <channel>")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.suggestCommand("/chat subscribe ")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Subscribes player to channel.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/chat unsubscribe <channel>")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.suggestCommand("/chat unsubscribe ")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Unsubscribes player from channel.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/chat switch <channel>")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.suggestCommand("/chat switch ")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Switches active channel.\n")
-                    .color(NamedTextColor.WHITE));
+                    .color(WHITE));
     }
 
     // ** Info **
@@ -184,31 +185,31 @@ public class Messages {
 
     public Component channelListHeader() {
         return Component.text("------------------------")
-                .color(NamedTextColor.GRAY)
+                .color(GRAY)
                 .append(Component.text("[")
-                        .color(NamedTextColor.DARK_GRAY))
+                        .color(DARK_GRAY))
                 .append(Component.text("Chat")
-                        .color(NamedTextColor.DARK_GREEN))
+                        .color(DARK_GREEN))
                 .append(Component.text("]")
-                        .color(NamedTextColor.DARK_GRAY))
+                        .color(DARK_GRAY))
                 .append(Component.text("------------------------\n")
-                        .color(NamedTextColor.GRAY))
+                        .color(GRAY))
                 .append(Component.text(channelListHeader)
-                        .color(NamedTextColor.GRAY));
+                        .color(GRAY));
     }
 
     public Component channelListEntry(String name, TextColor textColor) {
         return Component.text(" - ")
-                .color(NamedTextColor.DARK_GREEN)
+                .color(DARK_GREEN)
                 .append(Component.text(name)
                         .color(textColor)
-                        .decoration(TextDecoration.BOLD, true)
+                        .decoration(BOLD, true)
                         .hoverEvent(HoverEvent.showText(
                                 Component.text("Click")
-                                        .color(NamedTextColor.AQUA)
-                                        .decoration(TextDecoration.BOLD, true)
+                                        .color(AQUA)
+                                        .decoration(BOLD, true)
                                         .append(Component.text(" for more info.")
-                                                .color(NamedTextColor.WHITE))))
+                                                .color(WHITE))))
                         .clickEvent(ClickEvent.runCommand("/chat info channel " + name)));
     }
 
@@ -219,18 +220,18 @@ public class Messages {
 
     public Component channelListSubscribedHeader() {
         return Component.text(channelListSubscribedHeader)
-                .color(NamedTextColor.GRAY);
+                .color(GRAY);
     }
 
     public Component mutedListHeader() {
         return Component.text(mutedListHeader)
-                .color(NamedTextColor.GRAY);
+                .color(GRAY);
     }
 
     public Component mutedListEntry(String player) {
         return hyphenHeader
                 .append(Component.text(player)
-                        .color(NamedTextColor.WHITE)
+                        .color(WHITE)
                         .hoverEvent(HoverEvent.showText(MiniMessage.get().parse(clickToUnmute)))
                         .clickEvent(ClickEvent.runCommand("/chat unmute " + player)));
     }
@@ -257,7 +258,7 @@ public class Messages {
         // &2- &fAuto Subscribe: %autosus% TODO Fix this...
 
         // Get closest color to hex code, format with capital first letter
-        String closestColor = NamedTextColor.nearestTo(color).toString();
+        String closestColor = nearestTo(color).toString();
         closestColor = closestColor.substring(0, 1).toUpperCase() + closestColor.substring(1);
 
         return chatHeader
@@ -431,11 +432,11 @@ public class Messages {
     // [CrewChat]
     private transient Component crewChatHeader =
             Component.text("[")
-                        .color(NamedTextColor.GRAY)
+                        .color(GRAY)
                     .append(Component.text("CrewChat")
-                        .color(NamedTextColor.DARK_GREEN))
+                        .color(DARK_GREEN))
                     .append(Component.text("] ")
-                        .color(NamedTextColor.GRAY))
+                        .color(GRAY))
                     .append(Component.text()
                         .resetStyle());
 
@@ -446,17 +447,17 @@ public class Messages {
                 .append(Component.text("Version " +
                     Bukkit.getPluginManager().getPlugin("CrewChat").getDescription().getVersion() +
                     ". For help, click ")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("[Help]")
-                    .color(NamedTextColor.BLUE)
-                    .decoration(TextDecoration.BOLD, true)
+                    .color(BLUE)
+                    .decoration(BOLD, true)
                     .hoverEvent(HoverEvent.showText(
                         Component.text("Click")
-                            .color(NamedTextColor.AQUA)
-                            .decoration(TextDecoration.BOLD, true)
+                            .color(AQUA)
+                            .decoration(BOLD, true)
                             .append(Component.text(" here for help.")
-                                .color(NamedTextColor.WHITE)
-                                .decoration(TextDecoration.BOLD, false))))
+                                .color(WHITE)
+                                .decoration(BOLD, false))))
                     .clickEvent(ClickEvent.runCommand("/crewchat help")));
     }
 
@@ -466,33 +467,33 @@ public class Messages {
     public Component crewChatHelpCommand() {
         return crewChatHeader
                 .append(Component.text("Command Help:\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text(" - Alias: /cc <args> - (Click to run) -\n")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("/crewchat")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.runCommand("/crewchat")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Base CrewChat command.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/crewchat help")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.runCommand("/crewchat help")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Shows this screen.\n")
-                    .color(NamedTextColor.WHITE))
+                    .color(WHITE))
                 .append(Component.text("/crewchat reload")
-                    .color(NamedTextColor.DARK_GREEN)
+                    .color(DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(clickToRun))
                     .clickEvent(ClickEvent.runCommand("/crewchat reload")))
                 .append(Component.text(" - ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text("Reload CrewChat configuration files.")
-                    .color(NamedTextColor.WHITE));
+                    .color(WHITE));
     }
 
     // ** Reload **
@@ -500,7 +501,7 @@ public class Messages {
     // Config Reloaded
     private transient Component configReloaded =
             Component.text("Configuration reloaded.")
-                    .color(NamedTextColor.WHITE);
+                    .color(WHITE);
 
     public Component configReloaded() {
         // &7[&2CrewChat&7] &fConfiguration reloaded.
@@ -616,29 +617,29 @@ public class Messages {
     // [Chat]
     private transient Component chatHeader =
             Component.text("[")
-                    .color(NamedTextColor.GRAY)
+                    .color(GRAY)
                 .append(Component.text(chat)
-                    .color(NamedTextColor.DARK_GREEN))
+                    .color(DARK_GREEN))
                 .append(Component.text("] ")
-                    .color(NamedTextColor.GRAY))
+                    .color(GRAY))
                 .append(Component.text()
                     .resetStyle());
 
     // Hyphen
     private transient Component hyphenHeader =
             Component.text(" - ")
-                .color(NamedTextColor.DARK_GREEN)
+                .color(DARK_GREEN)
                 .append(Component.text()
                      .resetStyle());
 
     // Click to run
     private transient Component clickToRun =
             Component.text("Click")
-                .color(NamedTextColor.AQUA)
-                .decoration(TextDecoration.BOLD, true)
+                .color(AQUA)
+                .decoration(BOLD, true)
                 .append(Component.text(" to run.")
-                    .decoration(TextDecoration.BOLD, false)
-                    .color(NamedTextColor.WHITE));
+                    .decoration(BOLD, false)
+                    .color(WHITE));
 
     // ** Bad Config **
     // Plugin Not Configured Correctly
