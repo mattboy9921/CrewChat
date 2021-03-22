@@ -1,22 +1,22 @@
 package net.mattlabs.crewchat;
 
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 public class Channel {
 
     private transient String name;
-    private ChatColor chatColor;
+    private TextColor textColor;
     private boolean autoSubscribe;
 
     // Empty constructor for Configurate
     public Channel() { }
 
-    public Channel(String name, ChatColor chatColor, boolean autoSubscribe) {
+    public Channel(String name, TextColor textColor, boolean autoSubscribe) {
         this.name = name;
-        this.chatColor = chatColor;
+        this.textColor = textColor;
         this.autoSubscribe = autoSubscribe;
     }
 
@@ -30,8 +30,8 @@ public class Channel {
         return name;
     }
 
-    public ChatColor getChatColor() {
-        return chatColor;
+    public TextColor getTextColor() {
+        return textColor;
     }
 
     public boolean isAutoSubscribe() {

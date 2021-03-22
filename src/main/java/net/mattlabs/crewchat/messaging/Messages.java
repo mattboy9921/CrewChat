@@ -4,11 +4,11 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
@@ -271,7 +271,7 @@ public class Messages {
     }
 
     // TODO Make this part of CrewChat commands, simplify color
-    public Component channelInfo(String name, String colorS, ChatColor color) {
+    public Component channelInfo(String name, String colorS, TextColor color) {
         // &7[&2Chat&7] &fChannel &l%name%&r info:
         // &2- &fName: %name%
         // &2- &fChat Color: %color%
@@ -280,7 +280,7 @@ public class Messages {
                 hyphenHeader + channelInfoName + "\n" +
                 hyphenHeader + channelInfoColor + "\n",
                 "channel_name", name,
-                "channel_color", "<" + color.getName() + ">" + colorS);
+                "channel_color", "<" + color.toString() + ">" + colorS);
     }
 
     public Component channelNoExist(String name) {
@@ -295,13 +295,13 @@ public class Messages {
         return MiniMessage.get().parse(noPermission);
     }
 
-    public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, ChatColor chatColor) {
+    public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
         // %prefix%%playerName%: %message%
         return MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                 "<hover:show_text:'<white>" + time + "\n" +
                 this.status + ": <pre>" + status + "</pre>\n" +
-                this.channel + ": " + "<" + chatColor.getName() + ">" + activeChannel + "'>" +
-                chatMessageHeader + "<reset><" + chatColor.getName() + ">",
+                this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
+                chatMessageHeader + "<reset><" + textColor.toString() + ">",
                 "player_prefix", prefix,
                 "player_name", playerName)
                 .append(message);
@@ -332,9 +332,9 @@ public class Messages {
                         "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message));
     }
 
-    public Component meMessage(String playerName, String message, ChatColor chatColor) {
+    public Component meMessage(String playerName, String message, TextColor textColor) {
         // * %playerName% %message% *
-        return MiniMessage.get().parse("<" + chatColor.getName() + "><italic>* " + playerName + " " + message + " *");
+        return MiniMessage.get().parse("<" + textColor.toString() + "><italic>* " + playerName + " " + message + " *");
     }
 
     public Component crewChatBaseCommand() {
@@ -403,11 +403,11 @@ public class Messages {
                     .color(NamedTextColor.GRAY));
     }
 
-    public Component channelListEntry(String name, ChatColor chatColor) {
+    public Component channelListEntry(String name, TextColor textColor) {
         return Component.text(" - ")
                     .color(NamedTextColor.DARK_GREEN)
                 .append(Component.text(name)
-                    .color(NamedTextColor.NAMES.value(chatColor.getName()))
+                    .color(textColor)
                     .decoration(TextDecoration.BOLD, true)
                     .hoverEvent(HoverEvent.showText(
                             Component.text("Click")
@@ -418,9 +418,9 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/chat info channel " + name)));
     }
 
-    public Component channelListActive(String name, ChatColor chatColor) {
+    public Component channelListActive(String name, TextColor textColor) {
         return MiniMessage.get().parse("<gray>" + channelListActive,
-                "channel_name", "<" + chatColor.getName() + "><bold>" + name + "<reset><gray>");
+                "channel_name", "<" + textColor.toString() + "><bold>" + name + "<reset><gray>");
     }
 
     public Component channelListSubscribedHeader() {
@@ -474,8 +474,8 @@ public class Messages {
     }
 
     // TODO: Add chat color to other messages that reference a channel, possibly consolidate method signature to just use the channel
-    public Component newActiveChannel(String channelName, ChatColor chatColor) {
-        return chatHeader.append(MiniMessage.get().parse(newActiveChannel, "channel_name", "<" +chatColor.getName() + ">" + channelName));
+    public Component newActiveChannel(String channelName, TextColor textColor) {
+        return chatHeader.append(MiniMessage.get().parse(newActiveChannel, "channel_name", "<" +textColor.toString() + ">" + channelName));
     }
 
     public Component cantSetActive(String channelName) {

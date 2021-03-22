@@ -40,7 +40,7 @@ public class MeSender implements Runnable {
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers)
-            platform.player(subbedPlayer).sendMessage(messages.meMessage(player.getName(), message, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+            platform.player(subbedPlayer).sendMessage(messages.meMessage(player.getName(), message, channelManager.getTextColor(channelManager.channelFromString(activeChannel))));
         if (CrewChat.getInstance().getDiscordSRVEnabled())
             DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(), "_* " + player.getDisplayName() + " " + message + " *_");
         player = null;

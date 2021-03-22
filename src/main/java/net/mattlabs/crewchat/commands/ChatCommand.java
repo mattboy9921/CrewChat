@@ -67,12 +67,12 @@ public class ChatCommand extends BaseCommand {
             if (commandSender instanceof Player) {
                 platform.player((Player) commandSender).sendMessage(messages.channelListHeader());
                 for (Channel channel : channelManager.getChannels())
-                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel.getName(), channel.getChatColor()));
+                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel.getName(), channel.getTextColor()));
                 platform.player((Player) commandSender).sendMessage(messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
-                        channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)).getChatColor()));
+                        channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)).getTextColor()));
                 platform.player((Player) commandSender).sendMessage(messages.channelListSubscribedHeader());
                 for (String channel : playerManager.getSubscribedChannels((Player) commandSender))
-                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel, channelManager.channelFromString(channel).getChatColor()));
+                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
                 if (!playerManager.getMutedPlayerNames((Player) commandSender).isEmpty()) {
                     platform.player((Player) commandSender).sendMessage(messages.mutedListHeader());
                     for (String mutee : playerManager.getMutedPlayerNames((Player) commandSender))
@@ -99,13 +99,13 @@ public class ChatCommand extends BaseCommand {
             if (requestedChannel != null) {
                 if (commandSender instanceof Player) {
                     platform.player((Player) commandSender).sendMessage(messages.channelInfo(requestedChannel.getName(),
-                            requestedChannel.getChatColor().name(),
-                            requestedChannel.getChatColor()));
+                            requestedChannel.getTextColor().toString(),
+                            requestedChannel.getTextColor()));
                 }
                 else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
                         + " info: " +
                         "\n - Name: " + requestedChannel.getName() +
-                        "\n - Chat Color: " + requestedChannel.getChatColor().name() +
+                        "\n - Chat Color: " + requestedChannel.getTextColor().toString() +
                         "\n - Auto Subscribe: " + String.valueOf(requestedChannel.isAutoSubscribe()));
             } else {
                 if (commandSender instanceof Player) {
@@ -209,7 +209,7 @@ public class ChatCommand extends BaseCommand {
                         platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName));
                     else {
                         playerManager.setActiveChannel((Player) commandSender, channelName);
-                        platform.player((Player) commandSender).sendMessage(messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getChatColor()));
+                        platform.player((Player) commandSender).sendMessage(messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getTextColor()));
                     }
                 }
                 else {

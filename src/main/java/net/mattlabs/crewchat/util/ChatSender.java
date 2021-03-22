@@ -4,13 +4,13 @@ import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.util.DiscordUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
-import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
@@ -56,7 +56,7 @@ public class ChatSender implements Runnable{
             status = colorize(playerManager.getStatus(player));
             activeChannel = playerManager.getActiveChannel(player);
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
-            this.message = parseMessageAdventure(message, channelManager.getChatColor(channelManager.channelFromString(activeChannel)));
+            this.message = parseMessageAdventure(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
@@ -72,7 +72,7 @@ public class ChatSender implements Runnable{
                 status,
                 message,
                 activeChannel,
-                channelManager.getChatColor(channelManager.channelFromString(activeChannel)));
+                channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
 
         for (Player subbedPlayer : subscribedPlayers) {
             if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(player.getName()) && !playerManager.isDeafened(subbedPlayer)) {
@@ -108,7 +108,7 @@ public class ChatSender implements Runnable{
         return s.replaceAll("&([0-9a-f])", "\u00A7$1");
     }
 
-    private Component parseMessageAdventure(String message, ChatColor chatColor) {
+    private Component parseMessageAdventure(String message, TextColor textColor) {
         // Filter out any legacy codes/MiniMessage tags
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(message));
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(message));
@@ -119,7 +119,7 @@ public class ChatSender implements Runnable{
         mentionedPlayers = new ArrayList<>();
 
         for (String part : parts) {
-            Component nextComponent = MiniMessage.get().parse("<" + chatColor.getName() + ">" + part);
+            Component nextComponent = MiniMessage.get().parse("<" + textColor.toString() + ">" + part);
             Player mentionedPlayer = null;
 
             // Match player names
@@ -133,7 +133,7 @@ public class ChatSender implements Runnable{
                 String[] mentionParts = part.split(mentionedPlayer.getName());
                 nextComponent = MiniMessage.get().parse("<gold>@" + mentionedPlayer.getName());
                 if (mentionParts.length > 0) {
-                    Component afterMention = MiniMessage.get().parse("<" + chatColor.getName() + ">" + mentionParts[1]);
+                    Component afterMention = MiniMessage.get().parse("<" + textColor.toString() + ">" + mentionParts[1]);
                     nextComponent = nextComponent.append(afterMention);
                 }
             }
@@ -146,7 +146,7 @@ public class ChatSender implements Runnable{
                     part = "http://" + part;
                 nextComponent = MiniMessage.get().parse("<click:open_url:" + part + "><hover:show_text:'<white>Click to open link.'><blue>" + part);
                 if (linkParts.length == 2) {
-                    Component afterLink = MiniMessage.get().parse("<" + chatColor.getName() + ">" + linkParts[1]);
+                    Component afterLink = MiniMessage.get().parse("<" + textColor.toString() + ">" + linkParts[1]);
                     nextComponent = nextComponent.append(afterLink);
                 }
             }
