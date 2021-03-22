@@ -5,10 +5,12 @@ import co.aikar.commands.BukkitCommandIssuer;
 import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.PaperCommandManager;
 import co.aikar.commands.annotation.*;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
+import net.mattlabs.crewchat.util.ConfigurateManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
@@ -22,8 +24,11 @@ public class ChatCommand extends BaseCommand {
 
     private ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
     private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
     private PaperCommandManager paperCommandManager = CrewChat.getInstance().getPaperCommandManager();
+    private BukkitAudiences platform = CrewChat.getInstance().getPlatform();
     private Chat chat = CrewChat.getChat();
+    private Messages messages;
 
     public ChatCommand() {
         // Command Conditions
@@ -31,20 +36,22 @@ public class ChatCommand extends BaseCommand {
             BukkitCommandIssuer issuer = context.getIssuer();
             if (issuer.isPlayer())
                 if (!playerManager.playerExists(issuer.getPlayer())) {
-                    issuer.getPlayer().spigot().sendMessage(Messages.badConfig());
+                    platform.player(issuer.getPlayer()).sendMessage(messages.badConfig());
                     throw new ConditionFailedException("Bad config.");
                 }
         }));
 
         // Command Completions
         paperCommandManager.getCommandCompletions().registerStaticCompletion("channels", channelManager.getChannelNames());
+
+        messages = configurateManager.get("messages.conf");
     }
 
     @Default
     @Description("Chat base command.")
     public void onDefault(CommandSender commandSender) {
         if (commandSender instanceof Player) {
-            commandSender.spigot().sendMessage(Messages.chatBaseCommand());
+            platform.player((Player) commandSender).sendMessage(messages.chatBaseCommand());
         }
         else CrewChat.getInstance().getLogger().info("Welcome to chat! (Run /chat help for help)");
     }
@@ -52,23 +59,24 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("info")
     public class Info extends BaseCommand {
 
+        // TODO: Clean up redundant code
         @Default
         @Description("Lists all channels, active channel and subscribed channels.")
         @CommandPermission("crewchat.chat.info")
         public void onInfo(CommandSender commandSender) {
             if (commandSender instanceof Player) {
-                commandSender.spigot().sendMessage(Messages.channelListHeader());
+                platform.player((Player) commandSender).sendMessage(messages.channelListHeader());
                 for (Channel channel : channelManager.getChannels())
-                    commandSender.spigot().sendMessage(Messages.channelListEntry(channel.getName(), channel.getChatColor()));
-                commandSender.spigot().sendMessage(Messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
+                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel.getName(), channel.getChatColor()));
+                platform.player((Player) commandSender).sendMessage(messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
                         channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)).getChatColor()));
-                commandSender.spigot().sendMessage(Messages.channelListSubscribedHeader());
+                platform.player((Player) commandSender).sendMessage(messages.channelListSubscribedHeader());
                 for (String channel : playerManager.getSubscribedChannels((Player) commandSender))
-                    commandSender.spigot().sendMessage(Messages.channelListEntry(channel, channelManager.channelFromString(channel).getChatColor()));
+                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel, channelManager.channelFromString(channel).getChatColor()));
                 if (!playerManager.getMutedPlayerNames((Player) commandSender).isEmpty()) {
-                    commandSender.spigot().sendMessage(Messages.mutedListHeader());
+                    platform.player((Player) commandSender).sendMessage(messages.mutedListHeader());
                     for (String mutee : playerManager.getMutedPlayerNames((Player) commandSender))
-                        commandSender.spigot().sendMessage(Messages.mutedListEntry(mutee));
+                        platform.player((Player) commandSender).sendMessage(messages.mutedListEntry(mutee));
                 }
             }
             else {
@@ -90,9 +98,9 @@ public class ChatCommand extends BaseCommand {
 
             if (requestedChannel != null) {
                 if (commandSender instanceof Player) {
-                        commandSender.spigot().sendMessage(Messages.channelInfo(requestedChannel.getName(),
-                                requestedChannel.getChatColor().name(),
-                                requestedChannel.getChatColor()));
+                    platform.player((Player) commandSender).sendMessage(messages.channelInfo(requestedChannel.getName(),
+                            requestedChannel.getChatColor().name(),
+                            requestedChannel.getChatColor()));
                 }
                 else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
                         + " info: " +
@@ -101,7 +109,7 @@ public class ChatCommand extends BaseCommand {
                         "\n - Auto Subscribe: " + String.valueOf(requestedChannel.isAutoSubscribe()));
             } else {
                 if (commandSender instanceof Player) {
-                        commandSender.spigot().sendMessage(Messages.channelNoExist(specifiedChannel));
+                        platform.player((Player) commandSender).sendMessage(messages.channelNoExist(specifiedChannel));
                 }
                 else CrewChat.getInstance().getLogger().info("Channel " + specifiedChannel + " doesn't exist!");
             }
@@ -117,7 +125,7 @@ public class ChatCommand extends BaseCommand {
                 String   statusStr = String.join(" ", status);
                 Player player = (Player) commandSender;
                 playerManager.setStatus(player, statusStr);
-                commandSender.spigot().sendMessage(Messages.statusSet(statusStr));
+                platform.player(player).sendMessage(messages.statusSet(statusStr));
         }
     }
 
@@ -131,25 +139,26 @@ public class ChatCommand extends BaseCommand {
             if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
-                commandSender.spigot().sendMessage(Messages.channelNoExist(string));
+                platform.player((Player) commandSender).sendMessage(messages.channelNoExist(string));
             }
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.subscribe." + channelName)) {
                     if (playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        commandSender.spigot().sendMessage(Messages.alreadySubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.alreadySubscribed(channelName));
                     else {
                         playerManager.addSubscription((Player) commandSender, channelName);
-                        commandSender.spigot().sendMessage(Messages.nowSubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.nowSubscribed(channelName));
                     }
                 }
                 else {
-                    commandSender.spigot().sendMessage(Messages.noPermission());
+                    platform.player((Player) commandSender).sendMessage(messages.noPermission());
                 }
             }
-            else commandSender.spigot().sendMessage(Messages.cantSubscribe(string));
+            else platform.player((Player) commandSender).sendMessage(messages.cantSubscribe(string));
         }
     }
 
+    // TODO: Change string name to something meaningful
     @Subcommand("unsubscribe")
     @Description("Unsubscribes player from channel.")
     @CommandCompletion("@channels")
@@ -160,25 +169,25 @@ public class ChatCommand extends BaseCommand {
             if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
-                commandSender.spigot().sendMessage(Messages.channelNoExist(string));
+                platform.player((Player) commandSender).sendMessage(messages.channelNoExist(string));
             }
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.unsubscribe." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        commandSender.spigot().sendMessage(Messages.notSubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName));
                     else if (channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender))
                             .equals(channelManager.channelFromString(channelName)))
-                        commandSender.spigot().sendMessage(Messages.cantUnsubscribeActive(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribeActive(channelName));
                     else {
                         playerManager.removeSubscription((Player) commandSender, channelName);
-                        commandSender.spigot().sendMessage(Messages.nowUnsubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.nowUnsubscribed(channelName));
                     }
                 }
                 else {
-                    commandSender.spigot().sendMessage(Messages.noPermission());
+                    platform.player((Player) commandSender).sendMessage(messages.noPermission());
                 }
             }
-            else commandSender.spigot().sendMessage(Messages.cantUnsubscribe(string));
+            else platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribe(string));
         }
     }
     
@@ -192,23 +201,23 @@ public class ChatCommand extends BaseCommand {
             if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
-                commandSender.spigot().sendMessage(Messages.channelNoExist(string));
+                platform.player((Player) commandSender).sendMessage(messages.channelNoExist(string));
             }
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.switch." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        commandSender.spigot().sendMessage(Messages.notSubscribed(channelName));
+                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName));
                     else {
                         playerManager.setActiveChannel((Player) commandSender, channelName);
-                        commandSender.spigot().sendMessage(Messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getChatColor()));
+                        platform.player((Player) commandSender).sendMessage(messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getChatColor()));
                     }
                 }
                 else {
-                    commandSender.spigot().sendMessage(Messages.noPermission());
+                    platform.player((Player) commandSender).sendMessage(messages.noPermission());
                 }
             }
             else {
-                commandSender.spigot().sendMessage(Messages.cantSetActive(string));
+                platform.player((Player) commandSender).sendMessage(messages.cantSetActive(string));
             }
         }
     }
@@ -222,16 +231,16 @@ public class ChatCommand extends BaseCommand {
         else {
             // Check if player exists
             Player mutee = Bukkit.getPlayerExact(string);
-            if (mutee == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
+            if (mutee == null) platform.player((Player) commandSender).sendMessage(messages.playerNoExist());
             // Check if muting self
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
-                commandSender.spigot().sendMessage(Messages.cantMuteSelf());
+                platform.player((Player) commandSender).sendMessage(messages.cantMuteSelf());
             // Check if mutee already muted
             else if (playerManager.getMutedPlayerNames((Player) commandSender).contains(string))
-                commandSender.spigot().sendMessage(Messages.playerAlreadyMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(messages.playerAlreadyMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             else {
                 playerManager.addMutedPlayer((Player) commandSender, mutee);
-                commandSender.spigot().sendMessage(Messages.playerMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(messages.playerMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             }
         }
     }
@@ -245,16 +254,16 @@ public class ChatCommand extends BaseCommand {
         else {
             // Check if player exists
             Player mutee = Bukkit.getPlayerExact(string);
-            if (mutee == null) commandSender.spigot().sendMessage(Messages.playerNoExist());
+            if (mutee == null) platform.player((Player) commandSender).sendMessage(messages.playerNoExist());
             // Check if unmuting self
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
-                commandSender.spigot().sendMessage(Messages.cantUnmuteSelf());
+                platform.player((Player) commandSender).sendMessage(messages.cantUnmuteSelf());
             // Check if mutee already unmuted
             else if (playerManager.getMutedPlayerNames((Player) commandSender).contains(mutee.getName()))
-                commandSender.spigot().sendMessage(Messages.playerAlreadyUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(messages.playerAlreadyUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             else {
                 playerManager.removeMutedPlayer((Player) commandSender, mutee);
-                commandSender.spigot().sendMessage(Messages.playerUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(messages.playerUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             }
         }
     }
@@ -267,11 +276,11 @@ public class ChatCommand extends BaseCommand {
         else {
             if (!playerManager.isDeafened((Player) commandSender)) {
                 playerManager.setDeafened((Player) commandSender, true);
-                commandSender.spigot().sendMessage(Messages.playerDeafened());
+                platform.player((Player) commandSender).sendMessage(messages.playerDeafened());
             }
             else {
                 playerManager.setDeafened((Player) commandSender, false);
-                commandSender.spigot().sendMessage(Messages.playerUndeafened());
+                platform.player((Player) commandSender).sendMessage(messages.playerUndeafened());
             }
         }
     }
@@ -279,7 +288,7 @@ public class ChatCommand extends BaseCommand {
     @HelpCommand
     public void onHelp(CommandSender commandSender) {
         if (commandSender instanceof Player) {
-            commandSender.spigot().sendMessage(Messages.chatHelpCommand());
+            platform.player((Player) commandSender).sendMessage(messages.chatHelpCommand());
         }
         else CrewChat.getInstance().getLogger().info("Command Help:\n" +
                 "Alias: /c <args>\n" +

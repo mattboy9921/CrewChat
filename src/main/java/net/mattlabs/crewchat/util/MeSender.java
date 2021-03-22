@@ -2,6 +2,7 @@ package net.mattlabs.crewchat.util;
 
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.util.DiscordUtil;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import org.bukkit.entity.Player;
@@ -12,6 +13,9 @@ public class MeSender implements Runnable {
 
     private PlayerManager playerManager;
     private ChannelManager channelManager;
+    private ConfigurateManager configurateManager;
+    private BukkitAudiences platform;
+    private Messages messages;
     private String message, activeChannel;
     private Player player;
     private ArrayList<Player> subscribedPlayers;
@@ -19,6 +23,9 @@ public class MeSender implements Runnable {
     public MeSender() {
         playerManager = CrewChat.getInstance().getPlayerManager();
         channelManager = CrewChat.getInstance().getChannelManager();
+        configurateManager = CrewChat.getInstance().getConfigurateManager();
+        platform = CrewChat.getInstance().getPlatform();
+        messages = configurateManager.get("messages.conf");
     }
 
     public void sendMe(Player player, String message) {
@@ -33,7 +40,7 @@ public class MeSender implements Runnable {
 
     public void run() {
         for (Player subbedPlayer : subscribedPlayers)
-            subbedPlayer.spigot().sendMessage(Messages.meMessage(player.getName(), message, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+            platform.player(subbedPlayer).sendMessage(messages.meMessage(player.getName(), message, channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
         if (CrewChat.getInstance().getDiscordSRVEnabled())
             DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(), "_* " + player.getDisplayName() + " " + message + " *_");
         player = null;
