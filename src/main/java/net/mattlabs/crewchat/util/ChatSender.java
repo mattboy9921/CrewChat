@@ -56,7 +56,7 @@ public class ChatSender implements Runnable{
             status = colorize(playerManager.getStatus(player));
             activeChannel = playerManager.getActiveChannel(player);
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
-            this.message = parseMessageAdventure(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+            this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
@@ -108,7 +108,7 @@ public class ChatSender implements Runnable{
         return s.replaceAll("&([0-9a-f])", "\u00A7$1");
     }
 
-    private Component parseMessageAdventure(String message, TextColor textColor) {
+    private Component parseMessage(String message, TextColor textColor) {
         // Filter out any legacy codes/MiniMessage tags
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(message));
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(message));
