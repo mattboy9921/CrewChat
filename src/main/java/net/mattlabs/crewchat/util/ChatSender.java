@@ -2,13 +2,15 @@ package net.mattlabs.crewchat.util;
 
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.util.DiscordUtil;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
@@ -23,16 +25,22 @@ public class ChatSender implements Runnable{
 
     private PlayerManager playerManager;
     private ChannelManager channelManager;
+    private ConfigurateManager configurateManager;
     private Chat chat;
     private String prefix, time, status, activeChannel, messageString;
     private Player player;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
-    private TextComponent message;
+    private Component message;
+    private Messages messages;
+    private BukkitAudiences platform;
 
     public ChatSender(){
         playerManager = CrewChat.getInstance().getPlayerManager();
         channelManager = CrewChat.getInstance().getChannelManager();
+        configurateManager = CrewChat.getInstance().getConfigurateManager();
+        platform = CrewChat.getInstance().getPlatform();
         chat = CrewChat.getChat();
+        messages = configurateManager.get("messages.conf");
     }
 
     public void sendMessage(Player player, String message) {
@@ -40,7 +48,7 @@ public class ChatSender implements Runnable{
 
         this.player = player;
         if (playerManager.isOnline(player)) {
-            if (playerManager.isDeafened(player)) player.spigot().sendMessage(Messages.playerIsDeafened());
+            if (playerManager.isDeafened(player)) platform.player(player).sendMessage(messages.playerIsDeafened());
             messageString = message;
             prefix = colorize(chat.getPlayerPrefix(player));
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
@@ -48,16 +56,24 @@ public class ChatSender implements Runnable{
             status = colorize(playerManager.getStatus(player));
             activeChannel = playerManager.getActiveChannel(player);
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
-            this.message = parseMessage(message, channelManager.getChatColor(channelManager.channelFromString(activeChannel)));
+            this.message = parseMessageAdventure(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
-            player.sendMessage(Messages.badConfig());
+            platform.player(player).sendMessage(messages.badConfig());
             CrewChat.getInstance().getLogger().info("Player " + player.getDisplayName() + " can't send messages, check permissions!");
         }
     }
 
     public void run() {
+        Component messageComponent = messages.chatMessage(prefix,
+                player.getName(),
+                time,
+                status,
+                message,
+                activeChannel,
+                channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+
         for (Player subbedPlayer : subscribedPlayers) {
             if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(player.getName()) && !playerManager.isDeafened(subbedPlayer)) {
                 for (Player mentionedPlayer : mentionedPlayers)
@@ -70,32 +86,15 @@ public class ChatSender implements Runnable{
                             }, 2);
                         }, 2);
                     }
-                subbedPlayer.spigot().sendMessage(Messages.chatMessage(prefix,
-                        player.getName(),
-                        time,
-                        status,
-                        message,
-                        activeChannel,
-                        channelManager.getChatColor(channelManager.channelFromString(activeChannel))));
+                platform.player(subbedPlayer).sendMessage(parseMarkdown(messageComponent));
             }
         }
-        CrewChat.getInstance().getLogger().info(TextComponent.toPlainText(Messages.chatMessage(prefix,
-                player.getName(),
-                time,
-                status,
-                message,
-                activeChannel,
-                channelManager.getChatColor(channelManager.channelFromString(activeChannel)))));
+        platform.console().sendMessage(parseMarkdown(messageComponent));
+
         if (CrewChat.getInstance().getDiscordSRVEnabled())
             DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(),
-                    DiscordUtil.convertMentionsFromNames(TextComponent.toPlainText(Messages.chatMessage(prefix,
-                            player.getName(),
-                            time,
-                            status,
-                            message,
-                            activeChannel,
-                            channelManager.getChatColor(channelManager.channelFromString(activeChannel)))
-                    ), DiscordSRV.getPlugin().getMainGuild()));
+                    DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponent),
+                            DiscordSRV.getPlugin().getMainGuild()));
         prefix = null;
         player = null;
         status = null;
@@ -109,13 +108,18 @@ public class ChatSender implements Runnable{
         return s.replaceAll("&([0-9a-f])", "\u00A7$1");
     }
 
-    private TextComponent parseMessage(String message, ChatColor chatColor) {
+    private Component parseMessageAdventure(String message, TextColor textColor) {
+        // Filter out any legacy codes/MiniMessage tags
+        message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(message));
+        message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(message));
+        message = PlainComponentSerializer.plain().serialize(MiniMessage.get().parse(message));
+
         String[] parts = message.split(" ");
-        TextComponent componentMessage = new TextComponent("");
+        Component componentMessage = MiniMessage.get().parse("");
         mentionedPlayers = new ArrayList<>();
 
         for (String part : parts) {
-            TextComponent nextComponent = new TextComponent(part);
+            Component nextComponent = MiniMessage.get().parse("<" + textColor.toString() + ">" + part);
             Player mentionedPlayer = null;
 
             // Match player names
@@ -127,12 +131,10 @@ public class ChatSender implements Runnable{
 
             if (mentionedPlayer != null) {
                 String[] mentionParts = part.split(mentionedPlayer.getName());
-                nextComponent = new TextComponent("@" + mentionedPlayer.getName());
-                nextComponent.setColor(ChatColor.GOLD);
+                nextComponent = MiniMessage.get().parse("<gold>@" + mentionedPlayer.getName());
                 if (mentionParts.length > 0) {
-                    TextComponent afterMention = new TextComponent(mentionParts[1]);
-                    afterMention.setColor(chatColor);
-                    nextComponent.addExtra(afterMention);
+                    Component afterMention = MiniMessage.get().parse("<" + textColor.toString() + ">" + mentionParts[1]);
+                    nextComponent = nextComponent.append(afterMention);
                 }
             }
             // Match links
@@ -140,24 +142,23 @@ public class ChatSender implements Runnable{
                 part = part.replaceAll("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?", "$0 ");
                 String[] linkParts = part.split(" ");
                 part = linkParts[0];
-                nextComponent = new TextComponent(part);
-                nextComponent.setColor(ChatColor.BLUE);
-                nextComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to open link.").create()));
                 if (!Pattern.matches("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$", part))
-                    nextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://" + part));
-                else
-                    nextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, part));
+                    part = "http://" + part;
+                nextComponent = MiniMessage.get().parse("<click:open_url:" + part + "><hover:show_text:'<white>Click to open link.'><blue>" + part);
                 if (linkParts.length == 2) {
-                    TextComponent afterLink = new TextComponent(linkParts[1]);
-                    afterLink.setColor(chatColor);
-                    nextComponent.addExtra(afterLink);
+                    Component afterLink = MiniMessage.get().parse("<" + textColor.toString() + ">" + linkParts[1]);
+                    nextComponent = nextComponent.append(afterLink);
                 }
             }
-            else nextComponent.setColor(chatColor);
-            componentMessage.addExtra(nextComponent);
-            componentMessage.addExtra(" ");
+            componentMessage = componentMessage.append(nextComponent);
+            componentMessage = componentMessage.append(MiniMessage.get().parse(" "));
         }
         return componentMessage;
+    }
+
+    private Component parseMarkdown(Component message) {
+        String messageSerialized = MiniMessage.get().serialize(message);
+        return MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(messageSerialized);
     }
 }
 

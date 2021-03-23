@@ -1,9 +1,9 @@
 package net.mattlabs.crewchat.util;
 
+import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.Config;
 import net.mattlabs.crewchat.CrewChat;
-import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
 
@@ -45,8 +45,8 @@ public class ChannelManager {
         else return null;
     }
 
-    public ChatColor getChatColor(Channel channel) {
-        if (channels.contains(channel)) return channels.get(channels.indexOf(channel)).getChatColor();
+    public TextColor getTextColor(Channel channel) {
+        if (channels.contains(channel)) return channels.get(channels.indexOf(channel)).getTextColor();
         else return null;
     }
 }

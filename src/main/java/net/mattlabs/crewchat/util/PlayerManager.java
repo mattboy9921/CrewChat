@@ -1,5 +1,6 @@
 package net.mattlabs.crewchat.util;
 
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.*;
 import net.mattlabs.crewchat.messaging.Messages;
 import org.bukkit.Bukkit;
@@ -7,17 +8,20 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class PlayerManager {
 
     private ConfigurateManager configurateManager;
     private ChannelManager channelManager;
+    private BukkitAudiences platform;
+    private Messages messages;
     private ArrayList<Chatter> chatters, onlineChatters;
 
     public PlayerManager() {
         configurateManager = CrewChat.getInstance().getConfigurateManager();
         channelManager = CrewChat.getInstance().getChannelManager();
+        platform = CrewChat.getInstance().getPlatform();
+        messages = configurateManager.get("messages.conf");
         chatters = new ArrayList<>();
         onlineChatters = new ArrayList<>();
     }
@@ -185,7 +189,7 @@ public class PlayerManager {
                     if (mutee.getTime().isAfter(mutee.getTime().plusHours(24))) {
                         chatter.removeMutedPlayer(mutee.getUuid());
                         if (Bukkit.getOfflinePlayer(chatter.getUuid()).isOnline())
-                            Bukkit.getPlayer(chatter.getUuid()).spigot().sendMessage(Messages.playerUnmuted(mutee.getPrefix(), mutee.getName()));
+                            platform.player(Bukkit.getPlayer(chatter.getUuid())).sendMessage(messages.playerUnmuted(mutee.getPrefix(), mutee.getName()));
                     }
         });
     }

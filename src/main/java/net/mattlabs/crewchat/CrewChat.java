@@ -2,12 +2,14 @@ package net.mattlabs.crewchat;
 
 import co.aikar.commands.PaperCommandManager;
 import io.leangen.geantyref.TypeToken;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
 import net.mattlabs.crewchat.listeners.JoinListener;
 import net.mattlabs.crewchat.listeners.QuitListener;
+import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.*;
-import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
@@ -28,6 +30,7 @@ public class CrewChat extends JavaPlugin{
     private static Chat chat = null;
     private static Permission perms = null;
     private ConfigurateManager configurateManager;
+    private BukkitAudiences platform;
 
     private boolean discordSRVEnabled;
 
@@ -76,18 +79,25 @@ public class CrewChat extends JavaPlugin{
         configurateManager = new ConfigurateManager();
 
         configurateManager.add("config.conf", TypeToken.get(Config.class), new Config(), Config::new,
-                opts -> opts.serializers(build -> build.register(ChatColor.class, ChatColorSerializer.INSTANCE)));
+                opts -> opts.serializers(build -> build.register(TextColor.class, TextColorSerializer.INSTANCE)));
         configurateManager.add("playerdata.conf", TypeToken.get(PlayerData.class), new PlayerData(), PlayerData::new,
                 opts -> opts.serializers(build -> build.register(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE)));
+        configurateManager.add("messages.conf", TypeToken.get(Messages.class), new Messages(), Messages::new);
 
         configurateManager.saveDefaults("config.conf");
         configurateManager.saveDefaults("playerdata.conf");
+        configurateManager.saveDefaults("messages.conf");
 
         configurateManager.load("config.conf");
         configurateManager.load("playerdata.conf");
+        configurateManager.load("messages.conf");
 
         configurateManager.save("config.conf");
         configurateManager.save("playerdata.conf");
+        configurateManager.save("messages.conf");
+
+        // Register Audience (Messages)
+        platform = BukkitAudiences.create(this);
 
         // Load Channels
         channelManager = new ChannelManager();
@@ -168,6 +178,10 @@ public class CrewChat extends JavaPlugin{
 
     public PaperCommandManager getPaperCommandManager() {
         return paperCommandManager;
+    }
+
+    public BukkitAudiences getPlatform() {
+        return platform;
     }
 
     // Vault Helper Methods
