@@ -10,6 +10,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
+import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
@@ -22,12 +23,40 @@ public class Messages {
 
     }
 
+    // Header fields
+    @Setting(value = "_schema-version")
+    @Comment("#######################################################################################################\n" +
+            "    ________  ________  _______   ___       __   ________  ___  ___  ________  _________   \n" +
+            "   |\\   ____\\|\\   __  \\|\\  ___ \\ |\\  \\     |\\  \\|\\   ____\\|\\  \\|\\  \\|\\   __  \\|\\___   ___\\ \n" +
+            "   \\ \\  \\___|\\ \\  \\|\\  \\ \\   __/|\\ \\  \\    \\ \\  \\ \\  \\___|\\ \\  \\\\\\  \\ \\  \\|\\  \\|___ \\  \\_| \n" +
+            "    \\ \\  \\    \\ \\   _  _\\ \\  \\_|/_\\ \\  \\  __\\ \\  \\ \\  \\    \\ \\   __  \\ \\   __  \\   \\ \\  \\  \n" +
+            "     \\ \\  \\____\\ \\  \\\\  \\\\ \\  \\_|\\ \\ \\  \\|\\__\\_\\  \\ \\  \\____\\ \\  \\ \\  \\ \\  \\ \\  \\   \\ \\  \\ \n" +
+            "      \\ \\_______\\ \\__\\\\ _\\\\ \\_______\\ \\____________\\ \\_______\\ \\__\\ \\__\\ \\__\\ \\__\\   \\ \\__\\\n" +
+            "       \\|_______|\\|__|\\|__|\\|_______|\\|____________|\\|_______|\\|__|\\|__|\\|__|\\|__|    \\|__|\n\n" +
+
+            "CrewChat Messages Configuration\n" +
+            "By Mattboy9921\n" +
+            "https://github.com/mattboy9921/CrewChat\n\n" +
+
+            "This configuration contains every string of text found in this plugin.\n\n" +
+
+            "For values that contain variables, they are shown as \"<some_value>\"\n" +
+            "and the possible tags are shown in the comment above the line.\n" +
+            "It is not necessary to include every variable, but certain strings won't make sense otherwise.\n\n" +
+
+            "Colors and text style can be specified using XML-like tags, for example: \"<white>\".\n" +
+            "Standard Minecraft colors/styles are available. Hex colors can be specified with \"<color:#XXXXXX>\".\n" +
+            "Please note, some values cannot use color codes (\"<white>\") as denoted in the comment above the value.\n" +
+            "#######################################################################################################\n\n" +
+            "Config version. Do not change this!")
+    private int schemaVersion = 0;
+
     // *** Chat Command ***
 
     // ** Base **
 
     // Welcome to chat
-    @Comment("Appears in the chat base command.\n")
+    @Comment("\nAppears in the chat base command.")
     private String welcomeToChat = "<white>Welcome to chat!";
 
     public Component chatBaseCommand() {
@@ -49,7 +78,7 @@ public class Messages {
     // ** Deafen **
 
     // Player Deafened
-    @Comment("Appears when a player deafens themself.\n")
+    @Comment("\nAppears when a player deafens themself.")
     private String playerDeafened = "<white>You have been deafened. You will not receive any chat messages.";
 
     public Component playerDeafened() {
@@ -57,7 +86,7 @@ public class Messages {
     }
 
     // Player Undeafened
-    @Comment("Appears when a player undeafens themself.\n")
+    @Comment("\nAppears when a player undeafens themself.")
     private String playerUndeafened = "<white>You are no longer deafened. You will receive all chat messages.";
 
     public Component playerUndeafened() {
@@ -65,7 +94,7 @@ public class Messages {
     }
 
     // Player Is Deafened
-    @Comment("Appears when a player tries to send a chat message while deafened.\n")
+    @Comment("\nAppears when a player tries to send a chat message while deafened.")
     private String playerIsDeafened = "<white>You are deafened and cannot see chat messages!";
 
     public Component playerIsDeafened() {
@@ -75,7 +104,7 @@ public class Messages {
     // ** General **
 
     // Channel No Exist
-    @Comment("Appears when a command contains a channel that doesn't exist.\n" +
+    @Comment("\nAppears when a command contains a channel that doesn't exist.\n" +
             "Possible tags: <channel_name>")
     private String channelNoExist = "<white>Channel <bold><channel_name></bold> doesn't exist!";
 
@@ -87,9 +116,9 @@ public class Messages {
     // ** Help **
     public Component chatHelpCommand() {
         return chatHeader
-                .append(Component.text("Command Help:\n")
+                .append(Component.text("Command Help:")
                     .color(WHITE))
-                .append(Component.text(" - Alias: /c <args> - (Click to run) -\n")
+                .append(Component.text(" - Alias: /c <args> - (Click to run) -")
                     .color(GRAY))
                 .append(Component.text("/chat")
                     .color(DARK_GREEN)
@@ -97,7 +126,7 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/chat ")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Base Chat command.\n")
+                .append(Component.text("Base Chat command.")
                     .color(WHITE))
                 .append(Component.text("/chat help")
                     .color(DARK_GREEN)
@@ -105,7 +134,7 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/chat help")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Shows this screen.\n")
+                .append(Component.text("Shows this screen.")
                     .color(WHITE))
                 .append(Component.text("/chat info")
                     .color(DARK_GREEN)
@@ -113,7 +142,7 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/chat info")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Lists all channels, active channel and subscribed channels.\n")
+                .append(Component.text("Lists all channels, active channel and subscribed channels.")
                     .color(WHITE))
                 .append(Component.text("/chat info channel <channel>")
                     .color(DARK_GREEN)
@@ -121,7 +150,7 @@ public class Messages {
                     .clickEvent(ClickEvent.suggestCommand("/chat info channel ")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Lists info about specified channel.\n")
+                .append(Component.text("Lists info about specified channel.")
                     .color(WHITE))
                 .append(Component.text("/chat status <status>")
                     .color(DARK_GREEN)
@@ -129,7 +158,7 @@ public class Messages {
                     .clickEvent(ClickEvent.suggestCommand("/chat status ")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Sets player's status.\n")
+                .append(Component.text("Sets player's status.")
                     .color(WHITE))
                 .append(Component.text("/chat subscribe <channel>")
                     .color(DARK_GREEN)
@@ -137,7 +166,7 @@ public class Messages {
                     .clickEvent(ClickEvent.suggestCommand("/chat subscribe ")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Subscribes player to channel.\n")
+                .append(Component.text("Subscribes player to channel.")
                     .color(WHITE))
                 .append(Component.text("/chat unsubscribe <channel>")
                     .color(DARK_GREEN)
@@ -145,7 +174,7 @@ public class Messages {
                     .clickEvent(ClickEvent.suggestCommand("/chat unsubscribe ")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Unsubscribes player from channel.\n")
+                .append(Component.text("Unsubscribes player from channel.")
                     .color(WHITE))
                 .append(Component.text("/chat switch <channel>")
                     .color(DARK_GREEN)
@@ -153,34 +182,34 @@ public class Messages {
                     .clickEvent(ClickEvent.suggestCommand("/chat switch ")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Switches active channel.\n")
+                .append(Component.text("Switches active channel.")
                     .color(WHITE));
     }
 
     // ** Info **
 
     // Channel List Header
-    @Comment("Appears in the chat info command.\n" +
-            "(Does not accept color codes)\n")
+    @Comment("\nAppears in the chat info command.\n" +
+            "(Does not accept color codes)")
     private String channelListHeader = "Channel List: (Click for more info)";
 
     // Channel List Active
-    @Comment("Appears in the chat info command.\n" +
-            "(Does not accept color codes)\n")
+    @Comment("\nAppears in the chat info command.\n" +
+            "(Does not accept color codes)")
     private String channelListActive = "Your active channel is: <channel_name>.";
 
     // Channel List Subscribe Header
-    @Comment("Appears in the chat info command.\n" +
-            "(Does not accept color codes)\n")
+    @Comment("\nAppears in the chat info command.\n" +
+            "(Does not accept color codes)")
     private String channelListSubscribedHeader = "Your subscribed channels are:";
 
     // Muted List Header
-    @Comment("Appears in the chat info command.\n" +
-            "(Does not accept color codes)\n")
+    @Comment("\nAppears in the chat info command.\n" +
+            "(Does not accept color codes)")
     private String mutedListHeader = "Your muted players are:";
 
     // Click to unmute
-    @Comment("Appears in the chat info command.\n")
+    @Comment("\nAppears in the chat info command.")
     private String clickToUnmute = "<bold><aqua>Click<reset> to unmute.";
 
     public Component channelListHeader() {
@@ -192,7 +221,7 @@ public class Messages {
                         .color(DARK_GREEN))
                 .append(Component.text("]")
                         .color(DARK_GRAY))
-                .append(Component.text("------------------------\n")
+                .append(Component.text("------------------------")
                         .color(GRAY))
                 .append(Component.text(channelListHeader)
                         .color(GRAY));
@@ -272,7 +301,7 @@ public class Messages {
     // ** Mute/Unmute **
 
     // Chat Can't Mute Self
-    @Comment("Appears when a player tries to mute themself.\n")
+    @Comment("\nAppears when a player tries to mute themself.")
     private String cantMuteSelf = "<white>You can't mute yourself!";
 
     public Component cantMuteSelf() {
@@ -280,7 +309,7 @@ public class Messages {
     }
 
     // Chat Can't Unmute Self
-    @Comment("Appears when a player tries to unmute themself.\n")
+    @Comment("\nAppears when a player tries to unmute themself.")
     private String cantUnmuteSelf = "<white>You can't unmute yourself!";
 
     public Component cantUnmuteSelf() {
@@ -288,7 +317,7 @@ public class Messages {
     }
 
     // Chat Player Already Muted
-    @Comment("Appears when a player tries to mute someone they've already muted.\n" +
+    @Comment("\nAppears when a player tries to mute someone they've already muted.\n" +
             "Possible tags: <player_prefix>, <player_name>")
     private String playerAlreadyMuted = "<white><player_prefix><player_name> is already muted!";
 
@@ -299,7 +328,7 @@ public class Messages {
     }
 
     // Chat Player Already Unmuted
-    @Comment("Appears when a player tries to unmute someone who isn't muted.\n" +
+    @Comment("\nAppears when a player tries to unmute someone who isn't muted.\n" +
             "Possible tags: <player_prefix>, <player_name>")
     private String playerAlreadyUnmuted = "<white><player_prefix><player_name> is not muted!";
 
@@ -310,7 +339,7 @@ public class Messages {
     }
 
     // Chat Player Muted
-    @Comment("Appears when a player mutes someone.\n" +
+    @Comment("\nAppears when a player mutes someone.\n" +
             "Possible tags: <player_prefix>, <player_name>")
     private String playerMuted = "<white><player_prefix><player_name> has been muted.";
 
@@ -321,7 +350,7 @@ public class Messages {
     }
 
     // Chat Player Unmuted
-    @Comment("Appears when a player unmutes someone.\n" +
+    @Comment("\nAppears when a player unmutes someone.\n" +
             "Possible tags: <player_prefix>, <player_name>")
     private String playerUnmuted = "<white><player_prefix><player_name> has been unmuted.";
 
@@ -333,7 +362,7 @@ public class Messages {
 
     // ** Status **
 
-    @Comment("Appears when a player sets their status.\n" +
+    @Comment("\nAppears when a player sets their status.\n" +
             "Possible tags: <status>")
     private String statusSet = "<white>Your status has been set to: \"<status>\".";
 
@@ -344,7 +373,7 @@ public class Messages {
     // ** Subscribe/Unsubscribe **
 
     // Already Subscribed
-    @Comment("Appears when a player tries to subscribe to a channel they already subscribe to.\n" +
+    @Comment("\nAppears when a player tries to subscribe to a channel they already subscribe to.\n" +
             "Possibe tags: <channel_name>")
     private String alreadySubscribed = "<white>You are already subscribed to <bold><channel_name></bold>.";
 
@@ -353,7 +382,7 @@ public class Messages {
     }
 
     // Can't Subscribe
-    @Comment("Appears when a player can't subscribe to a channel.\n" +
+    @Comment("\nAppears when a player can't subscribe to a channel.\n" +
             "Possibe tags: <channel_name>")
     private String cantSubscribe = "<white>You can't subscribe to <bold><channel_name></bold>!";
 
@@ -362,7 +391,7 @@ public class Messages {
     }
 
     // Can't Unsubscribe
-    @Comment("Appears when a player can't unsubscribe from a channel.\n" +
+    @Comment("\nAppears when a player can't unsubscribe from a channel.\n" +
             "Possibe tags: <channel_name>")
     private String cantUnsubscribe = "<white>You can't unsubscribe from <bold><channel_name></bold>!";
 
@@ -371,7 +400,7 @@ public class Messages {
     }
 
     // Can't Unsubscribe Active
-    @Comment("Appears when a player can't unsubscribe from a channel because it is their active channel.\n" +
+    @Comment("\nAppears when a player can't unsubscribe from a channel because it is their active channel.\n" +
             "Possibe tags: <channel_name>")
     private String cantUnsubscribeActive = "<white>You can't unsubscribe from <bold><channel_name></bold>, it is your active channel!";
 
@@ -380,7 +409,7 @@ public class Messages {
     }
 
     // Not Subscribed
-    @Comment("Appears when a player unsubscribes from a channel they are not subscribed to.\n" +
+    @Comment("\nAppears when a player unsubscribes from a channel they are not subscribed to.\n" +
             "Possibe tags: <channel_name>")
     private String notSubscribed = "<white>You aren't subscribed to <bold><channel_name></bold>.";
 
@@ -389,7 +418,7 @@ public class Messages {
     }
 
     // Now Subscribed
-    @Comment("Appears when a player subscribes to a channel.\n" +
+    @Comment("\nAppears when a player subscribes to a channel.\n" +
             "Possibe tags: <channel_name>")
     private String nowSubscribed = "<white>You are now subscribed to <bold><channel_name></bold>.";
 
@@ -398,7 +427,7 @@ public class Messages {
     }
 
     // Now Unsubscribed
-    @Comment("Appears when a player unsubscribes from a channel.\n" +
+    @Comment("\nAppears when a player unsubscribes from a channel.\n" +
             "Possibe tags: <channel_name>")
     private String nowUnsubscribed = "<white>You are no longer subscribed to <bold><channel_name></bold>.";
 
@@ -409,17 +438,16 @@ public class Messages {
     // ** Switch **
 
     // New Active Channel
-    @Comment("Appears when a player changes their active channel.\n" +
+    @Comment("\nAppears when a player changes their active channel.\n" +
             "Possibe tags: <channel_name>")
     private String newActiveChannel = "<white>Your active channel is now <bold><channel_name></bold>.";
 
-    // TODO: Add chat color to other messages that reference a channel, possibly consolidate method signature to just use the channel
     public Component newActiveChannel(String channelName, TextColor textColor) {
         return chatHeader.append(MiniMessage.get().parse(newActiveChannel, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
     }
 
     // Can't Set Active
-    @Comment("Appears when a player can't change their active channel.\n" +
+    @Comment("\nAppears when a player can't change their active channel.\n" +
             "Possibe tags: <channel_name>")
     private String cantSetActive = "<white>You can't set <bold><channel_name></bold> as your active channel!";
 
@@ -466,9 +494,9 @@ public class Messages {
     // Help
     public Component crewChatHelpCommand() {
         return crewChatHeader
-                .append(Component.text("Command Help:\n")
+                .append(Component.text("Command Help:")
                     .color(WHITE))
-                .append(Component.text(" - Alias: /cc <args> - (Click to run) -\n")
+                .append(Component.text(" - Alias: /cc <args> - (Click to run) -")
                     .color(GRAY))
                 .append(Component.text("/crewchat")
                     .color(DARK_GREEN)
@@ -476,7 +504,7 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/crewchat")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Base CrewChat command.\n")
+                .append(Component.text("Base CrewChat command.")
                     .color(WHITE))
                 .append(Component.text("/crewchat help")
                     .color(DARK_GREEN)
@@ -484,7 +512,7 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/crewchat help")))
                 .append(Component.text(" - ")
                     .color(GRAY))
-                .append(Component.text("Shows this screen.\n")
+                .append(Component.text("Shows this screen.")
                     .color(WHITE))
                 .append(Component.text("/crewchat reload")
                     .color(DARK_GREEN)
@@ -518,7 +546,7 @@ public class Messages {
     // *** Private Message ***
 
     // PM Header
-    @Comment("This is the format used before every private message sent.\n" +
+    @Comment("\nThis is the format used before every private message sent.\n" +
             "Possible tags: <sender_prefix>, <sender_name>, <recipient_prefix>, <recipient_name>")
     private String privateMessageHeader = "<gray>[<reset><sender_prefix><sender_name><reset> <gray>-><reset> <recipient_prefix><recipient_name><reset><gray>]<reset> ";
 
@@ -535,7 +563,7 @@ public class Messages {
     }
 
     // Click to reply
-    @Comment("Appears when hovering over private messages.\n")
+    @Comment("\nAppears when hovering over private messages.")
     private String clickToReply = "<bold><aqua>Click<reset> this message to reply.";
 
     // TODO: Add date and channel to this
@@ -552,7 +580,7 @@ public class Messages {
     }
 
     // PM Can't Message Self
-    @Comment("Appears when a player tries to private message themself.\n")
+    @Comment("\nAppears when a player tries to private message themself.")
     private String cantMessageSelf = "<white>You can't send a message to yourself!";
 
     public Component cantMessageSelf() {
@@ -560,7 +588,7 @@ public class Messages {
     }
 
     // PM No PM Received
-    @Comment("Appears when a player tries to reply without receiving a private message.\n")
+    @Comment("\nAppears when a player tries to reply without receiving a private message.")
     private String noPMReceived = "<white>You haven't received any messages!";
 
     public Component noPMReceived() {
@@ -568,7 +596,7 @@ public class Messages {
     }
 
     // PM Player Doesn't Exist
-    @Comment("Appears when a player tries to private message a player that doesn't exist.\n")
+    @Comment("\nAppears when a player tries to private message a player that doesn't exist.")
     private String playerNoExist = "<white>Player doesn't exist!";
 
     public Component playerNoExist() {
@@ -578,7 +606,7 @@ public class Messages {
     // *** Chat Messages ***
 
     // Chat Message
-    @Comment("This is the format used before every chat message sent.\n" +
+    @Comment("\nThis is the format used before every chat message sent.\n" +
             "Possible tags: <player_prefix><player_name>")
     private String chatMessageHeader = "<player_prefix><player_name><gray>: ";
 
@@ -597,20 +625,20 @@ public class Messages {
     // *** General ***
 
     // General fields used in many strings
-    @Comment("\"Chat\" text that appears before many messages.\n" +
-            "(Does not accept color codes)\n")
+    @Comment("\n\"Chat\" text that appears before many messages.\n" +
+            "(Does not accept color codes)")
     private String chat = "Chat";
 
-    @Comment("Value for the word \"Status\".\n")
+    @Comment("\nValue for the word \"Status\".")
     private String status = "Status";
 
-    @Comment("Value for the word \"Channel\".\n")
+    @Comment("\nValue for the word \"Channel\".")
     private String channel = "Channel";
 
-    @Comment("Value for the word \"You\".\n")
+    @Comment("\nValue for the word \"You\".")
     private String you = "You";
 
-    @Comment("Value for the word \"Help\".\n" +
+    @Comment("\nValue for the word \"Help\".\n" +
             "(Does not accept color codes)")
     private String help = "Help";
 
@@ -643,17 +671,17 @@ public class Messages {
 
     // ** Bad Config **
     // Plugin Not Configured Correctly
-    @Comment("Appears when the plugin is configured incorrectly.\n")
+    @Comment("\nAppears when the plugin is configured incorrectly.")
     private String pluginNotConfigured = "<white>Plugin not configured correctly.";
 
     // Incorrect Permission
-    @Comment("Appears when the plugin is configured incorrectly.\n")
+    @Comment("\nAppears when the plugin is configured incorrectly.")
     private String permError = "<white>Permissions/configuration error.";
 
     public Component badConfig() {
         return chatHeader
                 .append(MiniMessage.get().parse(pluginNotConfigured))
-                .append(Component.text("\n"))
+                .append(Component.text(""))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(permError));
     }
@@ -661,7 +689,7 @@ public class Messages {
     // ** No Permission **
 
     // No Permission
-    @Comment("Appears if player does not have permission to run a command.\n")
+    @Comment("\nAppears if player does not have permission to run a command.")
     private String noPermission = "<red>I'm sorry but you do not have permission to perform this" +
             "command. Please contact the server administrators if you" +
             "believe that this is in error.";
