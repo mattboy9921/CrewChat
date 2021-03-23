@@ -11,6 +11,7 @@ CrewChat is a chat plugin developed for the Crew Craft Server.
  - Support for clickable links in chat
  - Player info/status messages
  - Ping players by name
+ - Mute/deafen functions
  - DiscordSRV integration
 
 **Commands**
@@ -28,6 +29,8 @@ CrewChat:
  - `/chat subscribe <channel>` - Subscribes player to `<channel>`
  - `/chat unsubscribe <channel>` - Unsubscribes player from `<channel>`
  - `/chat switch <channel>` - Switches player's active channel
+ - `/chat mute <player>` - Mutes `<player>` for 24 hours
+ - `/chat deafen` - Deafens player from all chat messages
  - Alias: `/c`
  
  Me:
@@ -49,6 +52,8 @@ CrewChat:
  - `crewchat.chat.subscribe.<channel>` - Allows player to subscribe to `<channel>`
  - `crewchat.chat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
  - `crewchat.chat.switch.<channel>` - Allows player to switch `<channel>` as active channel
+ - `crewchat.chat.mute` - Allows player to mute/unmute players
+ - `crewchat.chat.deafen` - Allows player to deafen/undeafen themself
  - `crewchat.chat.info` -  Allows player to run `/chat info`
  - `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
  - `crewchat.reload` - Allows player to use `/crewchat reload`
