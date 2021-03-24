@@ -8,23 +8,19 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class PlayerManager {
 
-    private ConfigurateManager configurateManager;
-    private ChannelManager channelManager;
-    private BukkitAudiences platform;
-    private Messages messages;
-    private ArrayList<Chatter> chatters, onlineChatters;
+    private final ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
+    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
 
-    public PlayerManager() {
-        configurateManager = CrewChat.getInstance().getConfigurateManager();
-        channelManager = CrewChat.getInstance().getChannelManager();
-        platform = CrewChat.getInstance().getPlatform();
-        messages = configurateManager.get("messages.conf");
-        chatters = new ArrayList<>();
-        onlineChatters = new ArrayList<>();
-    }
+    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final Messages messages = CrewChat.getInstance().getMessages();
+
+    private ArrayList<Chatter> chatters = new ArrayList<>();
+    private final ArrayList<Chatter> onlineChatters = new ArrayList<>();
 
     public void loadPlayers() {
         PlayerData playerData = configurateManager.get("playerdata.conf");
@@ -63,7 +59,10 @@ public class PlayerManager {
     public void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) throws NullPointerException {
         boolean configError = true;
         for (Channel channel : channelManager.getChannels()) {
-            if (channel.getName().equals(activeChannel)) configError = false;
+            if (channel.getName().equals(activeChannel)) {
+                configError = false;
+                break;
+            }
         }
         if (configError) {
             throw new NullPointerException("Bad config/permissions");
@@ -142,9 +141,8 @@ public class PlayerManager {
 
     public ArrayList<String> getMutedPlayerNames(Player player) {
         ArrayList<String> mutedPlayerNames = new ArrayList<>();
-        chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getMutedPlayers().forEach(mutee -> {
-            mutedPlayerNames.add(mutee.getName());
-        });
+        chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getMutedPlayers().forEach(mutee ->
+                mutedPlayerNames.add(mutee.getName()));
         return mutedPlayerNames;
     }
 
@@ -189,7 +187,7 @@ public class PlayerManager {
                     if (mutee.getTime().isAfter(mutee.getTime().plusHours(24))) {
                         chatter.removeMutedPlayer(mutee.getUuid());
                         if (Bukkit.getOfflinePlayer(chatter.getUuid()).isOnline())
-                            platform.player(Bukkit.getPlayer(chatter.getUuid())).sendMessage(messages.playerUnmuted(mutee.getPrefix(), mutee.getName()));
+                            platform.player(Objects.requireNonNull(Bukkit.getPlayer(chatter.getUuid()))).sendMessage(messages.playerUnmuted(mutee.getPrefix(), mutee.getName()));
                     }
         });
     }

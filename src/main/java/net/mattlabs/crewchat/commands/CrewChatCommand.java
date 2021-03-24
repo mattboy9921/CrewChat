@@ -15,15 +15,11 @@ import org.bukkit.entity.Player;
 @CommandPermission("crewchat.use")
 public class CrewChatCommand extends BaseCommand {
 
-    private ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
-    private ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
-    private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    private BukkitAudiences platform = CrewChat.getInstance().getPlatform();
-    private Messages messages;
-
-    public CrewChatCommand() {
-        messages = configurateManager.get("messages.conf");
-    }
+    private final ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
+    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
+    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final Messages messages = CrewChat.getInstance().getMessages();
 
     @Default
     @Description("CrewChat base command.")

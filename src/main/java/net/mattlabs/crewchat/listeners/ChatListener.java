@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 
 public class ChatListener implements Listener {
 
-    ChatSender chatSender = CrewChat.getInstance().getChatSender();
+    private final ChatSender chatSender = CrewChat.getInstance().getChatSender();
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
@@ -18,10 +18,9 @@ public class ChatListener implements Listener {
             event.setCancelled(true);
         }
         // Catch any plugin trying to send non-async chat messages
-        else CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
-            CrewChat.getInstance().getServer().getPluginManager().callEvent(
-                    new AsyncPlayerChatEvent(true, event.getPlayer(), event.getMessage(), event.getRecipients()));
-        });
+        else CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () ->
+                CrewChat.getInstance().getServer().getPluginManager().callEvent(
+                new AsyncPlayerChatEvent(true, event.getPlayer(), event.getMessage(), event.getRecipients())));
     }
 
     // Cancel synchronous chat messages

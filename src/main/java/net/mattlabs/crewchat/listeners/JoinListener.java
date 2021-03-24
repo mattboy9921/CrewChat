@@ -13,14 +13,10 @@ import java.util.ArrayList;
 
 public class JoinListener implements Listener{
 
-    private PlayerManager playerManager;
-    private ChannelManager channelManager;
-    private boolean configError;
+    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private final ChannelManager channelManager  = CrewChat.getInstance().getChannelManager();
 
-    public JoinListener() {
-        playerManager = CrewChat.getInstance().getPlayerManager();
-        channelManager = CrewChat.getInstance().getChannelManager();
-    }
+    private boolean configError;
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

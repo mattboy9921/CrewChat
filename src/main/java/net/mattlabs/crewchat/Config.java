@@ -7,6 +7,7 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 import java.util.*;
 
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ConfigSerializable
 public class Config {
 

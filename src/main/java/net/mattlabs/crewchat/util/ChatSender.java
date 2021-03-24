@@ -23,25 +23,20 @@ import java.util.regex.Pattern;
 
 public class ChatSender implements Runnable{
 
-    private PlayerManager playerManager;
-    private ChannelManager channelManager;
-    private ConfigurateManager configurateManager;
-    private Chat chat;
-    private String prefix, time, status, activeChannel, messageString, notificationSound;
+    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
+
+    private final Messages messages = CrewChat.getInstance().getMessages();
+    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final Chat chat = CrewChat.getChat();
+
+    private String prefix, time, status, activeChannel;
+    private final String notificationSound;
     private Player player;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
-    private Messages messages;
-    private BukkitAudiences platform;
 
     public ChatSender(){
-        playerManager = CrewChat.getInstance().getPlayerManager();
-        channelManager = CrewChat.getInstance().getChannelManager();
-        configurateManager = CrewChat.getInstance().getConfigurateManager();
-        platform = CrewChat.getInstance().getPlatform();
-        chat = CrewChat.getChat();
-        messages = configurateManager.get("messages.conf");
-
         // Check version for notification sound
         if (Versions.versionCompare("1.14.0", CrewChat.getInstance().getVersion()) <= 0)
             notificationSound = "block.note_block.iron_xylophone";
@@ -54,7 +49,6 @@ public class ChatSender implements Runnable{
         this.player = player;
         if (playerManager.isOnline(player)) {
             if (playerManager.isDeafened(player)) platform.player(player).sendMessage(messages.playerIsDeafened());
-            messageString = message;
             prefix = colorize(chat.getPlayerPrefix(player));
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
             time = format.format(new Date());

@@ -5,7 +5,6 @@ import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
-import net.mattlabs.crewchat.util.ConfigurateManager;
 import net.mattlabs.crewchat.util.MsgManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
@@ -17,16 +16,11 @@ import org.bukkit.entity.Player;
 @CommandPermission("crewchat.pm")
 public class MsgCommand extends BaseCommand {
 
-    MsgManager msgManager = CrewChat.getInstance().getMsgManager();
-    PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
-    BukkitAudiences platform = CrewChat.getInstance().getPlatform();
-    Chat chat = CrewChat.getChat();
-    private Messages messages;
-
-    public MsgCommand() {
-        messages = configurateManager.get("messages.conf");
-    }
+    private final MsgManager msgManager = CrewChat.getInstance().getMsgManager();
+    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final Chat chat = CrewChat.getChat();
+    private final Messages messages = CrewChat.getInstance().getMessages();
 
     @Default
     @CommandCompletion("@players @nothing")
@@ -38,7 +32,7 @@ public class MsgCommand extends BaseCommand {
 
             Player recipient = Bukkit.getPlayerExact(recipientString);
             if (recipient == null) platform.player((Player) commandSender).sendMessage(messages.playerNoExist());
-            else if (((Player) commandSender).getName().equalsIgnoreCase(recipient.getName())) {
+            else if (commandSender.getName().equalsIgnoreCase(recipient.getName())) {
                 platform.player((Player) commandSender).sendMessage(messages.cantMessageSelf());
             }
             else {

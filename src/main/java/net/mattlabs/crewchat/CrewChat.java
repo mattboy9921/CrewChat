@@ -34,6 +34,7 @@ public class CrewChat extends JavaPlugin{
 
     private static Chat chat = null;
     private BukkitAudiences platform;
+    private Messages messages;
 
     private String version;
     private boolean discordSRVEnabled;
@@ -110,6 +111,9 @@ public class CrewChat extends JavaPlugin{
         configurateManager.save("playerdata.conf");
         configurateManager.save("messages.conf");
 
+        // Load Messages
+        messages = configurateManager.get("messages.conf");
+
         // Register Audience (Messages)
         platform = BukkitAudiences.create(this);
 
@@ -142,7 +146,7 @@ public class CrewChat extends JavaPlugin{
         paperCommandManager.registerCommand(new ReplyCommand());
 
         // bStats
-        Metrics metrics = new Metrics(this, 5799);
+        new Metrics(this, 5799);
 
         this.getLogger().info("CrewChat loaded - By mattboy9921");
     }
@@ -196,6 +200,10 @@ public class CrewChat extends JavaPlugin{
 
     public String getVersion() {
         return version;
+    }
+
+    public Messages getMessages() {
+        return messages;
     }
 
     // Vault Helper Methods

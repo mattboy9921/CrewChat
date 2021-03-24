@@ -11,22 +11,15 @@ import java.util.ArrayList;
 
 public class MeSender implements Runnable {
 
-    private PlayerManager playerManager;
-    private ChannelManager channelManager;
-    private ConfigurateManager configurateManager;
-    private BukkitAudiences platform;
-    private Messages messages;
+    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
+
+    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final Messages messages = CrewChat.getInstance().getMessages();
+
     private String message, activeChannel;
     private Player player;
     private ArrayList<Player> subscribedPlayers;
-
-    public MeSender() {
-        playerManager = CrewChat.getInstance().getPlayerManager();
-        channelManager = CrewChat.getInstance().getChannelManager();
-        configurateManager = CrewChat.getInstance().getConfigurateManager();
-        platform = CrewChat.getInstance().getPlatform();
-        messages = configurateManager.get("messages.conf");
-    }
 
     public void sendMe(Player player, String message) {
         playerManager.updateMutedPlayers();

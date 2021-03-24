@@ -9,13 +9,9 @@ import java.util.ArrayList;
 
 public class ChannelManager {
 
-    private ConfigurateManager configurateManager;
-    private ArrayList<Channel> channels;
+    private final ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
 
-    public ChannelManager() {
-        configurateManager = CrewChat.getInstance().getConfigurateManager();
-        channels = new ArrayList<>();
-    }
+    private ArrayList<Channel> channels  = new ArrayList<>();
 
     public void loadChannels() {
         Config config = configurateManager.get("config.conf");

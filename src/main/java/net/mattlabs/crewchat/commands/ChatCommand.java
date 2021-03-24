@@ -11,7 +11,6 @@ import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
-import net.mattlabs.crewchat.util.ConfigurateManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
@@ -23,15 +22,14 @@ import org.bukkit.entity.Player;
 @Conditions("badconfig")
 public class ChatCommand extends BaseCommand {
 
-    private ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
-    private PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    private ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
-    private PaperCommandManager paperCommandManager = CrewChat.getInstance().getPaperCommandManager();
-    private BukkitAudiences platform = CrewChat.getInstance().getPlatform();
-    private Chat chat = CrewChat.getChat();
-    private Messages messages;
+    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
+    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
+    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final Chat chat = CrewChat.getChat();
+    private final Messages messages = CrewChat.getInstance().getMessages();
 
     public ChatCommand() {
+        PaperCommandManager paperCommandManager = CrewChat.getInstance().getPaperCommandManager();
         // Command Conditions
         paperCommandManager.getCommandConditions().addCondition("badconfig", (context -> {
             BukkitCommandIssuer issuer = context.getIssuer();
@@ -44,8 +42,6 @@ public class ChatCommand extends BaseCommand {
 
         // Command Completions
         paperCommandManager.getCommandCompletions().registerStaticCompletion("channels", channelManager.getChannelNames());
-
-        messages = configurateManager.get("messages.conf");
     }
 
     @Default
@@ -101,12 +97,11 @@ public class ChatCommand extends BaseCommand {
                 if (commandSender instanceof Player) {
                     platform.player((Player) commandSender).sendMessage(messages.channelInfo(requestedChannel.getName(),
                             requestedChannel.getTextColor()));
-                }
-                else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
+                } else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
                         + " info: " +
                         "\n - Name: " + requestedChannel.getName() +
                         "\n - Chat Color: " + requestedChannel.getTextColor().toString() +
-                        "\n - Auto Subscribe: " + String.valueOf(requestedChannel.isAutoSubscribe()));
+                        "\n - Auto Subscribe: " + requestedChannel.isAutoSubscribe());
             } else {
                 if (commandSender instanceof Player) {
                         platform.player((Player) commandSender).sendMessage(messages.channelNoExist(specifiedChannel));
@@ -269,7 +264,7 @@ public class ChatCommand extends BaseCommand {
     }
 
     @Subcommand("deafen")
-    @Description("Surpresses all chat messages for player.")
+    @Description("Suppresses all chat messages for player.")
     @CommandPermission("crewchat.chat.deafen")
     public void onDeafen(CommandSender commandSender) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");

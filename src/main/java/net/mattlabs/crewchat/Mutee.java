@@ -13,6 +13,7 @@ public class Mutee {
     private LocalDateTime time;
 
     // Empty constructor for Configurate
+    @SuppressWarnings("unused")
     public Mutee() {}
 
     public Mutee(UUID uuid, String prefix, String name) {

@@ -10,13 +10,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class QuitListener implements Listener {
 
-    private MsgManager msgManager;
-    private PlayerManager playerManager;
-
-    public QuitListener() {
-        msgManager = CrewChat.getInstance().getMsgManager();
-        playerManager = CrewChat.getInstance().getPlayerManager();
-    }
+    private final MsgManager msgManager = CrewChat.getInstance().getMsgManager();
+    private final PlayerManager playerManager  = CrewChat.getInstance().getPlayerManager();
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
