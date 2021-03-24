@@ -46,8 +46,10 @@ public class Messages {
 
             "Colors and text style can be specified using XML-like tags, for example: \"<white>\".\n" +
             "Standard Minecraft colors/styles are available. Hex colors can be specified with \"<color:#XXXXXX>\".\n" +
-            "Please note, some values cannot use color codes (\"<white>\") as denoted in the comment above the value.\n" +
+            "Please note, some values cannot use color codes (\"<white>\") as denoted in the comment above the value.\n\n" +
+            
             "#######################################################################################################\n\n" +
+
             "Config version. Do not change this!")
     private int schemaVersion = 0;
 
