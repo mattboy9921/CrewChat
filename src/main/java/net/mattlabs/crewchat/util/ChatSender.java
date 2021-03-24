@@ -2,7 +2,9 @@ package net.mattlabs.crewchat.util;
 
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.util.DiscordUtil;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -12,8 +14,6 @@ import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.milkbowl.vault.chat.Chat;
-import org.bukkit.Instrument;
-import org.bukkit.Note;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
@@ -27,7 +27,7 @@ public class ChatSender implements Runnable{
     private ChannelManager channelManager;
     private ConfigurateManager configurateManager;
     private Chat chat;
-    private String prefix, time, status, activeChannel, messageString;
+    private String prefix, time, status, activeChannel, messageString, notificationSound;
     private Player player;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
@@ -41,6 +41,11 @@ public class ChatSender implements Runnable{
         platform = CrewChat.getInstance().getPlatform();
         chat = CrewChat.getChat();
         messages = configurateManager.get("messages.conf");
+
+        // Check version for notification sound
+        if (Versions.versionCompare("1.14.0", CrewChat.getInstance().getVersion()) <= 0)
+            notificationSound = "block.note_block.iron_xylophone";
+        else notificationSound = "block.note_block.pling";
     }
 
     public void sendMessage(Player player, String message) {
@@ -78,11 +83,11 @@ public class ChatSender implements Runnable{
             if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(player.getName()) && !playerManager.isDeafened(subbedPlayer)) {
                 for (Player mentionedPlayer : mentionedPlayers)
                     if (mentionedPlayer.equals(subbedPlayer)) {
-                        subbedPlayer.playNote(subbedPlayer.getLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(0, Note.Tone.C));
+                        platform.player(subbedPlayer).playSound(Sound.sound(Key.key("minecraft", notificationSound), Sound.Source.PLAYER, 1f, (float) Math.pow(2f, -5f/12f))); // C#
                         CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), () -> {
-                            subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.sharp(1, Note.Tone.F));
+                            platform.player(subbedPlayer).playSound(Sound.sound(Key.key("minecraft", notificationSound), Sound.Source.PLAYER, 1f, 1f)); // F#
                             CrewChat.getInstance().getServer().getScheduler().runTaskLater(CrewChat.getInstance(), () -> {
-                                subbedPlayer.playNote(subbedPlayer.getEyeLocation(), Instrument.IRON_XYLOPHONE, Note.natural(1, Note.Tone.B));
+                                platform.player(subbedPlayer).playSound(Sound.sound(Key.key("minecraft", notificationSound), Sound.Source.PLAYER, 1f, (float) Math.pow(2f, 5f/12f))); // B
                             }, 2);
                         }, 2);
                     }

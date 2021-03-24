@@ -13,6 +13,7 @@ import net.mattlabs.crewchat.util.*;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,13 +32,26 @@ public class CrewChat extends JavaPlugin{
     private static Permission perms = null;
     private ConfigurateManager configurateManager;
     private BukkitAudiences platform;
+    private String version;
 
     private boolean discordSRVEnabled;
 
-    public PaperCommandManager paperCommandManager;
+    private PaperCommandManager paperCommandManager;
 
     public void onEnable() {
         instance = this;
+
+        // Determine version
+        version = Bukkit.getVersion();
+        int start = version.indexOf("MC: ") + 4;
+        int end = version.length() - 1;
+        version = version.substring(start, end);
+
+        if (Versions.versionCompare("1.8.0", version) >= 0) {
+            getLogger().severe("You are running MC " + version + ". This plugin requires MC 1.8.0 or higher, disabling plugin...");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // Register ACF
         paperCommandManager = new PaperCommandManager(this);
@@ -182,6 +196,10 @@ public class CrewChat extends JavaPlugin{
 
     public BukkitAudiences getPlatform() {
         return platform;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     // Vault Helper Methods
