@@ -33,7 +33,6 @@ public class CrewChat extends JavaPlugin{
     private MeSender meSender;
 
     private static Chat chat = null;
-    private static Permission perms = null;
     private BukkitAudiences platform;
 
     private String version;
@@ -59,32 +58,32 @@ public class CrewChat extends JavaPlugin{
 
         // Vault Check
         if (!hasVault()) {
-            this.getLogger().severe(String.format("Disabled due to no Vault dependency found!"));
+            this.getLogger().severe("Disabled due to no Vault dependency found!");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         // DiscordSRV Check
         if (!hasDiscordSRV()) {
-            this.getLogger().info(String.format("DiscordSRV not detected, disabling integration."));
+            this.getLogger().info("DiscordSRV not detected, disabling integration.");
             discordSRVEnabled = false;
         }
         else {
-            this.getLogger().info(String.format("DiscordSRV detected, enabling integration."));
+            this.getLogger().info("DiscordSRV detected, enabling integration.");
             discordSRVEnabled = true;
         }
 
         // Vault Setup
         if (!setupChat()) {
-            this.getLogger().severe(String.format("Disabled due to Vault Chat error!"));
-            this.getLogger().severe(String.format("Is there a permissions plugin installed?"));
+            this.getLogger().severe("Disabled due to Vault Chat error!");
+            this.getLogger().severe("Is there a permissions plugin installed?");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
         if (!setupPermissions()) {
-            this.getLogger().severe(String.format("Disabled due to Vault Permissions error!"));
-            this.getLogger().severe(String.format("Is there a permissions plugin installed?"));
+            this.getLogger().severe("Disabled due to Vault Permissions error!");
+            this.getLogger().severe("Is there a permissions plugin installed?");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -183,10 +182,6 @@ public class CrewChat extends JavaPlugin{
         return discordSRVEnabled;
     }
 
-    public static Permission getPermissions() {
-        return perms;
-    }
-
     public static Chat getChat() {
         return chat;
     }
@@ -213,7 +208,7 @@ public class CrewChat extends JavaPlugin{
         RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
         if (rsp != null) {
             chat = rsp.getProvider();
-            return chat != null;
+            return true;
         }
         else return false;
     }
@@ -221,8 +216,8 @@ public class CrewChat extends JavaPlugin{
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         if (rsp != null) {
-            perms = rsp.getProvider();
-            return perms != null;
+            rsp.getProvider();
+            return true;
         }
         else return false;
     }
