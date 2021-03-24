@@ -26,17 +26,18 @@ public class CrewChat extends JavaPlugin{
     private ChannelManager channelManager;
     private PlayerManager playerManager;
     private MsgManager msgManager;
+    private ConfigurateManager configurateManager;
+    private PaperCommandManager paperCommandManager;
+
     private ChatSender chatSender;
     private MeSender meSender;
+
     private static Chat chat = null;
     private static Permission perms = null;
-    private ConfigurateManager configurateManager;
     private BukkitAudiences platform;
+
     private String version;
-
     private boolean discordSRVEnabled;
-
-    private PaperCommandManager paperCommandManager;
 
     public void onEnable() {
         instance = this;
