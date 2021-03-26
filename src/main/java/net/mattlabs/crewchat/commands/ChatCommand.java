@@ -132,7 +132,7 @@ public class ChatCommand extends BaseCommand {
         else {
             Player player = (Player) commandSender; 
             String channelName = null;
-            if (channelManager.getChannels().contains(new Channel(string, null, false)))
+            if (channelManager.getChannels().contains(new Channel(string, null, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
                 platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(string));
@@ -163,7 +163,7 @@ public class ChatCommand extends BaseCommand {
         else {
             Player player = (Player) commandSender; 
             String channelName = null;
-            if (channelManager.getChannels().contains(new Channel(string, null, false)))
+            if (channelManager.getChannels().contains(new Channel(string, null, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
                 platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(string));
@@ -197,7 +197,7 @@ public class ChatCommand extends BaseCommand {
         else {
             Player player = (Player) commandSender; 
             String channelName = null;
-            if (channelManager.getChannels().contains(new Channel(string, null, false)))
+            if (channelManager.getChannels().contains(new Channel(string, null, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
                 platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(string));

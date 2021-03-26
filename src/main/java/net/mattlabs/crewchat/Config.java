@@ -36,13 +36,13 @@ public class Config {
     @Setting(value = "channels")
     @Comment("\nChannel Configuration\n" +
             "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
-    private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", NamedTextColor.WHITE, true)));
+    private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", "Global chat channel", NamedTextColor.WHITE, true)));
 
     public List<Channel> getChannels() {
 
         // Convert map to arraylist
         ArrayList<Channel> channels = new ArrayList<>();
-        channelsMap.forEach((name, channel) -> channels.add(new Channel(name, channel.getTextColor(), channel.isAutoSubscribe())));
+        channelsMap.forEach((name, channel) -> channels.add(new Channel(name, channel.getDescription(), channel.getTextColor(), channel.isAutoSubscribe())));
         return channels;
     }
 }
