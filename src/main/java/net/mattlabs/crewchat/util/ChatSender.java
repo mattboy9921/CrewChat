@@ -12,7 +12,6 @@ import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
-import net.mattlabs.crewchat.messaging.Messages;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
 
@@ -23,11 +22,11 @@ import java.util.regex.Pattern;
 
 public class ChatSender implements Runnable{
 
-    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
+    private final CrewChat crewChat = CrewChat.getInstance();
+    private final PlayerManager playerManager = crewChat.getPlayerManager();
+    private final ChannelManager channelManager = crewChat.getChannelManager();
 
-    private final Messages messages = CrewChat.getInstance().getMessages();
-    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final BukkitAudiences platform = crewChat.getPlatform();
     private final Chat chat = CrewChat.getChat();
 
     private String prefix, time, status, activeChannel;
@@ -48,7 +47,7 @@ public class ChatSender implements Runnable{
 
         this.player = player;
         if (playerManager.isOnline(player)) {
-            if (playerManager.isDeafened(player)) platform.player(player).sendMessage(messages.playerIsDeafened());
+            if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
             prefix = colorize(chat.getPlayerPrefix(player));
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
             time = format.format(new Date());
@@ -59,13 +58,13 @@ public class ChatSender implements Runnable{
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
-            platform.player(player).sendMessage(messages.badConfig());
+            platform.player(player).sendMessage(crewChat.getMessages().badConfig());
             CrewChat.getInstance().getLogger().info("Player " + player.getDisplayName() + " can't send messages, check permissions!");
         }
     }
 
     public void run() {
-        Component messageComponent = messages.chatMessage(prefix,
+        Component messageComponent = crewChat.getMessages().chatMessage(prefix,
                 player.getName(),
                 time,
                 status,

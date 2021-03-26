@@ -2,7 +2,6 @@ package net.mattlabs.crewchat.util;
 
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.*;
-import net.mattlabs.crewchat.messaging.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -13,11 +12,11 @@ import java.util.Objects;
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class PlayerManager {
 
-    private final ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
-    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
+    private final CrewChat crewChat = CrewChat.getInstance();
+    private final ConfigurateManager configurateManager = crewChat.getConfigurateManager();
+    private final ChannelManager channelManager = crewChat.getChannelManager();
 
-    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
-    private final Messages messages = CrewChat.getInstance().getMessages();
+    private final BukkitAudiences platform = crewChat.getPlatform();
 
     private ArrayList<Chatter> chatters = new ArrayList<>();
     private final ArrayList<Chatter> onlineChatters = new ArrayList<>();
@@ -187,7 +186,7 @@ public class PlayerManager {
                     if (mutee.getTime().isAfter(mutee.getTime().plusHours(24))) {
                         chatter.removeMutedPlayer(mutee.getUuid());
                         if (Bukkit.getOfflinePlayer(chatter.getUuid()).isOnline())
-                            platform.player(Objects.requireNonNull(Bukkit.getPlayer(chatter.getUuid()))).sendMessage(messages.playerUnmuted(mutee.getPrefix(), mutee.getName()));
+                            platform.player(Objects.requireNonNull(Bukkit.getPlayer(chatter.getUuid()))).sendMessage(crewChat.getMessages().playerUnmuted(mutee.getPrefix(), mutee.getName()));
                     }
         });
     }

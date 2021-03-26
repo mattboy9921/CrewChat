@@ -4,7 +4,6 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.CrewChat;
-import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.MsgManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
@@ -16,11 +15,11 @@ import org.bukkit.entity.Player;
 @CommandPermission("crewchat.pm")
 public class MsgCommand extends BaseCommand {
 
-    private final MsgManager msgManager = CrewChat.getInstance().getMsgManager();
-    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final CrewChat crewChat = CrewChat.getInstance();
+    private final MsgManager msgManager = crewChat.getMsgManager();
+    private final PlayerManager playerManager = crewChat.getPlayerManager();
+    private final BukkitAudiences platform = crewChat.getPlatform();
     private final Chat chat = CrewChat.getChat();
-    private final Messages messages = CrewChat.getInstance().getMessages();
 
     @Default
     @CommandCompletion("@players @nothing")
@@ -31,18 +30,18 @@ public class MsgCommand extends BaseCommand {
             playerManager.updateMutedPlayers();
 
             Player recipient = Bukkit.getPlayerExact(recipientString);
-            if (recipient == null) platform.player((Player) commandSender).sendMessage(messages.playerNoExist());
+            if (recipient == null) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerNoExist());
             else if (commandSender.getName().equalsIgnoreCase(recipient.getName())) {
-                platform.player((Player) commandSender).sendMessage(messages.cantMessageSelf());
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantMessageSelf());
             }
             else {
                 msgManager.updatePlayer(recipient.getName(), commandSender.getName());
-                platform.player((Player) commandSender).sendMessage(messages.privateMessageSend(chat.getPlayerPrefix((Player) commandSender),
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix((Player) commandSender),
                         chat.getPlayerPrefix(recipient), recipient.getName(),
                         playerManager.getStatus((Player) commandSender),
                         playerManager.getStatus(recipient), message));
                 if (!playerManager.hasMuted(recipient, (Player) commandSender))
-                    platform.player((Player) commandSender).sendMessage(messages.privateMessageReceive(chat.getPlayerPrefix((Player) commandSender),
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix((Player) commandSender),
                             chat.getPlayerPrefix(recipient), commandSender.getName(),
                             playerManager.getStatus((Player) commandSender),
                             playerManager.getStatus(recipient), message));

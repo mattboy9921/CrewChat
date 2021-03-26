@@ -113,6 +113,7 @@ public class CrewChat extends JavaPlugin{
 
         // Load Messages
         messages = configurateManager.get("messages.conf");
+        getLogger().info("Messages on load: " + messages.toString());
 
         // Register Audience (Messages)
         platform = BukkitAudiences.create(this);
@@ -152,6 +153,17 @@ public class CrewChat extends JavaPlugin{
     }
 
     public void onDisable() {
+    }
+
+    public void reload() {
+        getLogger().info("Reloading CrewChat...");
+        configurateManager.reload();
+        messages = configurateManager.get("messages.conf");
+        getLogger().info("Configuration reloaded.");
+        channelManager.reloadChannels();
+        getLogger().info("Channels reloaded.");
+        playerManager.reloadPlayers();
+        getLogger().info("Players reloaded.");
     }
 
     public ConfigurateManager getConfigurateManager() {

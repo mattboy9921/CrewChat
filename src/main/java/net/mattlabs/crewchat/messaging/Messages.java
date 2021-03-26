@@ -219,7 +219,7 @@ public class Messages {
                 .color(GRAY)
                 .append(Component.text("[")
                         .color(DARK_GRAY))
-                .append(Component.text("Chat")
+                .append(Component.text(chat)
                         .color(DARK_GREEN))
                 .append(Component.text("]")
                         .color(DARK_GRAY))

@@ -4,10 +4,6 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.CrewChat;
-import net.mattlabs.crewchat.messaging.Messages;
-import net.mattlabs.crewchat.util.ChannelManager;
-import net.mattlabs.crewchat.util.ConfigurateManager;
-import net.mattlabs.crewchat.util.PlayerManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,16 +11,13 @@ import org.bukkit.entity.Player;
 @CommandPermission("crewchat.use")
 public class CrewChatCommand extends BaseCommand {
 
-    private final ConfigurateManager configurateManager = CrewChat.getInstance().getConfigurateManager();
-    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
-    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
-    private final Messages messages = CrewChat.getInstance().getMessages();
+    private final CrewChat crewChat = CrewChat.getInstance();
+    private final BukkitAudiences platform = crewChat.getPlatform();
 
     @Default
     @Description("CrewChat base command.")
     public void onDefault(CommandSender commandSender) {
-        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(messages.crewChatBaseCommand());
+        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().crewChatBaseCommand());
         else CrewChat.getInstance().getLogger().info("Version " +
                 CrewChat.getInstance().getDescription().getVersion() + ". For help, run '/crewchat help'");
     }
@@ -33,23 +26,17 @@ public class CrewChatCommand extends BaseCommand {
     @Description("Reloads CrewChat configuration files.")
     @CommandPermission("crewchat.reload")
     public void onReload(CommandSender commandSender) {
-        CrewChat.getInstance().getLogger().info("Reloading CrewChat...");
-        configurateManager.reload();
-        CrewChat.getInstance().getLogger().info("Configuration reloaded.");
-        channelManager.reloadChannels();
-        CrewChat.getInstance().getLogger().info("Channels reloaded.");
-        playerManager.reloadPlayers();
-        CrewChat.getInstance().getLogger().info("Players reloaded.");
+        CrewChat.getInstance().reload();
 
         // TODO: Fix reload command, put in main class
-        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(messages.configReloaded());
+        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().configReloaded());
         CrewChat.getInstance().getLogger().info("CrewChat reloaded.");
     }
 
     @Subcommand("help")
     @Description("CrewChat help command.")
     public void onHelp(CommandSender commandSender) {
-        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(messages.crewChatHelpCommand());
+        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().crewChatHelpCommand());
         else CrewChat.getInstance().getLogger().info("Command Help:\n"
                 + "Alias: /cc <args>\n"
                 + "/crewchat - Base CrewChat command.\n"

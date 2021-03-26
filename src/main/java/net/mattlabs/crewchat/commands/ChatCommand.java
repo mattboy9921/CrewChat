@@ -9,7 +9,6 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
-import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
@@ -22,11 +21,11 @@ import org.bukkit.entity.Player;
 @Conditions("badconfig")
 public class ChatCommand extends BaseCommand {
 
-    private final ChannelManager channelManager = CrewChat.getInstance().getChannelManager();
-    private final PlayerManager playerManager = CrewChat.getInstance().getPlayerManager();
-    private final BukkitAudiences platform = CrewChat.getInstance().getPlatform();
+    private final CrewChat crewChat = CrewChat.getInstance();
+    private final ChannelManager channelManager = crewChat.getChannelManager();
+    private final PlayerManager playerManager = crewChat.getPlayerManager();
+    private final BukkitAudiences platform = crewChat.getPlatform();
     private final Chat chat = CrewChat.getChat();
-    private final Messages messages = CrewChat.getInstance().getMessages();
 
     public ChatCommand() {
         PaperCommandManager paperCommandManager = CrewChat.getInstance().getPaperCommandManager();
@@ -35,7 +34,7 @@ public class ChatCommand extends BaseCommand {
             BukkitCommandIssuer issuer = context.getIssuer();
             if (issuer.isPlayer())
                 if (!playerManager.playerExists(issuer.getPlayer())) {
-                    platform.player(issuer.getPlayer()).sendMessage(messages.badConfig());
+                    platform.player(issuer.getPlayer()).sendMessage(crewChat.getMessages().badConfig());
                     throw new ConditionFailedException("Bad config.");
                 }
         }));
@@ -48,7 +47,7 @@ public class ChatCommand extends BaseCommand {
     @Description("Chat base command.")
     public void onDefault(CommandSender commandSender) {
         if (commandSender instanceof Player) {
-            platform.player((Player) commandSender).sendMessage(messages.chatBaseCommand());
+            platform.player((Player) commandSender).sendMessage(crewChat.getMessages().chatBaseCommand());
         }
         else CrewChat.getInstance().getLogger().info("Welcome to chat! (Run /chat help for help)");
     }
@@ -62,18 +61,18 @@ public class ChatCommand extends BaseCommand {
         @CommandPermission("crewchat.chat.info")
         public void onInfo(CommandSender commandSender) {
             if (commandSender instanceof Player) {
-                platform.player((Player) commandSender).sendMessage(messages.channelListHeader());
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelListHeader());
                 for (Channel channel : channelManager.getChannels())
-                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel.getName(), channel.getTextColor()));
-                platform.player((Player) commandSender).sendMessage(messages.channelListActive(playerManager.getActiveChannel((Player) commandSender),
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelListEntry(channel.getName(), channel.getTextColor()));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelListActive(playerManager.getActiveChannel((Player) commandSender),
                         channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender)).getTextColor()));
-                platform.player((Player) commandSender).sendMessage(messages.channelListSubscribedHeader());
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelListSubscribedHeader());
                 for (String channel : playerManager.getSubscribedChannels((Player) commandSender))
-                    platform.player((Player) commandSender).sendMessage(messages.channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
                 if (!playerManager.getMutedPlayerNames((Player) commandSender).isEmpty()) {
-                    platform.player((Player) commandSender).sendMessage(messages.mutedListHeader());
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().mutedListHeader());
                     for (String mutee : playerManager.getMutedPlayerNames((Player) commandSender))
-                        platform.player((Player) commandSender).sendMessage(messages.mutedListEntry(mutee));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().mutedListEntry(mutee));
                 }
             }
             else {
@@ -95,7 +94,7 @@ public class ChatCommand extends BaseCommand {
 
             if (requestedChannel != null) {
                 if (commandSender instanceof Player) {
-                    platform.player((Player) commandSender).sendMessage(messages.channelInfo(requestedChannel.getName(),
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelInfo(requestedChannel.getName(),
                             requestedChannel.getTextColor()));
                 } else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
                         + " info: " +
@@ -104,7 +103,7 @@ public class ChatCommand extends BaseCommand {
                         "\n - Auto Subscribe: " + requestedChannel.isAutoSubscribe());
             } else {
                 if (commandSender instanceof Player) {
-                        platform.player((Player) commandSender).sendMessage(messages.channelNoExist(specifiedChannel));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(specifiedChannel));
                 }
                 else CrewChat.getInstance().getLogger().info("Channel " + specifiedChannel + " doesn't exist!");
             }
@@ -120,7 +119,7 @@ public class ChatCommand extends BaseCommand {
                 String   statusStr = String.join(" ", status);
                 Player player = (Player) commandSender;
                 playerManager.setStatus(player, statusStr);
-                platform.player(player).sendMessage(messages.statusSet(statusStr));
+                platform.player(player).sendMessage(crewChat.getMessages().statusSet(statusStr));
         }
     }
 
@@ -134,22 +133,22 @@ public class ChatCommand extends BaseCommand {
             if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
-                platform.player((Player) commandSender).sendMessage(messages.channelNoExist(string));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(string));
             }
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.subscribe." + channelName)) {
                     if (playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        platform.player((Player) commandSender).sendMessage(messages.alreadySubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().alreadySubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else {
                         playerManager.addSubscription((Player) commandSender, channelName);
-                        platform.player((Player) commandSender).sendMessage(messages.nowSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().nowSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     }
                 }
                 else {
-                    platform.player((Player) commandSender).sendMessage(messages.noPermission());
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().noPermission());
                 }
             }
-            else platform.player((Player) commandSender).sendMessage(messages.cantSubscribe(string, NamedTextColor.WHITE));
+            else platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantSubscribe(string, NamedTextColor.WHITE));
         }
     }
 
@@ -164,25 +163,25 @@ public class ChatCommand extends BaseCommand {
             if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
-                platform.player((Player) commandSender).sendMessage(messages.channelNoExist(string));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(string));
             }
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.unsubscribe." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().notSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else if (channelManager.channelFromString(playerManager.getActiveChannel((Player) commandSender))
                             .equals(channelManager.channelFromString(channelName)))
-                        platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribeActive(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantUnsubscribeActive(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else {
                         playerManager.removeSubscription((Player) commandSender, channelName);
-                        platform.player((Player) commandSender).sendMessage(messages.nowUnsubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().nowUnsubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     }
                 }
                 else {
-                    platform.player((Player) commandSender).sendMessage(messages.noPermission());
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().noPermission());
                 }
             }
-            else platform.player((Player) commandSender).sendMessage(messages.cantUnsubscribe(string, NamedTextColor.WHITE));
+            else platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantUnsubscribe(string, NamedTextColor.WHITE));
         }
     }
     
@@ -196,23 +195,23 @@ public class ChatCommand extends BaseCommand {
             if (channelManager.getChannels().contains(new Channel(string, null, false)))
                 channelName = channelManager.channelFromString(string).getName();
             else {
-                platform.player((Player) commandSender).sendMessage(messages.channelNoExist(string));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(string));
             }
             if (channelName != null) {
                 if (commandSender.hasPermission("crewchat.chat.switch." + channelName)) {
                     if (!playerManager.getSubscribedChannels((Player) commandSender).contains(channelName))
-                        platform.player((Player) commandSender).sendMessage(messages.notSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().notSubscribed(channelName, channelManager.getTextColor(channelManager.channelFromString(channelName))));
                     else {
                         playerManager.setActiveChannel((Player) commandSender, channelName);
-                        platform.player((Player) commandSender).sendMessage(messages.newActiveChannel(channelName, channelManager.channelFromString(channelName).getTextColor()));
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().newActiveChannel(channelName, channelManager.channelFromString(channelName).getTextColor()));
                     }
                 }
                 else {
-                    platform.player((Player) commandSender).sendMessage(messages.noPermission());
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().noPermission());
                 }
             }
             else {
-                platform.player((Player) commandSender).sendMessage(messages.cantSetActive(string, NamedTextColor.WHITE));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantSetActive(string, NamedTextColor.WHITE));
             }
         }
     }
@@ -226,16 +225,16 @@ public class ChatCommand extends BaseCommand {
         else {
             // Check if player exists
             Player mutee = Bukkit.getPlayerExact(string);
-            if (mutee == null) platform.player((Player) commandSender).sendMessage(messages.playerNoExist());
+            if (mutee == null) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerNoExist());
             // Check if muting self
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
-                platform.player((Player) commandSender).sendMessage(messages.cantMuteSelf());
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantMuteSelf());
             // Check if mutee already muted
             else if (playerManager.getMutedPlayerNames((Player) commandSender).contains(string))
-                platform.player((Player) commandSender).sendMessage(messages.playerAlreadyMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerAlreadyMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             else {
                 playerManager.addMutedPlayer((Player) commandSender, mutee);
-                platform.player((Player) commandSender).sendMessage(messages.playerMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerMuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             }
         }
     }
@@ -249,33 +248,33 @@ public class ChatCommand extends BaseCommand {
         else {
             // Check if player exists
             Player mutee = Bukkit.getPlayerExact(string);
-            if (mutee == null) platform.player((Player) commandSender).sendMessage(messages.playerNoExist());
+            if (mutee == null) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerNoExist());
             // Check if unmuting self
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
-                platform.player((Player) commandSender).sendMessage(messages.cantUnmuteSelf());
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantUnmuteSelf());
             // Check if mutee already unmuted
             else if (playerManager.getMutedPlayerNames((Player) commandSender).contains(mutee.getName()))
-                platform.player((Player) commandSender).sendMessage(messages.playerAlreadyUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerAlreadyUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             else {
                 playerManager.removeMutedPlayer((Player) commandSender, mutee);
-                platform.player((Player) commandSender).sendMessage(messages.playerUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             }
         }
     }
 
     @Subcommand("deafen")
-    @Description("Suppresses all chat messages for player.")
+    @Description("Suppresses all chat crewChat.getMessages() for player.")
     @CommandPermission("crewchat.chat.deafen")
     public void onDeafen(CommandSender commandSender) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             if (!playerManager.isDeafened((Player) commandSender)) {
                 playerManager.setDeafened((Player) commandSender, true);
-                platform.player((Player) commandSender).sendMessage(messages.playerDeafened());
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerDeafened());
             }
             else {
                 playerManager.setDeafened((Player) commandSender, false);
-                platform.player((Player) commandSender).sendMessage(messages.playerUndeafened());
+                platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerUndeafened());
             }
         }
     }
@@ -283,7 +282,7 @@ public class ChatCommand extends BaseCommand {
     @HelpCommand
     public void onHelp(CommandSender commandSender) {
         if (commandSender instanceof Player) {
-            platform.player((Player) commandSender).sendMessage(messages.chatHelpCommand());
+            platform.player((Player) commandSender).sendMessage(crewChat.getMessages().chatHelpCommand());
         }
         else CrewChat.getInstance().getLogger().info("Command Help:\n" +
                 "Alias: /c <args>\n" +
