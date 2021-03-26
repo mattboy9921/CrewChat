@@ -31,25 +31,26 @@ public class ReplyCommand extends BaseCommand {
         else {
             playerManager.updateMutedPlayers();
 
-            if (msgManager.playerExists(commandSender.getName())) {
-                if (Bukkit.getPlayer(msgManager.getLastSender(commandSender.getName())) == null)
-                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerNoExist());
+            Player sender = (Player) commandSender;
+            if (msgManager.playerExists(sender.getName())) {
+                if (Bukkit.getPlayer(msgManager.getLastSender(sender.getName())) == null)
+                    platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
                 else {
-                    Player recipient = Bukkit.getPlayer(msgManager.getLastSender(commandSender.getName()));
-                    msgManager.updatePlayer(recipient.getName(), commandSender.getName());
-                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix((Player) commandSender),
+                    Player recipient = Bukkit.getPlayer(msgManager.getLastSender(sender.getName()));
+                    msgManager.updatePlayer(recipient.getName(), sender.getName());
+                    platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
                             chat.getPlayerPrefix(recipient), recipient.getName(),
-                            playerManager.getStatus((Player) commandSender),
+                            playerManager.getStatus(sender),
                             playerManager.getStatus(recipient), message));
 
-                    if (!playerManager.hasMuted(recipient, (Player) commandSender))
-                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix((Player) commandSender),
-                                chat.getPlayerPrefix(recipient), commandSender.getName(),
-                                playerManager.getStatus((Player) commandSender),
+                    if (!playerManager.hasMuted(recipient, sender))
+                        platform.player(sender).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
+                                chat.getPlayerPrefix(recipient), sender.getName(),
+                                playerManager.getStatus(sender),
                                 playerManager.getStatus(recipient), message));
                 }
             }
-            else platform.player((Player) commandSender).sendMessage(crewChat.getMessages().noPMReceived());
+            else platform.player(sender).sendMessage(crewChat.getMessages().noPMReceived());
         }
     }
 }

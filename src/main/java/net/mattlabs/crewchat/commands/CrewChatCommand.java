@@ -28,7 +28,6 @@ public class CrewChatCommand extends BaseCommand {
     public void onReload(CommandSender commandSender) {
         CrewChat.getInstance().reload();
 
-        // TODO: Fix reload command, put in main class
         if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().configReloaded());
         CrewChat.getInstance().getLogger().info("CrewChat reloaded.");
     }
