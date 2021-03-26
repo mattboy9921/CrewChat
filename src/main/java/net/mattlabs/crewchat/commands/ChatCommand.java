@@ -253,7 +253,7 @@ public class ChatCommand extends BaseCommand {
             else if (commandSender.getName().equalsIgnoreCase(mutee.getName()))
                 platform.player((Player) commandSender).sendMessage(crewChat.getMessages().cantUnmuteSelf());
             // Check if mutee already unmuted
-            else if (playerManager.getMutedPlayerNames((Player) commandSender).contains(mutee.getName()))
+            else if (!playerManager.getMutedPlayerNames((Player) commandSender).contains(mutee.getName()))
                 platform.player((Player) commandSender).sendMessage(crewChat.getMessages().playerAlreadyUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
             else {
                 playerManager.removeMutedPlayer((Player) commandSender, mutee);
