@@ -321,44 +321,44 @@ public class Messages {
     // Chat Player Already Muted
     @Comment("\nAppears when a player tries to mute someone they've already muted.\n" +
             "Possible tags: <player_prefix>, <player_name>")
-    private String playerAlreadyMuted = "<white><player_prefix><player_name> is already muted!";
+    private String playerAlreadyMuted = "<white><player_prefix><player_name><white> is already muted!";
 
     public Component playerAlreadyMuted(String playerPrefix, String playerName) {
         return chatHeader.append(MiniMessage.get().parse(playerAlreadyMuted,
-                "player_prefix", playerPrefix,
+                "player_prefix", serialize(playerPrefix),
                 "player_name", playerName));
     }
 
     // Chat Player Already Unmuted
     @Comment("\nAppears when a player tries to unmute someone who isn't muted.\n" +
             "Possible tags: <player_prefix>, <player_name>")
-    private String playerAlreadyUnmuted = "<white><player_prefix><player_name> is not muted!";
+    private String playerAlreadyUnmuted = "<white><player_prefix><player_name><white> is not muted!";
 
     public Component playerAlreadyUnmuted(String playerPrefix, String playerName) {
         return chatHeader.append(MiniMessage.get().parse(playerAlreadyUnmuted,
-                "player_prefix", playerPrefix,
+                "player_prefix", serialize(playerPrefix),
                 "player_name", playerName));
     }
 
     // Chat Player Muted
     @Comment("\nAppears when a player mutes someone.\n" +
             "Possible tags: <player_prefix>, <player_name>")
-    private String playerMuted = "<white><player_prefix><player_name> has been muted.";
+    private String playerMuted = "<white><player_prefix><player_name><white> has been muted.";
 
     public Component playerMuted(String playerPrefix, String player) {
         return chatHeader.append(MiniMessage.get().parse(playerMuted,
-                "player_prefix", playerPrefix,
+                "player_prefix", serialize(playerPrefix),
                 "player_name", player));
     }
 
     // Chat Player Unmuted
     @Comment("\nAppears when a player unmutes someone.\n" +
             "Possible tags: <player_prefix>, <player_name>")
-    private String playerUnmuted = "<white><player_prefix><player_name> has been unmuted.";
+    private String playerUnmuted = "<white><player_prefix><player_name><white> has been unmuted.";
 
     public Component playerUnmuted(String playerPrefix, String player) {
         return chatHeader.append(MiniMessage.get().parse(playerUnmuted,
-                "player_prefix", playerPrefix,
+                "player_prefix", serialize(playerPrefix),
                 "player_name", player));
     }
 
