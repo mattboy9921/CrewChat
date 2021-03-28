@@ -1,16 +1,17 @@
 package net.mattlabs.crewchat;
 
 
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
 public class Channel {
 
-    private transient String name;
-    private String description;
-    private TextColor textColor;
-    private boolean autoSubscribe;
+    private transient String name = "Unnamed";
+    private String description = "No description";
+    private TextColor textColor = NamedTextColor.WHITE;
+    private boolean autoSubscribe = false;
 
     // Empty constructor for Configurate
     public Channel() { }
