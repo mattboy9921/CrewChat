@@ -275,18 +275,18 @@ public class Messages {
     // Name
     private transient String channelInfoName = "<white>Name: <channel_name>";
 
+    // Description
+    private transient String channelInfoDescription = "<white>Description: <channel_description>";
+
     // Color
     private transient String channelInfoColor = "<white>Color: <channel_color>";
 
-    // Auto Subscribe
-    private transient String channelInfoAutoSubscribe = "<white>Auto Subscribe: <channel_autosubscribe>";
-
     // TODO Make this part of CrewChat commands
-    public Component channelInfo(String name, TextColor color) {
+    public Component channelInfo(String name, String description, TextColor color) {
         // &7[&2Chat&7] &fChannel &l%name%&r info:
         // &2- &fName: %name%
         // &2- &fChat Color: %color%
-        // &2- &fAuto Subscribe: %autosus% TODO Fix this...
+        // &2- &fDescription: %desc#
 
         // Get closest color to hex code, format with capital first letter
         String closestColor = nearestTo(color).toString();
@@ -296,6 +296,8 @@ public class Messages {
                 .append(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", name))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(channelInfoName + "\n", "channel_name", name))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(channelInfoDescription + "\n", "channel_description", description))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(channelInfoColor, "channel_color", "<color:" + color.toString() + ">" + closestColor + " (" + color.asHexString() + ")"));
     }
