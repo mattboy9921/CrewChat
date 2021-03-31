@@ -631,10 +631,10 @@ public class Messages {
             "Possible tags: <player_prefix><player_name>")
     private String discordMessageHeader = "<gray>[<color:#7289DA>Discord<gray>] <player_prefix><player_name><gray>: ";
 
-    public Component discordMessage(String prefix, String playerName, String time, Component message, String activeChannel, TextColor textColor) {
+    public Component discordMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
         // [Discord] %prefix%%playerName%: %message%
-        return MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
-                        "<hover:show_text:'<white>" + time + "\n" +
+        return MiniMessage.get().parse("<hover:show_text:'<white>" + time + "\n" +
+                        this.status + ": " + status + "\n" +
                         this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         discordMessageHeader,
                 "player_prefix", prefix,
