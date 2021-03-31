@@ -2,6 +2,8 @@ package net.mattlabs.crewchat;
 
 import co.aikar.commands.PaperCommandManager;
 import github.scarsz.discordsrv.DiscordSRV;
+import github.scarsz.discordsrv.dependencies.jda.api.requests.GatewayIntent;
+import github.scarsz.discordsrv.dependencies.jda.api.utils.cache.CacheFlag;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
@@ -74,6 +76,8 @@ public class CrewChat extends JavaPlugin{
         else {
             this.getLogger().info("DiscordSRV detected, enabling integration.");
             discordSRVEnabled = true;
+            DiscordSRV.api.requireIntent(GatewayIntent.GUILD_PRESENCES);
+            DiscordSRV.api.requireCacheFlag(CacheFlag.ACTIVITY);
         }
 
         // Vault Setup

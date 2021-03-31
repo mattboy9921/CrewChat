@@ -76,6 +76,8 @@ public class ChatSender implements Runnable{
 
         prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
         name = sender.getEffectiveName();
+        if (!sender.getActivities().isEmpty()) status = sender.getActivities().get(0).getName();
+        else status = "No status";
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
         time = format.format(new Date());
         activeChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
@@ -90,6 +92,7 @@ public class ChatSender implements Runnable{
             messageComponent = crewChat.getMessages().discordMessage(prefix,
                     name,
                     time,
+                    status,
                     message,
                     activeChannel,
                     channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
