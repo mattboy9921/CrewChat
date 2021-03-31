@@ -632,11 +632,11 @@ public class Messages {
     private String discordMessageHeader = "<gray>[<color:#7289DA>Discord<gray>] <player_prefix><player_name><gray>: ";
 
     public Component discordMessage(String prefix, String playerName, String time, Component message, String activeChannel, TextColor textColor) {
-        // %prefix%%playerName%: %message%
+        // [Discord] %prefix%%playerName%: %message%
         return MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
                         this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
-                        discordMessageHeader + "<reset><" + textColor.toString() + ">",
+                        discordMessageHeader,
                 "player_prefix", prefix,
                 "player_name", playerName)
                 .append(message);
