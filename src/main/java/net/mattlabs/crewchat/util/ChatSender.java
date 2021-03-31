@@ -120,7 +120,6 @@ public class ChatSender implements Runnable{
             }
         }
         platform.console().sendMessage(parseMarkdown(messageComponent));
-        platform.console().sendMessage(Component.text(MiniMessage.get().serialize(messageComponent)));
 
         if (!isDiscordMessage)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
