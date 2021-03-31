@@ -1,11 +1,13 @@
 package net.mattlabs.crewchat;
 
 import co.aikar.commands.PaperCommandManager;
+import github.scarsz.discordsrv.DiscordSRV;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
+import net.mattlabs.crewchat.listeners.DiscordSRVListener;
 import net.mattlabs.crewchat.listeners.JoinListener;
 import net.mattlabs.crewchat.listeners.QuitListener;
 import net.mattlabs.crewchat.messaging.Messages;
@@ -138,6 +140,9 @@ public class CrewChat extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
+
+        // Register DiscordSRV Listener
+        if (discordSRVEnabled) DiscordSRV.api.subscribe(new DiscordSRVListener());
 
         // Register Commands with ACF
         paperCommandManager.registerCommand(new CrewChatCommand());

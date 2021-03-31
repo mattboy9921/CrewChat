@@ -14,7 +14,7 @@ public class ChatListener implements Listener {
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event) {
         if (event.isAsynchronous()) {
-            chatSender.sendMessage(event.getPlayer(), event.getMessage());
+            chatSender.sendChatMessage(event.getPlayer(), event.getMessage());
             event.setCancelled(true);
         }
         // Catch any plugin trying to send non-async chat messages

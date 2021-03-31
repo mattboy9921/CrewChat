@@ -626,6 +626,22 @@ public class Messages {
                 .append(message);
     }
 
+    // Discord Message
+    @Comment("\nThis is the format used before every Discord message sent.\n" +
+            "Possible tags: <player_prefix><player_name>")
+    private String discordMessageHeader = "<gray>[<color:#7289DA>Discord<gray>] <player_prefix><player_name><gray>: ";
+
+    public Component discordMessage(String prefix, String playerName, String time, Component message, String activeChannel, TextColor textColor) {
+        // %prefix%%playerName%: %message%
+        return MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
+                        "<hover:show_text:'<white>" + time + "\n" +
+                        this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
+                        discordMessageHeader + "<reset><" + textColor.toString() + ">",
+                "player_prefix", prefix,
+                "player_name", playerName)
+                .append(message);
+    }
+
     // *** General ***
 
     // General fields used in many strings
