@@ -12,5 +12,6 @@ public class DiscordSRVListener {
     @Subscribe
     public void discordMessageReceivedPre(DiscordGuildMessagePreProcessEvent event) {
         chatSender.sendDiscordMessage(event.getMember(), event.getChannel(), event.getMessage().getContentDisplay());
+        event.setCancelled(true);
     }
 }
