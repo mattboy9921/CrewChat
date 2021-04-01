@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class ChatSender implements Runnable{
@@ -35,6 +36,7 @@ public class ChatSender implements Runnable{
     private final Chat chat = CrewChat.getChat();
 
     private String prefix, name, time, status, activeChannel;
+    private TextColor channelColor;
     private final String notificationSound;
     private Player player;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
@@ -62,6 +64,7 @@ public class ChatSender implements Runnable{
             status = colorize(playerManager.getStatus(player));
             activeChannel = playerManager.getActiveChannel(player);
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
+            channelColor = channelManager.getTextColor(channelManager.channelFromString(activeChannel));
             this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
@@ -80,9 +83,36 @@ public class ChatSender implements Runnable{
         else status = "No status";
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
         time = format.format(new Date());
-        activeChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
-        subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
-        this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+
+        // Loop through all in game channels linked to a Discord channel ID
+        // Key is in game channel name, value is Discord channel ID
+        Map<String, String> channelsMap = DiscordSRV.getPlugin().getChannels();
+        int channelCount = 0;
+        // TODO: Turn this into a set
+        subscribedPlayers = new ArrayList<>();
+        for (Map.Entry<String, String> channelEntry : channelsMap.entrySet()) {
+            if (channelEntry.getValue().equals(channel.getId())) {
+                CrewChat.getInstance().getLogger().info("Channels match! " + channelEntry.getKey());
+                channelCount++;
+                for (Player player : playerManager.getSubscribedPlayers(channelEntry.getKey()))
+                    if (!subscribedPlayers.contains(player)) {
+                        CrewChat.getInstance().getLogger().info("Adding player! " + player.getName());
+                        subscribedPlayers.add(player);
+                    }
+            }
+        }
+
+        if (channelCount > 1) {
+            activeChannel = "<color:#7289DA>(Discord)<reset> " + channel.getName();
+            channelColor = TextColor.fromHexString("#fffffe");
+            this.message = parseMessage(message, TextColor.fromHexString("#fffffe"));
+        }
+        else {
+            activeChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
+            channelColor = channelManager.getTextColor(channelManager.channelFromString(activeChannel));
+            this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+        }
+
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
     }
 
@@ -95,7 +125,7 @@ public class ChatSender implements Runnable{
                     status,
                     message,
                     activeChannel,
-                    channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+                    channelColor);
         }
         else {
             messageComponent = crewChat.getMessages().chatMessage(prefix,
@@ -104,7 +134,7 @@ public class ChatSender implements Runnable{
                     status,
                     message,
                     activeChannel,
-                    channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+                    channelColor);
         }
 
         for (Player subbedPlayer : subscribedPlayers) {
