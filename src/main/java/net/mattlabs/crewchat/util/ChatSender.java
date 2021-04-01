@@ -38,7 +38,6 @@ public class ChatSender implements Runnable{
     private String prefix, name, time, status, activeChannel;
     private TextColor channelColor;
     private final String notificationSound;
-    private Player player;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
     private boolean isDiscordMessage;
@@ -54,7 +53,6 @@ public class ChatSender implements Runnable{
         playerManager.updateMutedPlayers();
         isDiscordMessage = false;
 
-        this.player = player;
         if (playerManager.isOnline(player)) {
             if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
             prefix = colorize(chat.getPlayerPrefix(player));
@@ -104,8 +102,8 @@ public class ChatSender implements Runnable{
 
         if (channelCount > 1) {
             activeChannel = "<color:#7289DA>(Discord)<reset> " + channel.getName();
-            channelColor = TextColor.fromHexString("#fffffe");
-            this.message = parseMessage(message, TextColor.fromHexString("#fffffe"));
+            channelColor = NamedTextColor.WHITE;
+            this.message = parseMessage(message, NamedTextColor.WHITE);
         }
         else {
             activeChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
@@ -117,9 +115,16 @@ public class ChatSender implements Runnable{
     }
 
     public void run() {
-        Component messageComponent;
+        Component messageComponent, messageComponentMD;
         if (isDiscordMessage) {
             messageComponent = crewChat.getMessages().discordMessage(prefix,
+                    name,
+                    time,
+                    status,
+                    parseMarkdown(message),
+                    activeChannel,
+                    channelColor);
+            messageComponentMD = crewChat.getMessages().discordMessage(prefix,
                     name,
                     time,
                     status,
@@ -129,6 +134,13 @@ public class ChatSender implements Runnable{
         }
         else {
             messageComponent = crewChat.getMessages().chatMessage(prefix,
+                    name,
+                    time,
+                    status,
+                    parseMarkdown(message),
+                    activeChannel,
+                    channelColor);
+            messageComponentMD = crewChat.getMessages().chatMessage(prefix,
                     name,
                     time,
                     status,
@@ -149,19 +161,18 @@ public class ChatSender implements Runnable{
                             }, 2);
                         }, 2);
                     }
-                platform.player(subbedPlayer).sendMessage(parseMarkdown(messageComponent));
+                platform.player(subbedPlayer).sendMessage(messageComponent);
             }
         }
-        platform.console().sendMessage(parseMarkdown(messageComponent));
+        platform.console().sendMessage(messageComponent);
 
         if (!isDiscordMessage)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
-                        DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponent),
+                        DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponentMD),
                                 DiscordSRV.getPlugin().getMainGuild()));
 
         prefix = null;
-        player = null;
         status = null;
         message = null;
         activeChannel = null;
