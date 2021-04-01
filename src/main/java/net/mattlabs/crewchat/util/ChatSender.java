@@ -126,7 +126,7 @@ public class ChatSender implements Runnable{
 
         if (!isDiscordMessage)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
-                DiscordUtil.sendMessage(DiscordSRV.getPlugin().getMainTextChannel(),
+                DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
                         DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponent),
                                 DiscordSRV.getPlugin().getMainGuild()));
 
