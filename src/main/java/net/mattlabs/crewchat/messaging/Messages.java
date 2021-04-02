@@ -371,7 +371,7 @@ public class Messages {
     private String statusSet = "<white>Your status has been set to: \"<status>\".";
 
     public Component statusSet(String status) {
-        return chatHeader.append(MiniMessage.get().parse(statusSet, "status", status));
+        return chatHeader.append(MiniMessage.get().parse(statusSet, "status", serialize(status) + "<reset>"));
     }
 
     // ** Subscribe/Unsubscribe **
@@ -618,7 +618,7 @@ public class Messages {
         // %prefix%%playerName%: %message%
         return MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
-                        this.status + ": <pre>" + status + "</pre>\n" +
+                        this.status + ": " + status + "<reset>\n" +
                         this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
                 "player_prefix", prefix,
@@ -724,6 +724,6 @@ public class Messages {
     // *** Helper Methods ***
 
     private static String serialize(String legacyColorCode) {
-        return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(legacyColorCode));
+        return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(legacyColorCode))));
     }
 }
