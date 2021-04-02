@@ -92,11 +92,9 @@ public class ChatSender implements Runnable{
         subscribedPlayers = new ArrayList<>();
         for (Map.Entry<String, String> channelEntry : channelsMap.entrySet()) {
             if (channelEntry.getValue().equals(channel.getId())) {
-                CrewChat.getInstance().getLogger().info("Channels match! " + channelEntry.getKey());
                 channelCount++;
                 for (Player player : playerManager.getSubscribedPlayers(channelEntry.getKey()))
                     if (!subscribedPlayers.contains(player)) {
-                        CrewChat.getInstance().getLogger().info("Adding player! " + player.getName());
                         subscribedPlayers.add(player);
                     }
             }
