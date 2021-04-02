@@ -35,7 +35,7 @@ public class ChatSender implements Runnable{
     private final BukkitAudiences platform = crewChat.getPlatform();
     private final Chat chat = CrewChat.getChat();
 
-    private String prefix, name, time, status, activeChannel;
+    private String prefix, name, time, status, activeChannel, discordChannelID;
     private TextColor channelColor;
     private final String notificationSound;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
@@ -61,6 +61,7 @@ public class ChatSender implements Runnable{
             time = format.format(new Date());
             status = colorize(playerManager.getStatus(player));
             activeChannel = playerManager.getActiveChannel(player);
+            discordChannelID = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId();
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
             channelColor = channelManager.getTextColor(channelManager.channelFromString(activeChannel));
             this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
@@ -81,6 +82,7 @@ public class ChatSender implements Runnable{
         else status = "No status";
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
         time = format.format(new Date());
+        discordChannelID = channel.getId();
 
         // Loop through all in game channels linked to a Discord channel ID
         // Key is in game channel name, value is Discord channel ID
@@ -176,6 +178,7 @@ public class ChatSender implements Runnable{
         status = null;
         message = null;
         activeChannel = null;
+        discordChannelID = null;
         subscribedPlayers.clear();
     }
 
@@ -197,18 +200,24 @@ public class ChatSender implements Runnable{
 
         for (String part : parts) {
             Component nextComponent = Component.text(part).color(textColor);
-            Player mentionedPlayer = null;
+            String mentionedName = null;
 
             // Match player names
             for (Player player : subscribedPlayers)
-                if (Pattern.matches(player.getName() + ".?", part)) {
+                if (Pattern.matches("[@]?" + player.getName() + "((?=([^\\w\\s]|_)).*)?", part)) {
                     mentionedPlayers.add(player);
-                    mentionedPlayer = player;
+                    mentionedName = player.getName();
                 }
 
-            if (mentionedPlayer != null) {
-                String[] mentionParts = part.split(mentionedPlayer.getName());
-                nextComponent = Component.text("@" + mentionedPlayer.getName()).color(NamedTextColor.GOLD);
+            // Match Discord names
+            if (mentionedName == null)
+                for (Member member :  DiscordUtil.getTextChannelById(discordChannelID).getMembers())
+                    if (Pattern.matches("[@]?" + member.getEffectiveName() + "((?=([^\\w\\s]|_)).*)?", part)) mentionedName = member.getEffectiveName();
+
+            if (mentionedName != null) {
+                String split = (part.startsWith("@")) ? "@" + mentionedName : mentionedName;
+                String[] mentionParts = part.split(split);
+                nextComponent = Component.text("@" + mentionedName).color(NamedTextColor.GOLD);
                 if (mentionParts.length > 0) {
                     Component afterMention = Component.text(mentionParts[1]).color(textColor);
                     nextComponent = nextComponent.append(afterMention);
@@ -228,7 +237,8 @@ public class ChatSender implements Runnable{
                 }
             }
             componentMessage = componentMessage.append(nextComponent);
-            componentMessage = componentMessage.append(Component.space());
+            if (!part.equals(parts[parts.length - 1]))
+                componentMessage = componentMessage.append(Component.space());
         }
         return componentMessage;
     }
