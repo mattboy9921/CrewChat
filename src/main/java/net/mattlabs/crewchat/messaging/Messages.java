@@ -6,6 +6,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
+import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -14,6 +15,7 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
+import static net.kyori.adventure.text.minimessage.transformation.TransformationType.*;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ConfigSerializable
@@ -370,8 +372,16 @@ public class Messages {
             "Possible tags: <status>")
     private String statusSet = "<white>Your status has been set to: \"<status>\".";
 
-    public Component statusSet(String status) {
-        return chatHeader.append(MiniMessage.get().parse(statusSet, "status", serialize(status) + "<reset>"));
+    public Component statusSet(String status) throws ParsingException {
+        //noinspection unchecked
+        return chatHeader.append(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(statusSet, "status", serialize(status) + "<reset>"));
+    }
+
+    @Comment("\nAppears if a player's status contains a syntax error.")
+    private String statusSyntaxError = "<white>Your status could not be set. Please check the syntax.";
+
+    public Component statusSyntaxError() {
+        return chatHeader.append(MiniMessage.get().parse(statusSyntaxError));
     }
 
     // ** Subscribe/Unsubscribe **

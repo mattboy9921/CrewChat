@@ -8,6 +8,7 @@ import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.ChannelManager;
@@ -118,10 +119,16 @@ public class ChatCommand extends BaseCommand {
     public void onStatus(CommandSender commandSender, String[] status) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
-                String   statusStr = String.join(" ", status);
-                Player player = (Player) commandSender;
-                playerManager.setStatus(player, statusStr);
+            String statusStr = String.join(" ", status);
+            Player player = (Player) commandSender;
+            // Make sure the status string doesn't have any syntax errors
+            try {
                 platform.player(player).sendMessage(crewChat.getMessages().statusSet(statusStr));
+                playerManager.setStatus(player, statusStr);
+            }
+            catch (ParsingException e) {
+                platform.player(player).sendMessage(crewChat.getMessages().statusSyntaxError());
+            }
         }
     }
 
