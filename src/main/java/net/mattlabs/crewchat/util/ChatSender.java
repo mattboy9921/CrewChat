@@ -176,7 +176,7 @@ public class ChatSender implements Runnable{
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery"))
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
-                            player, DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponentMD),
+                            player, DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(message),
                                     DiscordSRV.getPlugin().getMainGuild()));
                 else
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
