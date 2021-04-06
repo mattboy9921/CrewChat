@@ -7,6 +7,8 @@ main: net.mattlabs.crewchat.CrewChat
 softdepend:
   - DiscordSRV
   - Vault
+loadbefore:
+  - DiscordSRV
 
 permissions:
   crewchat.chat.subscribe.channel:
