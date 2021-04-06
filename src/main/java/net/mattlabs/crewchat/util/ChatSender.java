@@ -4,6 +4,7 @@ import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import github.scarsz.discordsrv.util.DiscordUtil;
+import github.scarsz.discordsrv.util.WebhookUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.sound.Sound;
@@ -19,7 +20,10 @@ import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +40,7 @@ public class ChatSender implements Runnable{
     private final Chat chat = CrewChat.getChat();
 
     private String prefix, name, time, status, activeChannel, discordChannelID;
+    private Player player;
     private TextColor channelColor;
     private final String notificationSound;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
@@ -54,6 +59,7 @@ public class ChatSender implements Runnable{
         isDiscordMessage = false;
 
         if (playerManager.isOnline(player)) {
+            this.player = player;
             if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
             prefix = colorize(chat.getPlayerPrefix(player));
             name = player.getName();
@@ -168,9 +174,14 @@ public class ChatSender implements Runnable{
 
         if (!isDiscordMessage)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
-                DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
-                        DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponentMD),
-                                DiscordSRV.getPlugin().getMainGuild()));
+                if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery"))
+                    WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
+                            player, DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponentMD),
+                                    DiscordSRV.getPlugin().getMainGuild()));
+                else
+                    DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
+                            DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponentMD),
+                                    DiscordSRV.getPlugin().getMainGuild()));
 
         prefix = null;
         status = null;
@@ -222,13 +233,19 @@ public class ChatSender implements Runnable{
                 }
             }
             // Match links
-            else if (Pattern.matches("^(http://www\\.|https://www\\.|http://|https://)?[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?.*", part)) {
-                part = part.replaceAll("^(http://www\\.|https://www\\.|http://|https://)?[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?", "$0 ");
+            else if (Pattern.matches("^(http://www\\.|https://www\\.|http://|https://)[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?.*", part)) {
+                part = part.replaceAll("^(http://www\\.|https://www\\.|http://|https://)[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?", "$0 ");
                 String[] linkParts = part.split(" ");
                 part = linkParts[0];
-                if (!Pattern.matches("^(http://www\\.|https://www\\.|http://|https://)[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$", part))
-                    part = "http://" + part;
-                nextComponent = Component.text(part).color(NamedTextColor.BLUE).hoverEvent(HoverEvent.showText(Component.text("Click to open link").color(NamedTextColor.WHITE))).clickEvent(ClickEvent.openUrl(part));
+                // Get website description with Jsoup
+                String description = "No info found...";
+                try {
+                    Elements elements = Jsoup.connect(part).get().select("meta[name=description]");
+                    if (!elements.isEmpty()) description = elements.get(0).attr("content");
+                }
+                catch (IOException ignored) {}
+
+                nextComponent = Component.text(part).color(NamedTextColor.BLUE).hoverEvent(HoverEvent.showText(Component.text(description).color(NamedTextColor.WHITE))).clickEvent(ClickEvent.openUrl(part));
                 if (linkParts.length == 2) {
                     Component afterLink = Component.text(linkParts[1]).color(textColor);
                     nextComponent = nextComponent.append(afterLink);
