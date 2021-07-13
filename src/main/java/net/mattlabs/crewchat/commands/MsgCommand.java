@@ -42,7 +42,7 @@ public class MsgCommand extends BaseCommand {
                         playerManager.getStatus(sender),
                         playerManager.getStatus(recipient), message));
                 if (!playerManager.hasMuted(recipient, sender))
-                    platform.player(sender).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
+                    platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
                             chat.getPlayerPrefix(recipient), sender.getName(),
                             playerManager.getStatus(sender),
                             playerManager.getStatus(recipient), message));
