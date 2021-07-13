@@ -83,7 +83,7 @@ public class ChatSender implements Runnable{
         isDiscordMessage = true;
 
         prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
-        name = sender.getEffectiveName();
+        name = crewChat.getConfigCC().showChannelNamesDiscord ? "[" + channel.getName() + "]" + sender.getEffectiveName() : sender.getEffectiveName();
         if (!sender.getActivities().isEmpty()) status = sender.getActivities().get(0).getName();
         else status = "No status";
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
@@ -176,8 +176,10 @@ public class ChatSender implements Runnable{
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery"))
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
-                            player, DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(message),
-                                    DiscordSRV.getPlugin().getMainGuild()));
+                            name,
+                            DiscordSRV.getAvatarUrl(player),
+                            DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(message), DiscordSRV.getPlugin().getMainGuild()),
+                            null);
                 else
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
                             DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponentMD),

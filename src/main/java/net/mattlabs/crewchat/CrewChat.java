@@ -39,6 +39,7 @@ public class CrewChat extends JavaPlugin{
     private static Chat chat = null;
     private BukkitAudiences platform;
     private Messages messages;
+    private Config config;
 
     private String version;
     private boolean discordSRVEnabled;
@@ -117,6 +118,8 @@ public class CrewChat extends JavaPlugin{
         configurateManager.save("playerdata.conf");
         configurateManager.save("messages.conf");
 
+        config = configurateManager.get("config.conf");
+
         // Load Messages
         messages = configurateManager.get("messages.conf");
         getLogger().info("Messages on load: " + messages.toString());
@@ -167,6 +170,7 @@ public class CrewChat extends JavaPlugin{
     public void reload() {
         getLogger().info("Reloading CrewChat...");
         configurateManager.reload();
+        config = configurateManager.get("config.conf");
         messages = configurateManager.get("messages.conf");
         getLogger().info("Configuration reloaded.");
         channelManager.reloadChannels();
@@ -225,6 +229,10 @@ public class CrewChat extends JavaPlugin{
 
     public Messages getMessages() {
         return messages;
+    }
+
+    public Config getConfigCC() {
+        return config;
     }
 
     // Vault Helper Methods
