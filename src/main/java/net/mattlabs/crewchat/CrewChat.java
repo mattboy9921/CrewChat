@@ -75,10 +75,17 @@ public class CrewChat extends JavaPlugin{
             discordSRVEnabled = false;
         }
         else {
-            this.getLogger().info("DiscordSRV detected, enabling integration.");
-            discordSRVEnabled = true;
-            DiscordSRV.api.requireIntent(GatewayIntent.GUILD_PRESENCES);
-            DiscordSRV.api.requireCacheFlag(CacheFlag.ACTIVITY);
+            // Check if DSV config set up correctly
+            if (DiscordSRV.getPlugin().getMainTextChannel() == null) {
+                this.getLogger().info("DiscordSRV detected, DSV config invalid, disabling integration.");
+                discordSRVEnabled = false;
+            }
+            else {
+                this.getLogger().info("DiscordSRV detected, enabling integration.");
+                discordSRVEnabled = true;
+                DiscordSRV.api.requireIntent(GatewayIntent.GUILD_PRESENCES);
+                DiscordSRV.api.requireCacheFlag(CacheFlag.ACTIVITY);
+            }
         }
 
         // Vault Setup

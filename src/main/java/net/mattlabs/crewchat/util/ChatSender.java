@@ -67,7 +67,10 @@ public class ChatSender implements Runnable{
             time = format.format(new Date());
             status = colorize(playerManager.getStatus(player));
             activeChannel = playerManager.getActiveChannel(player);
-            discordChannelID = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId();
+            if (crewChat.getDiscordSRVEnabled()) {
+                if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel) == null) discordChannelID = DiscordSRV.getPlugin().getMainTextChannel().getId();
+                else discordChannelID = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId();
+            }
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
             channelColor = channelManager.getTextColor(channelManager.channelFromString(activeChannel));
             this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
@@ -180,7 +183,7 @@ public class ChatSender implements Runnable{
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery")) {
                     // Add channel name (if needed) to name
                     if (channelManager.channelFromString(activeChannel).isShowChannelNameDiscord()) name = "[" + activeChannel + "] " + name;
-                    WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
+                    WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(discordChannelID),
                             name,
                             DiscordSRV.getAvatarUrl(player),
                             DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(message), DiscordSRV.getPlugin().getMainGuild()),
@@ -188,7 +191,7 @@ public class ChatSender implements Runnable{
                 } else {
                     // Add channel name (if needed) to message
                     String messageStrMD = channelManager.channelFromString(activeChannel).isShowChannelNameDiscord() ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
-                    DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
+                    DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(discordChannelID),
                             DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
                 }
 
@@ -228,9 +231,11 @@ public class ChatSender implements Runnable{
                 }
 
             // Match Discord names
-            if (mentionedName == null)
-                for (Member member :  DiscordUtil.getTextChannelById(discordChannelID).getMembers())
-                    if (Pattern.matches("[@]?" + member.getEffectiveName() + "((?=([^\\w\\s]|_)).*)?", part)) mentionedName = member.getEffectiveName();
+            if (crewChat.getDiscordSRVEnabled()) {
+                if (mentionedName == null)
+                    for (Member member :  DiscordUtil.getTextChannelById(discordChannelID).getMembers())
+                        if (Pattern.matches("[@]?" + member.getEffectiveName() + "((?=([^\\w\\s]|_)).*)?", part)) mentionedName = member.getEffectiveName();
+            }
 
             if (mentionedName != null) {
                 String split = (part.startsWith("@")) ? "@" + mentionedName : mentionedName;
