@@ -178,15 +178,15 @@ public class ChatSender implements Runnable{
         if (!isDiscordMessage)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery")) {
-                    // Add channel name if needed
-                    String messageStr = channelManager.channelFromString(activeChannel).isShowChannelNameDiscord() ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(message) : PlainComponentSerializer.plain().serialize(message);
+                    // Add channel name (if needed) to name
+                    if (channelManager.channelFromString(activeChannel).isShowChannelNameDiscord()) name = "[" + activeChannel + "] " + name;
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
                             name,
                             DiscordSRV.getAvatarUrl(player),
-                            DiscordUtil.convertMentionsFromNames(messageStr, DiscordSRV.getPlugin().getMainGuild()),
+                            DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(message), DiscordSRV.getPlugin().getMainGuild()),
                             null);
                 } else {
-                    // Add channel name if needed
+                    // Add channel name (if needed) to message
                     String messageStrMD = channelManager.channelFromString(activeChannel).isShowChannelNameDiscord() ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
                             DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
