@@ -39,7 +39,7 @@ public class ChatSender implements Runnable{
     private final BukkitAudiences platform = crewChat.getPlatform();
     private final Chat chat = CrewChat.getChat();
 
-    private String prefix, name, time, status, activeChannel, discordChannelID;
+    private String prefix, name, time, status, activeChannel, discordHeader, discordChannelID;
     private Player player;
     private TextColor channelColor;
     private final String notificationSound;
@@ -83,7 +83,8 @@ public class ChatSender implements Runnable{
         isDiscordMessage = true;
 
         prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
-        name = crewChat.getConfigCC().showChannelNamesDiscord ? "[" + channel.getName() + "]" + sender.getEffectiveName() : sender.getEffectiveName();
+        name = sender.getEffectiveName();
+        discordHeader = crewChat.getConfigCC().showChannelNamesDiscord ? "Discord | " + channel.getName() : "Discord";
         if (!sender.getActivities().isEmpty()) status = sender.getActivities().get(0).getName();
         else status = "No status";
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
@@ -123,14 +124,16 @@ public class ChatSender implements Runnable{
     public void run() {
         Component messageComponent, messageComponentMD;
         if (isDiscordMessage) {
-            messageComponent = crewChat.getMessages().discordMessage(prefix,
+            messageComponent = crewChat.getMessages().discordMessage(discordHeader,
+                    prefix,
                     name,
                     time,
                     status,
                     parseMarkdown(message),
                     activeChannel,
                     channelColor);
-            messageComponentMD = crewChat.getMessages().discordMessage(prefix,
+            messageComponentMD = crewChat.getMessages().discordMessage(discordHeader,
+                    prefix,
                     name,
                     time,
                     status,
