@@ -175,20 +175,22 @@ public class ChatSender implements Runnable{
         }
         platform.console().sendMessage(messageComponent);
 
-        if (!isDiscordMessage) {
-            String messageStr = crewChat.getConfigCC().showInGameChannelNameDiscord ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(message) : PlainComponentSerializer.plain().serialize(message);
+        if (!isDiscordMessage)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
-                if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery"))
+                if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery")) {
+                    // Add channel name
+                    String messageStr = crewChat.getConfigCC().showInGameChannelNameDiscord ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(message) : PlainComponentSerializer.plain().serialize(message);
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
                             name,
                             DiscordSRV.getAvatarUrl(player),
                             DiscordUtil.convertMentionsFromNames(messageStr, DiscordSRV.getPlugin().getMainGuild()),
                             null);
-                else
+                } else {
+                    // Add channel name
+                    String messageStrMD = crewChat.getConfigCC().showInGameChannelNameDiscord ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
-                            DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(messageComponentMD),
-                                    DiscordSRV.getPlugin().getMainGuild()));
-        }
+                            DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
+                }
 
         prefix = null;
         status = null;
