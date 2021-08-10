@@ -12,15 +12,17 @@ public class Channel {
     private String description = "No description";
     private TextColor textColor = NamedTextColor.WHITE;
     private boolean autoSubscribe = false;
+    private boolean showChannelNameDiscord = false;
 
     // Empty constructor for Configurate
     public Channel() { }
 
-    public Channel(String name, String description, TextColor textColor, boolean autoSubscribe) {
+    public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameDiscord) {
         this.name = name;
         this.description = description;
         this.textColor = textColor;
         this.autoSubscribe = autoSubscribe;
+        this.showChannelNameDiscord = showChannelNameDiscord;
     }
 
     @Override
@@ -43,5 +45,9 @@ public class Channel {
 
     public boolean isAutoSubscribe() {
         return autoSubscribe;
+    }
+
+    public boolean isShowChannelNameDiscord() {
+        return showChannelNameDiscord;
     }
 }

@@ -178,16 +178,16 @@ public class ChatSender implements Runnable{
         if (!isDiscordMessage)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery")) {
-                    // Add channel name
-                    String messageStr = crewChat.getConfigCC().showInGameChannelNameDiscord ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(message) : PlainComponentSerializer.plain().serialize(message);
+                    // Add channel name if needed
+                    String messageStr = channelManager.channelFromString(activeChannel).isShowChannelNameDiscord() ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(message) : PlainComponentSerializer.plain().serialize(message);
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
                             name,
                             DiscordSRV.getAvatarUrl(player),
                             DiscordUtil.convertMentionsFromNames(messageStr, DiscordSRV.getPlugin().getMainGuild()),
                             null);
                 } else {
-                    // Add channel name
-                    String messageStrMD = crewChat.getConfigCC().showInGameChannelNameDiscord ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
+                    // Add channel name if needed
+                    String messageStrMD = channelManager.channelFromString(activeChannel).isShowChannelNameDiscord() ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId()),
                             DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
                 }
