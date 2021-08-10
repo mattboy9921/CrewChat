@@ -84,7 +84,7 @@ public class ChatSender implements Runnable{
 
         prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
         name = sender.getEffectiveName();
-        discordHeader = crewChat.getConfigCC().showChannelNamesDiscord ? "Discord | " + channel.getName() : "Discord";
+        discordHeader = crewChat.getConfigCC().showChannelNamesDiscord ? "Discord #" + channel.getName() : "Discord";
         if (!sender.getActivities().isEmpty()) status = sender.getActivities().get(0).getName();
         else status = "No status";
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
