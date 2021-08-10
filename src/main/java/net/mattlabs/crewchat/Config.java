@@ -33,8 +33,11 @@ public class Config {
             "Config version. Do not change this!")
     private int schemaVersion = 0;
 
-    @Comment("\nShow channel names in Discord messages.")
-    public boolean showChannelNamesDiscord = false;
+    @Comment("\nShow channel names on Discord to in game messages.")
+    public boolean showDiscordChannelNameInGame = false;
+
+    @Comment("\nShow channel names on in game to Discord messages.")
+    public boolean showInGameChannelNameDiscord = false;
 
     @Setting(value = "channels")
     @Comment("\nChannel Configuration\n" +
