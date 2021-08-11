@@ -33,6 +33,11 @@ public class Config {
             "Config version. Do not change this!")
     private int schemaVersion = 0;
 
+    @Setting(value = "enable-discordsrv")
+    @Comment("\nEnable DiscordSRV integration.")
+    private boolean enableDiscordSRV = false;
+
+    // TODO: Set this to private
     @Comment("\nShow channel names on Discord to in game messages.")
     public boolean showDiscordChannelNameInGame = false;
 
@@ -41,6 +46,9 @@ public class Config {
             "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
     private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", "Global chat channel", NamedTextColor.WHITE, true, false)));
 
+    public boolean isEnableDiscordSRV() {
+        return enableDiscordSRV;
+    }
     public List<Channel> getChannels() {
 
         // Convert map to arraylist

@@ -40,6 +40,7 @@ public class CrewChat extends JavaPlugin{
     private BukkitAudiences platform;
     private Messages messages;
     private Config config;
+    private DiscordSRVListener discordSRVListener;
 
     private String version;
     private boolean discordSRVEnabled;
@@ -67,25 +68,6 @@ public class CrewChat extends JavaPlugin{
             this.getLogger().severe("Disabled due to no Vault dependency found!");
             getServer().getPluginManager().disablePlugin(this);
             return;
-        }
-
-        // DiscordSRV Check
-        if (!hasDiscordSRV()) {
-            this.getLogger().info("DiscordSRV not detected, disabling integration.");
-            discordSRVEnabled = false;
-        }
-        else {
-            // Check if DSV config set up correctly
-            if (DiscordSRV.getPlugin().getMainTextChannel() == null) {
-                this.getLogger().info("DiscordSRV detected, DSV config invalid, disabling integration.");
-                discordSRVEnabled = false;
-            }
-            else {
-                this.getLogger().info("DiscordSRV detected, enabling integration.");
-                discordSRVEnabled = true;
-                DiscordSRV.api.requireIntent(GatewayIntent.GUILD_PRESENCES);
-                DiscordSRV.api.requireCacheFlag(CacheFlag.ACTIVITY);
-            }
         }
 
         // Vault Setup
@@ -131,6 +113,18 @@ public class CrewChat extends JavaPlugin{
         messages = configurateManager.get("messages.conf");
         getLogger().info("Messages on load: " + messages.toString());
 
+        // DiscordSRV Check
+        if (!hasDiscordSRV()) {
+            this.getLogger().info("DiscordSRV disabled or not detected, disabling integration.");
+            discordSRVEnabled = false;
+        }
+        else {
+            this.getLogger().info("DiscordSRV detected, enabling integration.");
+            discordSRVEnabled = true;
+            DiscordSRV.api.requireIntent(GatewayIntent.GUILD_PRESENCES);
+            DiscordSRV.api.requireCacheFlag(CacheFlag.ACTIVITY);
+        }
+
         // Register Audience (Messages)
         platform = BukkitAudiences.create(this);
 
@@ -156,7 +150,8 @@ public class CrewChat extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
 
         // Register DiscordSRV Listener
-        if (discordSRVEnabled) DiscordSRV.api.subscribe(new DiscordSRVListener());
+        discordSRVListener = new DiscordSRVListener();
+        if (discordSRVEnabled) DiscordSRV.api.subscribe(discordSRVListener);
 
         // Register Commands with ACF
         paperCommandManager.registerCommand(new CrewChatCommand());
@@ -266,8 +261,15 @@ public class CrewChat extends JavaPlugin{
         else return false;
     }
 
-    // DiscordSRV Helper Method
+    // DiscordSRV Helper Methods
+
     private boolean hasDiscordSRV() {
-        return getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+        return getServer().getPluginManager().getPlugin("DiscordSRV") != null && getConfigCC().isEnableDiscordSRV();
+    }
+
+    public void setDiscordConfigError() {
+        this.getLogger().info("DiscordSRV config invalid, disabling integration.");
+        DiscordSRV.api.unsubscribe(discordSRVListener);
+        discordSRVEnabled = false;
     }
 }
