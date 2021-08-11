@@ -18,7 +18,10 @@ public class Channel {
     // Empty constructor for Configurate
     public Channel() { }
 
-    // TODO: Add another constructor for mock/compare objects
+    // Constructor for comparable channel objects
+    public Channel(String name) {
+        this(name, null, null, false, false, false);
+    }
 
     public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameDiscord, boolean excludeFromDiscord) {
         this.name = name;
