@@ -6,6 +6,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
+import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -14,6 +15,7 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
+import static net.kyori.adventure.text.minimessage.transformation.TransformationType.*;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ConfigSerializable
@@ -370,8 +372,16 @@ public class Messages {
             "Possible tags: <status>")
     private String statusSet = "<white>Your status has been set to: \"<status>\".";
 
-    public Component statusSet(String status) {
-        return chatHeader.append(MiniMessage.get().parse(statusSet, "status", status));
+    public Component statusSet(String status) throws ParsingException {
+        //noinspection unchecked
+        return chatHeader.append(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(statusSet, "status", serialize(status) + "<reset>"));
+    }
+
+    @Comment("\nAppears if a player's status contains a syntax error.")
+    private String statusSyntaxError = "<white>Your status could not be set. Please check the syntax.";
+
+    public Component statusSyntaxError() {
+        return chatHeader.append(MiniMessage.get().parse(statusSyntaxError));
     }
 
     // ** Subscribe/Unsubscribe **
@@ -618,9 +628,26 @@ public class Messages {
         // %prefix%%playerName%: %message%
         return MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
-                        this.status + ": <pre>" + status + "</pre>\n" +
+                        this.status + ": " + status + "<reset>\n" +
                         this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
+                "player_prefix", prefix,
+                "player_name", playerName)
+                .append(message);
+    }
+
+    // Discord Message
+    @Comment("\nThis is the format used before every Discord message sent.\n" +
+            "Possible tags: <discord><player_prefix><player_name>")
+    private String discordMessageHeader = "<gray>[<color:#7289DA><discord><gray>] <player_prefix><player_name><gray>: ";
+
+    public Component discordMessage(String discordHeader, String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
+        // [Discord] %prefix%%playerName%: %message%
+        return MiniMessage.get().parse("<hover:show_text:'<white>" + time + "\n" +
+                        this.status + ": " + status + "\n" +
+                        this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
+                        discordMessageHeader,
+                "discord", discordHeader,
                 "player_prefix", prefix,
                 "player_name", playerName)
                 .append(message);
@@ -708,6 +735,6 @@ public class Messages {
     // *** Helper Methods ***
 
     private static String serialize(String legacyColorCode) {
-        return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(legacyColorCode));
+        return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(legacyColorCode))));
     }
 }

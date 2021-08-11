@@ -95,7 +95,7 @@
         <dependency>
             <groupId>com.discordsrv</groupId>
             <artifactId>discordsrv</artifactId>
-            <version>1.21.1</version>
+            <version>1.22.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- For bStats -->
@@ -115,7 +115,7 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
-            <version>4.4.0-SNAPSHOT</version>
+            <version>4.8.1</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
@@ -125,17 +125,23 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>4.8.1</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.0.0-SNAPSHOT</version>
+            <version>4.8.1</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- Jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.1</version>
         </dependency>
     </dependencies>
 
@@ -221,6 +227,11 @@
                         <relocation>
                             <pattern>net.kyori</pattern>
                             <shadedPattern>net.mattlabs.crewchat</shadedPattern>
+                        </relocation>
+                        <!-- Jsoup -->
+                        <relocation>
+                            <pattern>org.jsoup</pattern>
+                            <shadedPattern>net.mattlabs.jsoup</shadedPattern>
                         </relocation>
                     </relocations>
                     <!-- Fix signed dependency JARs -->

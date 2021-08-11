@@ -36,7 +36,7 @@ public class ChannelManager {
     }
 
     public Channel channelFromString(String channelName) {
-        Channel channel = new Channel(channelName, null, null, false);
+        Channel channel = new Channel(channelName, null, null, false, false, false);
         if (channels.contains(channel)) return channels.get(channels.indexOf(channel));
         else return null;
     }

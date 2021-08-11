@@ -1,11 +1,15 @@
 package net.mattlabs.crewchat;
 
 import co.aikar.commands.PaperCommandManager;
+import github.scarsz.discordsrv.DiscordSRV;
+import github.scarsz.discordsrv.dependencies.jda.api.requests.GatewayIntent;
+import github.scarsz.discordsrv.dependencies.jda.api.utils.cache.CacheFlag;
 import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.commands.*;
 import net.mattlabs.crewchat.listeners.ChatListener;
+import net.mattlabs.crewchat.listeners.DiscordSRVListener;
 import net.mattlabs.crewchat.listeners.JoinListener;
 import net.mattlabs.crewchat.listeners.QuitListener;
 import net.mattlabs.crewchat.messaging.Messages;
@@ -35,6 +39,8 @@ public class CrewChat extends JavaPlugin{
     private static Chat chat = null;
     private BukkitAudiences platform;
     private Messages messages;
+    private Config config;
+    private DiscordSRVListener discordSRVListener;
 
     private String version;
     private boolean discordSRVEnabled;
@@ -62,16 +68,6 @@ public class CrewChat extends JavaPlugin{
             this.getLogger().severe("Disabled due to no Vault dependency found!");
             getServer().getPluginManager().disablePlugin(this);
             return;
-        }
-
-        // DiscordSRV Check
-        if (!hasDiscordSRV()) {
-            this.getLogger().info("DiscordSRV not detected, disabling integration.");
-            discordSRVEnabled = false;
-        }
-        else {
-            this.getLogger().info("DiscordSRV detected, enabling integration.");
-            discordSRVEnabled = true;
         }
 
         // Vault Setup
@@ -111,9 +107,23 @@ public class CrewChat extends JavaPlugin{
         configurateManager.save("playerdata.conf");
         configurateManager.save("messages.conf");
 
+        config = configurateManager.get("config.conf");
+
         // Load Messages
         messages = configurateManager.get("messages.conf");
         getLogger().info("Messages on load: " + messages.toString());
+
+        // DiscordSRV Check
+        if (!hasDiscordSRV()) {
+            this.getLogger().info("DiscordSRV disabled or not detected, disabling integration.");
+            discordSRVEnabled = false;
+        }
+        else {
+            this.getLogger().info("DiscordSRV detected, enabling integration.");
+            discordSRVEnabled = true;
+            DiscordSRV.api.requireIntent(GatewayIntent.GUILD_PRESENCES);
+            DiscordSRV.api.requireCacheFlag(CacheFlag.ACTIVITY);
+        }
 
         // Register Audience (Messages)
         platform = BukkitAudiences.create(this);
@@ -139,6 +149,10 @@ public class CrewChat extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
         getServer().getPluginManager().registerEvents(new QuitListener(), this);
 
+        // Register DiscordSRV Listener
+        discordSRVListener = new DiscordSRVListener();
+        if (discordSRVEnabled) DiscordSRV.api.subscribe(discordSRVListener);
+
         // Register Commands with ACF
         paperCommandManager.registerCommand(new CrewChatCommand());
         paperCommandManager.registerCommand(new ChatCommand());
@@ -158,6 +172,7 @@ public class CrewChat extends JavaPlugin{
     public void reload() {
         getLogger().info("Reloading CrewChat...");
         configurateManager.reload();
+        config = configurateManager.get("config.conf");
         messages = configurateManager.get("messages.conf");
         getLogger().info("Configuration reloaded.");
         channelManager.reloadChannels();
@@ -218,6 +233,10 @@ public class CrewChat extends JavaPlugin{
         return messages;
     }
 
+    public Config getConfigCC() {
+        return config;
+    }
+
     // Vault Helper Methods
 
     private boolean hasVault() {
@@ -242,8 +261,15 @@ public class CrewChat extends JavaPlugin{
         else return false;
     }
 
-    // DiscordSRV Helper Method
+    // DiscordSRV Helper Methods
+
     private boolean hasDiscordSRV() {
-        return getServer().getPluginManager().getPlugin("DiscordSRV") != null;
+        return getServer().getPluginManager().getPlugin("DiscordSRV") != null && getConfigCC().isEnableDiscordSRV();
+    }
+
+    public void setDiscordConfigError() {
+        this.getLogger().info("DiscordSRV config invalid, disabling integration.");
+        DiscordSRV.api.unsubscribe(discordSRVListener);
+        discordSRVEnabled = false;
     }
 }

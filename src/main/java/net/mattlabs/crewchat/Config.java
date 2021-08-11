@@ -33,16 +33,27 @@ public class Config {
             "Config version. Do not change this!")
     private int schemaVersion = 0;
 
+    @Setting(value = "enable-discordsrv")
+    @Comment("\nEnable DiscordSRV integration.")
+    private boolean enableDiscordSRV = false;
+
+    // TODO: Set this to private
+    @Comment("\nShow channel names on Discord to in game messages.")
+    public boolean showDiscordChannelNameInGame = false;
+
     @Setting(value = "channels")
     @Comment("\nChannel Configuration\n" +
             "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
-    private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", "Global chat channel", NamedTextColor.WHITE, true)));
+    private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", "Global chat channel", NamedTextColor.WHITE, true, false, false)));
 
+    public boolean isEnableDiscordSRV() {
+        return enableDiscordSRV;
+    }
     public List<Channel> getChannels() {
 
         // Convert map to arraylist
         ArrayList<Channel> channels = new ArrayList<>();
-        channelsMap.forEach((name, channel) -> channels.add(new Channel(name, channel.getDescription(), channel.getTextColor(), channel.isAutoSubscribe())));
+        channelsMap.forEach((name, channel) -> channels.add(new Channel(name, channel.getDescription(), channel.getTextColor(), channel.isAutoSubscribe(), channel.isShowChannelNameDiscord(), channel.isExcludeFromDiscord())));
         return channels;
     }
 }

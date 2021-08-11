@@ -5,6 +5,7 @@ import net.mattlabs.crewchat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -181,13 +182,16 @@ public class PlayerManager {
 
     public void updateMutedPlayers() {
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
-            for (Chatter chatter : onlineChatters)
+            for (Chatter chatter : onlineChatters) {
+                ArrayList<Mutee> removedMutees = new ArrayList<>();
                 for (Mutee mutee : chatter.getMutedPlayers())
-                    if (mutee.getTime().isAfter(mutee.getTime().plusHours(24))) {
-                        chatter.removeMutedPlayer(mutee.getUuid());
+                    if (LocalDateTime.now().isAfter(mutee.getTime().plusHours(24))) {
+                        removedMutees.add(mutee);
                         if (Bukkit.getOfflinePlayer(chatter.getUuid()).isOnline())
                             platform.player(Objects.requireNonNull(Bukkit.getPlayer(chatter.getUuid()))).sendMessage(crewChat.getMessages().playerUnmuted(mutee.getPrefix(), mutee.getName()));
                     }
+                for (Mutee mutee : removedMutees) chatter.removeMutedPlayer(mutee.getUuid());
+            }
         });
     }
 
