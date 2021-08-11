@@ -45,7 +45,7 @@ public class ChatSender implements Runnable{
     private final String notificationSound;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
-    private boolean isDiscordMessage;
+    private boolean isDiscordMessage, excludeFromDiscord;
 
     public ChatSender(){
         // Check version for notification sound
@@ -70,6 +70,7 @@ public class ChatSender implements Runnable{
             if (crewChat.getDiscordSRVEnabled()) {
                 if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel) == null) discordChannelID = DiscordSRV.getPlugin().getMainTextChannel().getId();
                 else discordChannelID = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId();
+                excludeFromDiscord = channelManager.channelFromString(activeChannel).isExcludeFromDiscord();
             }
             subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
             channelColor = channelManager.getTextColor(channelManager.channelFromString(activeChannel));
@@ -178,7 +179,7 @@ public class ChatSender implements Runnable{
         }
         platform.console().sendMessage(messageComponent);
 
-        if (!isDiscordMessage)
+        if (!isDiscordMessage && !excludeFromDiscord)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery")) {
                     // Add channel name (if needed) to name

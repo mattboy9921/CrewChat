@@ -13,16 +13,20 @@ public class Channel {
     private TextColor textColor = NamedTextColor.WHITE;
     private boolean autoSubscribe = false;
     private boolean showChannelNameDiscord = false;
+    private boolean excludeFromDiscord = false;
 
     // Empty constructor for Configurate
     public Channel() { }
 
-    public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameDiscord) {
+    // TODO: Add another constructor for mock/compare objects
+
+    public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameDiscord, boolean excludeFromDiscord) {
         this.name = name;
         this.description = description;
         this.textColor = textColor;
         this.autoSubscribe = autoSubscribe;
         this.showChannelNameDiscord = showChannelNameDiscord;
+        this.excludeFromDiscord = excludeFromDiscord;
     }
 
     @Override
@@ -49,5 +53,9 @@ public class Channel {
 
     public boolean isShowChannelNameDiscord() {
         return showChannelNameDiscord;
+    }
+
+    public boolean isExcludeFromDiscord() {
+        return excludeFromDiscord;
     }
 }
