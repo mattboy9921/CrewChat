@@ -99,7 +99,6 @@ public class ChatSender implements Runnable{
         // Key is in game channel name, value is Discord channel ID
         Map<String, String> channelsMap = DiscordSRV.getPlugin().getChannels();
         int channelCount = 0;
-        // TODO: Turn this into a set
         subscribedPlayers = new ArrayList<>();
         for (Map.Entry<String, String> channelEntry : channelsMap.entrySet()) {
             if (channelEntry.getValue().equals(channel.getId())) {
