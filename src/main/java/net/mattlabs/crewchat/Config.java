@@ -37,9 +37,8 @@ public class Config {
     @Comment("\nEnable DiscordSRV integration.")
     private boolean enableDiscordSRV = false;
 
-    // TODO: Set this to private
     @Comment("\nShow channel names on Discord to in game messages.")
-    public boolean showDiscordChannelNameInGame = false;
+    private boolean showDiscordChannelNameInGame = false;
 
     @Setting(value = "channels")
     @Comment("\nChannel Configuration\n" +
@@ -48,6 +47,10 @@ public class Config {
 
     public boolean isEnableDiscordSRV() {
         return enableDiscordSRV;
+    }
+
+    public boolean isShowDiscordChannelNameInGame() {
+        return showDiscordChannelNameInGame;
     }
     public List<Channel> getChannels() {
 
