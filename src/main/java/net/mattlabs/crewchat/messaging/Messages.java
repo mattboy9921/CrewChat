@@ -564,15 +564,14 @@ public class Messages {
             "Possible tags: <sender_prefix>, <sender_name>, <recipient_prefix>, <recipient_name>")
     private String privateMessageHeader = "<gray>[<reset><sender_prefix><sender_name><reset> <gray>-><reset> <recipient_prefix><recipient_name><reset><gray>]<reset> ";
 
-    // TODO: Add date and channel to this
     public Component privateMessageSend(String senderPrefix, String recipientPrefix, String recipientName,
-                                        String senderStatus, String recipientStatus, String message) {
+                                        String senderStatus, String recipientStatus, String time, String message) {
         // &7[%senderPrefix%me &7-> %recipientPrefix%%recipientName%&7] &r%message%
         return MiniMessage.get().parse(privateMessageHeader,
                 "sender_prefix", serialize(senderPrefix),
-                "sender_name", you + "<hover:show_text:'<white>" + senderStatus + "'>",
+                "sender_name", you + "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>",
                 "recipient_prefix", serialize(recipientPrefix),
-                "recipient_name", recipientName + "<hover:show_text:'<white>" + recipientStatus + "'>")
+                "recipient_name", recipientName + "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>")
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(message));
     }
 
@@ -580,15 +579,14 @@ public class Messages {
     @Comment("\nAppears when hovering over private messages.")
     private String clickToReply = "<bold><aqua>Click<reset> this message to reply.";
 
-    // TODO: Add date and channel to this
     public Component privateMessageReceive(String senderPrefix, String recipientPrefix, String senderName,
-                                           String senderStatus, String recipientStatus, String message) {
+                                           String senderStatus, String recipientStatus, String time, String message) {
         // &7[%senderPrefix%%senderName% &7-> %recipientPrefix%Me&7] &r%message%
         return MiniMessage.get().parse(privateMessageHeader,
                 "sender_prefix", serialize(senderPrefix),
-                "sender_name", "<hover:show_text:'<white>" + senderStatus + "'>" + senderName,
+                "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName,
                 "recipient_prefix", serialize(recipientPrefix),
-                "recipient_name", "<hover:show_text:'<white>" + recipientStatus + "'>" + you)
+                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + you)
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(
                         "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message));
     }

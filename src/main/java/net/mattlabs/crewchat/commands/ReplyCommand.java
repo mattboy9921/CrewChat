@@ -14,6 +14,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @CommandAlias("reply|r")
 @CommandPermission("crewchat.pm")
 public class ReplyCommand extends BaseCommand {
@@ -36,18 +39,21 @@ public class ReplyCommand extends BaseCommand {
                 if (Bukkit.getPlayer(msgManager.getLastSender(sender.getName())) == null)
                     platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
                 else {
+                    SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
+                    String time = format.format(new Date());
+
                     Player recipient = Bukkit.getPlayer(msgManager.getLastSender(sender.getName()));
                     msgManager.updatePlayer(recipient.getName(), sender.getName());
                     platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
                             chat.getPlayerPrefix(recipient), recipient.getName(),
                             playerManager.getStatus(sender),
-                            playerManager.getStatus(recipient), message));
+                            playerManager.getStatus(recipient), time, message));
 
                     if (!playerManager.hasMuted(recipient, sender))
                         platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
                                 chat.getPlayerPrefix(recipient), sender.getName(),
                                 playerManager.getStatus(sender),
-                                playerManager.getStatus(recipient), message));
+                                playerManager.getStatus(recipient), time, message));
                 }
             }
             else platform.player(sender).sendMessage(crewChat.getMessages().noPMReceived());
