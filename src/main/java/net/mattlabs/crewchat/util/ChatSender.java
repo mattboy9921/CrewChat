@@ -203,10 +203,12 @@ public class ChatSender implements Runnable{
         subscribedPlayers.clear();
     }
 
-    // TODO: Is this needed?
-    public static String colorize(String s){
-        if(s == null) return null;
-        return s.replaceAll("&([0-9a-f])", "\u00A7$1");
+    // Replaces any & and § codes with MiniMessage tags
+    public static String colorize(String string){
+        if(string == null) return null;
+        string = MiniMessage.get().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(string));
+        string = MiniMessage.get().serialize(LegacyComponentSerializer.legacySection().deserialize(string));
+        return string;
     }
 
     private Component parseMessage(String message, TextColor textColor) {
