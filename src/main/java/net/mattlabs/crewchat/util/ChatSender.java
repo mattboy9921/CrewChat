@@ -61,11 +61,11 @@ public class ChatSender implements Runnable{
         if (playerManager.isOnline(player)) {
             this.player = player;
             if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
-            prefix = colorize(chat.getPlayerPrefix(player));
+            prefix = chat.getPlayerPrefix(player);
             name = player.getName();
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
             time = format.format(new Date());
-            status = colorize(playerManager.getStatus(player));
+            status = playerManager.getStatus(player);
             activeChannel = playerManager.getActiveChannel(player);
             if (crewChat.getDiscordSRVEnabled()) {
                 if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel) == null) discordChannelID = DiscordSRV.getPlugin().getMainTextChannel().getId();
@@ -201,14 +201,6 @@ public class ChatSender implements Runnable{
         activeChannel = null;
         discordChannelID = null;
         subscribedPlayers.clear();
-    }
-
-    // Replaces any & and § codes with MiniMessage tags
-    public static String colorize(String string){
-        if(string == null) return null;
-        string = MiniMessage.get().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(string));
-        string = MiniMessage.get().serialize(LegacyComponentSerializer.legacySection().deserialize(string));
-        return string;
     }
 
     private Component parseMessage(String message, TextColor textColor) {

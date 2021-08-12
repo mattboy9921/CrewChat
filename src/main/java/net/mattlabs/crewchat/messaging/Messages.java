@@ -631,7 +631,7 @@ public class Messages {
                         this.status + ": " + status + "<reset>\n" +
                         this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
-                "player_prefix", prefix,
+                "player_prefix", serialize(prefix),
                 "player_name", playerName)
                 .append(message);
     }
@@ -648,7 +648,7 @@ public class Messages {
                         this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         discordMessageHeader,
                 "discord", discordHeader,
-                "player_prefix", prefix,
+                "player_prefix", serialize(prefix),
                 "player_name", playerName)
                 .append(message);
     }
