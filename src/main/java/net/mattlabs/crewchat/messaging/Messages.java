@@ -621,7 +621,7 @@ public class Messages {
 
     // Chat Message
     @Comment("\nThis is the format used before every chat message sent.\n" +
-            "Possible tags: <player_prefix><player_name>")
+            "Possible tags: <player_prefix>, <player_name>")
     private String chatMessageHeader = "<player_prefix><player_name><gray>: ";
 
     public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
@@ -638,7 +638,7 @@ public class Messages {
 
     // Discord Message
     @Comment("\nThis is the format used before every Discord message sent.\n" +
-            "Possible tags: <discord><player_prefix><player_name>")
+            "Possible tags: <discord>, <player_prefix>, <player_name>")
     private String discordMessageHeader = "<gray>[<color:#7289DA><discord><gray>] <player_prefix><player_name><gray>: ";
 
     public Component discordMessage(String discordHeader, String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
