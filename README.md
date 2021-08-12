@@ -1,6 +1,6 @@
 CrewChat is a chat plugin developed for the Crew Craft Server.
 
-[![Build Status](https://travis-ci.com/mattboy9921/CrewChat.svg?branch=master)](https://travis-ci.com/mattboy9921/CrewChat)
+![Build Status](https://github.com/mattboy9921/CrewChat/actions/workflows/maven.yml/badge.svg)
 
 **Features**
  - General chat
