@@ -11,6 +11,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
+import net.mattlabs.crewchat.Mutee;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
@@ -73,8 +74,8 @@ public class ChatCommand extends BaseCommand {
                     platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
                 if (!playerManager.getMutedPlayerNames(player).isEmpty()) {
                     platform.player(player).sendMessage(crewChat.getMessages().mutedListHeader());
-                    for (String mutee : playerManager.getMutedPlayerNames(player))
-                        platform.player(player).sendMessage(crewChat.getMessages().mutedListEntry(mutee));
+                    for (Mutee mutee : playerManager.getMutedPlayers(player))
+                        platform.player(player).sendMessage(crewChat.getMessages().mutedListEntry(mutee.getName(), mutee.getTimeRemaining()));
                 }
             }
             else {

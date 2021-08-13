@@ -139,6 +139,10 @@ public class PlayerManager {
         return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getStatus();
     }
 
+    public ArrayList<Mutee> getMutedPlayers(Player player) {
+        return chatters.get(chatters.indexOf(new Chatter(player.getUniqueId()))).getMutedPlayers();
+    }
+
     public ArrayList<String> getMutedPlayerNames(Player player) {
         ArrayList<String> mutedPlayerNames = new ArrayList<>();
         chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getMutedPlayers().forEach(mutee ->
