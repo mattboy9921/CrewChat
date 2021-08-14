@@ -9,6 +9,7 @@ import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
+import org.apache.commons.lang.WordUtils;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
@@ -296,9 +297,10 @@ public class Messages {
         // &2- &fChat Color: %color%
         // &2- &fDescription: %desc#
 
-        // Get closest color to hex code, format with capital first letter
+        // Get closest color to hex code, remove underscores, capitalize first letter of each word
         String closestColor = nearestTo(color).toString();
-        closestColor = closestColor.substring(0, 1).toUpperCase() + closestColor.substring(1);
+        closestColor = closestColor.replaceAll("_", " ");
+        closestColor = WordUtils.capitalize(closestColor);
 
         return chatHeader
                 .append(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", name))
