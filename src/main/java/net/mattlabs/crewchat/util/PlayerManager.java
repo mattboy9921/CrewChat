@@ -3,6 +3,7 @@ package net.mattlabs.crewchat.util;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.*;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
@@ -178,6 +179,13 @@ public class PlayerManager {
     }
 
     public void removeMutedPlayer(Player muterPlayer, Player muteePlayer) {
+        Chatter muter = new Chatter(muterPlayer.getUniqueId());
+        muter = chatters.get(chatters.indexOf(muter));
+        muter.removeMutedPlayer(muteePlayer.getUniqueId());
+        configurateManager.save("playerdata.conf");
+    }
+
+    public void removeMutedPlayer(Player muterPlayer, OfflinePlayer muteePlayer) {
         Chatter muter = new Chatter(muterPlayer.getUniqueId());
         muter = chatters.get(chatters.indexOf(muter));
         muter.removeMutedPlayer(muteePlayer.getUniqueId());
