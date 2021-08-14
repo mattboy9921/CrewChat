@@ -39,7 +39,7 @@ public class ChatSender implements Runnable{
     private final BukkitAudiences platform = crewChat.getPlatform();
     private final Chat chat = CrewChat.getChat();
 
-    private String prefix, name, time, status, activeChannel, discordHeader, discordChannelID;
+    private String prefix, name, time, status, intendedChannel, discordHeader, discordChannelID;
     private Player player;
     private TextColor channelColor;
     private final String notificationSound;
@@ -54,7 +54,12 @@ public class ChatSender implements Runnable{
         else notificationSound = "block.note_block.pling";
     }
 
+    // Get active channel from PlayerManager
     public void sendChatMessage(Player player, String message) {
+        sendChatMessage(player, playerManager.getActiveChannel(player), message);
+    }
+
+    public void sendChatMessage(Player player, String intendedChannel, String message) {
         playerManager.updateMutedPlayers();
         isDiscordMessage = false;
 
@@ -66,15 +71,15 @@ public class ChatSender implements Runnable{
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
             time = format.format(new Date());
             status = playerManager.getStatus(player);
-            activeChannel = playerManager.getActiveChannel(player);
+            this.intendedChannel = intendedChannel;
             if (crewChat.getDiscordSRVEnabled()) {
-                if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel) == null) discordChannelID = DiscordSRV.getPlugin().getMainTextChannel().getId();
-                else discordChannelID = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel).getId();
-                excludeFromDiscord = channelManager.channelFromString(activeChannel).isExcludeFromDiscord();
+                if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(intendedChannel) == null) discordChannelID = DiscordSRV.getPlugin().getMainTextChannel().getId();
+                else discordChannelID = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(intendedChannel).getId();
+                excludeFromDiscord = channelManager.channelFromString(intendedChannel).isExcludeFromDiscord();
             }
-            subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
-            channelColor = channelManager.getTextColor(channelManager.channelFromString(activeChannel));
-            this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+            subscribedPlayers = playerManager.getSubscribedPlayers(intendedChannel);
+            channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
+            this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)));
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
@@ -111,14 +116,14 @@ public class ChatSender implements Runnable{
         }
 
         if (channelCount > 1) {
-            activeChannel = "<color:#7289DA>(Discord)<reset> " + channel.getName();
+            intendedChannel = "<color:#7289DA>(Discord)<reset> " + channel.getName();
             channelColor = NamedTextColor.WHITE;
             this.message = parseMessage(message, NamedTextColor.WHITE);
         }
         else {
-            activeChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
-            channelColor = channelManager.getTextColor(channelManager.channelFromString(activeChannel));
-            this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(activeChannel)));
+            intendedChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
+            channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
+            this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)));
         }
 
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
@@ -133,7 +138,7 @@ public class ChatSender implements Runnable{
                     time,
                     status,
                     parseMarkdown(message),
-                    activeChannel,
+                    intendedChannel,
                     channelColor);
             messageComponentMD = crewChat.getMessages().discordMessage(discordHeader,
                     prefix,
@@ -141,7 +146,7 @@ public class ChatSender implements Runnable{
                     time,
                     status,
                     message,
-                    activeChannel,
+                    intendedChannel,
                     channelColor);
         }
         else {
@@ -150,14 +155,14 @@ public class ChatSender implements Runnable{
                     time,
                     status,
                     parseMarkdown(message),
-                    activeChannel,
+                    intendedChannel,
                     channelColor);
             messageComponentMD = crewChat.getMessages().chatMessage(prefix,
                     name,
                     time,
                     status,
                     message,
-                    activeChannel,
+                    intendedChannel,
                     channelColor);
         }
 
@@ -182,7 +187,7 @@ public class ChatSender implements Runnable{
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery")) {
                     // Add channel name (if needed) to name
-                    if (channelManager.channelFromString(activeChannel).isShowChannelNameDiscord()) name = "[" + activeChannel + "] " + name;
+                    if (channelManager.channelFromString(intendedChannel).isShowChannelNameDiscord()) name = "[" + intendedChannel + "] " + name;
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(discordChannelID),
                             name,
                             DiscordSRV.getAvatarUrl(player),
@@ -190,7 +195,7 @@ public class ChatSender implements Runnable{
                             null);
                 } else {
                     // Add channel name (if needed) to message
-                    String messageStrMD = channelManager.channelFromString(activeChannel).isShowChannelNameDiscord() ? "[" + activeChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
+                    String messageStrMD = channelManager.channelFromString(intendedChannel).isShowChannelNameDiscord() ? "[" + intendedChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(discordChannelID),
                             DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
                 }
@@ -198,7 +203,7 @@ public class ChatSender implements Runnable{
         prefix = null;
         status = null;
         message = null;
-        activeChannel = null;
+        intendedChannel = null;
         discordChannelID = null;
         subscribedPlayers.clear();
     }

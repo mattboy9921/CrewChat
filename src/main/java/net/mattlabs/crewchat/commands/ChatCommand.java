@@ -45,6 +45,9 @@ public class ChatCommand extends BaseCommand {
 
         // Command Completions
         paperCommandManager.getCommandCompletions().registerStaticCompletion("channels", channelManager.getChannelNames());
+
+        // Command Contexts
+        paperCommandManager.getCommandContexts().registerContext(Channel.class, c -> new Channel(c.popFirstArg()));
     }
 
     @Default
@@ -316,6 +319,25 @@ public class ChatCommand extends BaseCommand {
                 playerManager.setDeafened(player, false);
                 platform.player(player).sendMessage(crewChat.getMessages().playerUndeafened());
             }
+        }
+    }
+
+    @Subcommand("send")
+    @Description("Send a message to a specified channel without switching to it.")
+    @CommandPermission("crewchat.chat.send")
+    @CommandCompletion("@channels")
+    public void onSend(CommandSender commandSender, Channel channel, String[] message) {
+        if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
+        else {
+            Player player = (Player) commandSender;
+            // Check if channel is real
+            if (!channelManager.getChannels().contains(channel))
+                platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
+            // Check if player subscribed to channel
+            else if (!playerManager.getSubscribedChannels(player).contains(channel.getName()))
+                platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channel.getName(), channelManager.channelFromString(channel.getName()).getTextColor()));
+            else
+                crewChat.getChatSender().sendChatMessage(player, channel.getName(), String.join(" ", message));
         }
     }
 
