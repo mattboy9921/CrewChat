@@ -302,7 +302,7 @@ public class ChatCommand extends BaseCommand {
     }
 
     @Subcommand("deafen")
-    @Description("Suppresses all chat crewChat.getMessages() for player.")
+    @Description("Suppresses all chat messages for player.")
     @CommandPermission("crewchat.chat.deafen")
     public void onDeafen(CommandSender commandSender) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
