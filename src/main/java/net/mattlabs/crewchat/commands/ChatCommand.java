@@ -121,15 +121,25 @@ public class ChatCommand extends BaseCommand {
     public void onStatus(CommandSender commandSender, String[] status) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
-            String statusStr = String.join(" ", status);
             Player player = (Player) commandSender;
-            // Make sure the status string doesn't have any syntax errors
-            try {
-                platform.player(player).sendMessage(crewChat.getMessages().statusSet(statusStr));
-                playerManager.setStatus(player, statusStr);
+            if (status.length == 0) {
+                try {
+                    platform.player(player).sendMessage(crewChat.getMessages().statusIs(playerManager.getStatus(player)));
+                }
+                catch (ParsingException e) {
+                    platform.player(player).sendMessage(crewChat.getMessages().statusSyntaxError());
+                }
             }
-            catch (ParsingException e) {
-                platform.player(player).sendMessage(crewChat.getMessages().statusSyntaxError());
+            else {
+                String statusStr = String.join(" ", status);
+                // Make sure the status string doesn't have any syntax errors
+                try {
+                    platform.player(player).sendMessage(crewChat.getMessages().statusSet(statusStr));
+                    playerManager.setStatus(player, statusStr);
+                }
+                catch (ParsingException e) {
+                    platform.player(player).sendMessage(crewChat.getMessages().statusSyntaxError());
+                }
             }
         }
     }

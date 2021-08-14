@@ -385,6 +385,15 @@ public class Messages {
         return chatHeader.append(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(statusSet, "status", serialize(status) + "<reset>"));
     }
 
+    @Comment("\nAppears when a player checks their status.\n" +
+            "Possible tags: <status>")
+    private String statusIs = "<white>Your status is: \"<status>\".";
+
+    public Component statusIs(String status) throws ParsingException {
+        //noinspection unchecked
+        return chatHeader.append(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(statusIs, "status", serialize(status) + "<reset>"));
+    }
+
     @Comment("\nAppears if a player's status contains a syntax error.")
     private String statusSyntaxError = "<white>Your status could not be set. Please check the syntax.";
 
