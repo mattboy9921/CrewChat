@@ -11,10 +11,12 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
+import net.mattlabs.crewchat.Mutee;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -73,8 +75,8 @@ public class ChatCommand extends BaseCommand {
                     platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
                 if (!playerManager.getMutedPlayerNames(player).isEmpty()) {
                     platform.player(player).sendMessage(crewChat.getMessages().mutedListHeader());
-                    for (String mutee : playerManager.getMutedPlayerNames(player))
-                        platform.player(player).sendMessage(crewChat.getMessages().mutedListEntry(mutee));
+                    for (Mutee mutee : playerManager.getMutedPlayers(player))
+                        platform.player(player).sendMessage(crewChat.getMessages().mutedListEntry(mutee.getName(), mutee.getTimeRemaining()));
                 }
             }
             else {
@@ -261,19 +263,30 @@ public class ChatCommand extends BaseCommand {
     public void onUnmute(CommandSender commandSender, String string) {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
-            Player player = (Player) commandSender; 
-            // Check if player exists
-            Player mutee = Bukkit.getPlayerExact(string);
-            if (mutee == null) platform.player(player).sendMessage(crewChat.getMessages().playerNoExist());
+            Player player = (Player) commandSender;
             // Check if unmuting self
-            else if (player.getName().equalsIgnoreCase(mutee.getName()))
+            if (player.getName().equalsIgnoreCase(string))
                 platform.player(player).sendMessage(crewChat.getMessages().cantUnmuteSelf());
             // Check if mutee already unmuted
-            else if (!playerManager.getMutedPlayerNames(player).contains(mutee.getName()))
-                platform.player(player).sendMessage(crewChat.getMessages().playerAlreadyUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+            else if (!playerManager.getMutedPlayerNames(player).contains(string)) {
+                // Check if mutee is online
+                if (Bukkit.getPlayerExact(string) == null) platform.player(player).sendMessage(crewChat.getMessages().playerNoExist());
+                else platform.player(player).sendMessage(crewChat.getMessages().playerAlreadyUnmuted(chat.getPlayerPrefix(Bukkit.getPlayerExact(string)), string));
+            }
+            // Mutee definitely muted
             else {
-                playerManager.removeMutedPlayer(player, mutee);
-                platform.player(player).sendMessage(crewChat.getMessages().playerUnmuted(chat.getPlayerPrefix(mutee), mutee.getName()));
+                // If mutee is offline
+                if (Bukkit.getPlayerExact(string) == null) {
+                    OfflinePlayer mutee = Bukkit.getOfflinePlayer(string);
+                    playerManager.removeMutedPlayer(player, mutee);
+                    platform.player(player).sendMessage(crewChat.getMessages().playerUnmuted(chat.getPlayerPrefix(player.getWorld().getName(), mutee), string));
+                }
+                // Mutee online
+                else {
+                    Player mutee = Bukkit.getPlayerExact(string);
+                    playerManager.removeMutedPlayer(player, mutee);
+                    platform.player(player).sendMessage(crewChat.getMessages().playerUnmuted(chat.getPlayerPrefix(mutee), string));
+                }
             }
         }
     }

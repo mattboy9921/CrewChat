@@ -216,6 +216,11 @@ public class Messages {
     @Comment("\nAppears in the chat info command.")
     private String clickToUnmute = "<bold><aqua>Click<reset> to unmute.";
 
+    // Time remaining
+    @Comment("\nAppears in the chat info command.\n" +
+            "Possibel tags: <time_remaining>")
+    private String timeRemaining = "Time remaining: <time_remaining>";
+
     public Component channelListHeader() {
         return Component.text("------------------------")
                 .color(GRAY)
@@ -261,11 +266,12 @@ public class Messages {
                 .color(GRAY);
     }
 
-    public Component mutedListEntry(String player) {
+    public Component mutedListEntry(String player, String timeRemaining) {
         return hyphenHeader
                 .append(Component.text(player)
                         .color(WHITE)
-                        .hoverEvent(HoverEvent.showText(MiniMessage.get().parse(clickToUnmute)))
+                        .hoverEvent(HoverEvent.showText(MiniMessage.get().parse(this.timeRemaining + "\n" + clickToUnmute,
+                                "time_remaining", timeRemaining)))
                         .clickEvent(ClickEvent.runCommand("/chat unmute " + player)));
     }
 

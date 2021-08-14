@@ -2,6 +2,7 @@ package net.mattlabs.crewchat;
 
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -37,6 +38,11 @@ public class Mutee {
 
     public LocalDateTime getTime() {
         return time;
+    }
+
+    public String getTimeRemaining() {
+        long seconds = Duration.between(LocalDateTime.now(), time.plusHours(24)).getSeconds();
+        return String.format("%d:%02d", seconds / 3600, (seconds % 3600) / 60);
     }
 
     public void updateTime() {
