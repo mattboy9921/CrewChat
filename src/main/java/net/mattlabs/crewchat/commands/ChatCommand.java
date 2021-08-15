@@ -5,6 +5,9 @@ import co.aikar.commands.BukkitCommandIssuer;
 import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.PaperCommandManager;
 import co.aikar.commands.annotation.*;
+import github.scarsz.discordsrv.DiscordSRV;
+import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
+import github.scarsz.discordsrv.dependencies.jda.api.entities.TextChannel;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -19,6 +22,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 @CommandAlias("chat|c")
 @CommandPermission("crewchat.chat")
@@ -44,7 +49,30 @@ public class ChatCommand extends BaseCommand {
         }));
 
         // Command Completions
+        // Channels
         paperCommandManager.getCommandCompletions().registerStaticCompletion("channels", channelManager.getChannelNames());
+
+        // Mentionable players/users
+        paperCommandManager.getCommandCompletions().registerAsyncCompletion("mentionable", c -> {
+            Player player = c.getPlayer();
+            String activeChannel = playerManager.getActiveChannel(player);
+
+            // In game channel
+            ArrayList<String> mentionable = new ArrayList<>();
+            for (Player subbedPlayer : playerManager.getSubscribedPlayers(activeChannel)) mentionable.add(subbedPlayer.getName());
+
+            // Discord channel
+            if (crewChat.getDiscordSRVEnabled()) {
+                if (channelManager.channelFromString(activeChannel).isExcludeFromDiscord()) {
+                    TextChannel discordChannel;
+                    if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel) == null) discordChannel = DiscordSRV.getPlugin().getMainTextChannel();
+                    else discordChannel = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel);
+
+                    for (Member member : discordChannel.getMembers()) mentionable.add(member.getEffectiveName());
+                }
+            }
+            return  mentionable;
+        });
 
         // Command Contexts
         paperCommandManager.getCommandContexts().registerContext(Channel.class, c -> new Channel(c.popFirstArg()));
@@ -340,6 +368,15 @@ public class ChatCommand extends BaseCommand {
             else
                 crewChat.getChatSender().sendChatMessage(player, channel.getName(), String.join(" ", message));
         }
+    }
+
+    @Subcommand("mention")
+    @Description("Mention a player in game or user on Discord.")
+    @CommandPermission("crewchat.chat.mention")
+    @CommandCompletion("@mentionable")
+    public void onMention(CommandSender commandSender, String[] mentioned) {
+        if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
+        else crewChat.getChatSender().sendChatMessage((Player) commandSender, String.join(" ", mentioned));
     }
 
     @HelpCommand
