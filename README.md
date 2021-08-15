@@ -31,7 +31,7 @@ CrewChat:
  - `/chat switch <channel>` - Switches player's active channel
  - `/chat mute <player>` - Mutes `<player>` for 24 hours
  - `/chat deafen` - Deafens player from all chat messages
- - `/chat send <channel> [message]` - Sends a message to a specified channel without switching to it.
+ - `/chat send <channel> [message]` - Sends a message to a specified channel without switching to it
  - `/chat mention <player>` - Mention a player in game or user on Discord
  - Alias: `/c`
  
