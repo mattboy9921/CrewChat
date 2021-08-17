@@ -520,6 +520,97 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/crewchat help")));
     }
 
+    // ** Info **
+
+    // Info Header
+    private transient String crewChatInfoHeader = "<white>Version <bold><version></bold> Info:";
+
+    public Component crewChatInfoHeader() {
+        return crewChatHeader.append(MiniMessage.get().parse(crewChatInfoHeader,
+                "version", CrewChat.getInstance().getDescription().getVersion()));
+    }
+
+    // Info Channels
+    private transient String crewChatChannelsLoaded = "<white><bold><channels></bold> channel(s) loaded.";
+
+    public Component crewChatChannelsLoaded(String channels) {
+        return hyphenHeader.append(MiniMessage.get().parse(crewChatChannelsLoaded, "channels", channels));
+    }
+
+    // Info Players
+    private transient String crewChatPlayersLoaded = "<white><bold><players></bold> player(s) loaded.";
+
+    public Component crewChatPlayersLoaded(String players) {
+        return hyphenHeader.append(MiniMessage.get().parse(crewChatPlayersLoaded, "players", players));
+    }
+
+    // Info Online Players
+    private transient String crewChatOnlinePlayersLoaded = "<white><bold><players></bold> online player(s) loaded.";
+
+    public Component crewChatOnlinePlayersLoaded(String players) {
+        return hyphenHeader.append(MiniMessage.get().parse(crewChatOnlinePlayersLoaded, "players", players));
+    }
+
+    // Info Discord Integration
+    private transient String crewChatDiscordIntegration = "<white>Discord integration enabled: <bold><enabled></bold>.";
+
+    public Component crewChatDiscordIntegration(Boolean enabled) {
+        return hyphenHeader.append(MiniMessage.get().parse(crewChatDiscordIntegration, "enabled", enabled ? "True" : "False"));
+    }
+
+    // Info
+    public Component crewChatInfo(int channelsLoaded, int playersLoaded, int onlinePlayersLoaded, boolean discordIntegration) {
+        return crewChatHeader.append(MiniMessage.get().parse(crewChatInfoHeader,
+                "version", CrewChat.getInstance().getDescription().getVersion())
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatChannelsLoaded + "\n", "channels", String.valueOf(channelsLoaded)))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatPlayersLoaded + "\n", "players", String.valueOf(playersLoaded)))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatOnlinePlayersLoaded + "\n", "players", String.valueOf(onlinePlayersLoaded)))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatDiscordIntegration, "enabled", discordIntegration ? "True" : "False")));
+    }
+
+    // ** Info Channel **
+    // Subscribers
+    private transient String crewChatChannelInfoSubscribers = "<white><bold><subscribers></bold> subscriber(s).";
+
+    // Auto-Subscribe
+    private transient String crewChatChannelInfoAutoSubscribe = "<white>Auto-Subscribe enabled: <bold><auto_subscribe>";
+
+    // Exclude From Discord
+    private transient String crewChatChannelInfoExcludeFromDiscord = "<white>Exclude from Discord enabled: <bold><exclude_from_discord>";
+
+    // Show Channel Name Discord
+    private transient String crewChatChannelInfoShowChannelNameDiscord = "<white>Show Channel Name on Discord enabled: <bold><show_channel_name_discord>";
+
+    // Channel Info
+    public Component crewChatChannelInfo(String name, String description, TextColor color, int subscribers, boolean isAutoSubscribe, boolean isExcludeFromDiscord, boolean isShowChannelNameDiscord) {
+
+        // Get closest color to hex code, remove underscores, capitalize first letter of each word
+        String closestColor = nearestTo(color).toString();
+        closestColor = closestColor.replaceAll("_", " ");
+        closestColor = WordUtils.capitalize(closestColor);
+
+        return crewChatHeader
+                .append(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", name))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(channelInfoName + "\n", "channel_name", name))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(channelInfoDescription + "\n", "channel_description", description))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(channelInfoColor + "\n", "channel_color", "<color:" + color + ">" + closestColor + " (" + color.asHexString() + ")"))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatChannelInfoSubscribers + "\n", "subscribers", String.valueOf(subscribers)))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatChannelInfoAutoSubscribe + "\n", "auto_subscribe", isAutoSubscribe ? "True" : "False"))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatChannelInfoExcludeFromDiscord + "\n", "exclude_from_discord", isExcludeFromDiscord ? "True" : "False"))
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(crewChatChannelInfoShowChannelNameDiscord, "show_channel_name_discord", isShowChannelNameDiscord ? "True" : "False"));
+    }
+
     // ** Help **
 
     // Help

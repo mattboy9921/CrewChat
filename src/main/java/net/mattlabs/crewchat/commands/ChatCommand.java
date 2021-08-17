@@ -59,7 +59,7 @@ public class ChatCommand extends BaseCommand {
 
             // In game channel
             ArrayList<String> mentionable = new ArrayList<>();
-            for (Player subbedPlayer : playerManager.getSubscribedPlayers(activeChannel)) mentionable.add(subbedPlayer.getName());
+            for (Player subbedPlayer : playerManager.getOnlineSubscribedPlayers(activeChannel)) mentionable.add(subbedPlayer.getName());
 
             // Discord channel
             if (crewChat.getDiscordSRVEnabled()) {
@@ -73,9 +73,6 @@ public class ChatCommand extends BaseCommand {
             }
             return  mentionable;
         });
-
-        // Command Contexts
-        paperCommandManager.getCommandContexts().registerContext(Channel.class, c -> new Channel(c.popFirstArg()));
     }
 
     @Default

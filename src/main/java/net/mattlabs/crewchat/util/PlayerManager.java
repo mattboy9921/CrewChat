@@ -118,6 +118,16 @@ public class PlayerManager {
 
     public ArrayList<Player> getSubscribedPlayers(String activeChannel) {
         ArrayList<Player> subscribedPlayers = new ArrayList<>();
+        for (Chatter chatter : chatters) {
+            if (chatter.isSubscribedTo(activeChannel)) {
+                subscribedPlayers.add(chatter.toPlayer());
+            }
+        }
+        return subscribedPlayers;
+    }
+
+    public ArrayList<Player> getOnlineSubscribedPlayers(String activeChannel) {
+        ArrayList<Player> subscribedPlayers = new ArrayList<>();
         for (Chatter chatter : onlineChatters) {
             if (chatter.isOnline() && chatter.isSubscribedTo(activeChannel)) {
                 subscribedPlayers.add(chatter.toPlayer());
@@ -217,5 +227,13 @@ public class PlayerManager {
 
     public void setDeafened(Player player, boolean deafen) {
         onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(player.getUniqueId()))).setDeafened(deafen);
+    }
+
+    public int getPlayerCount() {
+        return chatters.size();
+    }
+
+    public int getOnlinePlayerCount() {
+        return onlineChatters.size();
     }
 }

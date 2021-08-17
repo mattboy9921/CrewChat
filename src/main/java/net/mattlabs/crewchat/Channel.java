@@ -1,6 +1,8 @@
 package net.mattlabs.crewchat;
 
 
+import co.aikar.commands.BukkitCommandExecutionContext;
+import co.aikar.commands.contexts.ContextResolver;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -30,6 +32,11 @@ public class Channel {
         this.autoSubscribe = autoSubscribe;
         this.showChannelNameDiscord = showChannelNameDiscord;
         this.excludeFromDiscord = excludeFromDiscord;
+    }
+
+    // Context Resolver for ACF
+    public static ContextResolver<Channel, BukkitCommandExecutionContext> getContextResolver() {
+        return context -> new Channel(context.popFirstArg());
     }
 
     @Override

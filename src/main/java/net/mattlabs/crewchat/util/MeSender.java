@@ -26,7 +26,7 @@ public class MeSender implements Runnable {
         this.player = player;
         this.message = message;
         activeChannel = playerManager.getActiveChannel(player);
-        subscribedPlayers = playerManager.getSubscribedPlayers(activeChannel);
+        subscribedPlayers = playerManager.getOnlineSubscribedPlayers(activeChannel);
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
     }
 

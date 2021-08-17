@@ -77,7 +77,7 @@ public class ChatSender implements Runnable{
                 else discordChannelID = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(intendedChannel).getId();
                 excludeFromDiscord = channelManager.channelFromString(intendedChannel).isExcludeFromDiscord();
             }
-            subscribedPlayers = playerManager.getSubscribedPlayers(intendedChannel);
+            subscribedPlayers = playerManager.getOnlineSubscribedPlayers(intendedChannel);
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
             this.message = parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)));
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
@@ -108,7 +108,7 @@ public class ChatSender implements Runnable{
         for (Map.Entry<String, String> channelEntry : channelsMap.entrySet()) {
             if (channelEntry.getValue().equals(channel.getId())) {
                 channelCount++;
-                for (Player player : playerManager.getSubscribedPlayers(channelEntry.getKey()))
+                for (Player player : playerManager.getOnlineSubscribedPlayers(channelEntry.getKey()))
                     if (!subscribedPlayers.contains(player)) {
                         subscribedPlayers.add(player);
                     }

@@ -153,7 +153,10 @@ public class CrewChat extends JavaPlugin{
         discordSRVListener = new DiscordSRVListener();
         if (discordSRVEnabled) DiscordSRV.api.subscribe(discordSRVListener);
 
-        // Register Commands with ACF
+        // ACF Registrations
+        // Register Command Contexts
+        paperCommandManager.getCommandContexts().registerContext(Channel.class, Channel.getContextResolver());
+        // Register Commands
         paperCommandManager.registerCommand(new CrewChatCommand());
         paperCommandManager.registerCommand(new ChatCommand());
         paperCommandManager.registerCommand(new MeCommand());
