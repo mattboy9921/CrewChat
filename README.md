@@ -20,6 +20,8 @@ CrewChat:
  - `/crewchat` - Shows version
  - `/crewchat reload` - Reloads plugin
  - `/crewchat help` - Shows CrewChat command help
+ - `/crewchat info` - Shows CrewChat general info
+ - `/crewchat info channel <channel>` - Shows all information about specified channel
  - Alias: `/cc`
  
  Chat:
