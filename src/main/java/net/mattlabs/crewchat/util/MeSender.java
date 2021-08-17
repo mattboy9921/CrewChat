@@ -2,9 +2,7 @@ package net.mattlabs.crewchat.util;
 
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.util.DiscordUtil;
-import github.scarsz.discordsrv.util.WebhookUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import org.bukkit.entity.Player;
 
@@ -26,7 +24,7 @@ public class MeSender implements Runnable {
         playerManager.updateMutedPlayers();
 
         this.player = player;
-        this.message = message;
+        this.message = MessageUtil.sanitizeMessage(message);
         intendedChannel = playerManager.getActiveChannel(player);
         subscribedPlayers = playerManager.getOnlineSubscribedPlayers(intendedChannel);
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);

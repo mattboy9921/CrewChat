@@ -9,6 +9,7 @@ import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
+import net.mattlabs.crewchat.util.MessageUtil;
 import org.apache.commons.lang.WordUtils;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
@@ -16,7 +17,6 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
-import static net.kyori.adventure.text.minimessage.transformation.TransformationType.*;
 
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ConfigSerializable
@@ -381,7 +381,7 @@ public class Messages {
 
     public Component statusSet(String status) throws ParsingException {
         //noinspection unchecked
-        return chatHeader.append(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(statusSet, "status", serialize(status) + "<reset>"));
+        return chatHeader.append(MiniMessage.get().parse(MessageUtil.sanitizeMessageColor(statusSet), "status", serialize(status) + "<reset>"));
     }
 
     @Comment("\nAppears when a player checks their status.\n" +
@@ -390,7 +390,7 @@ public class Messages {
 
     public Component statusIs(String status) throws ParsingException {
         //noinspection unchecked
-        return chatHeader.append(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(statusIs, "status", serialize(status) + "<reset>"));
+        return chatHeader.append(MiniMessage.get().parse(MessageUtil.sanitizeMessageColor(statusIs), "status", serialize(status) + "<reset>"));
     }
 
     @Comment("\nAppears if a player's status contains a syntax error.")
