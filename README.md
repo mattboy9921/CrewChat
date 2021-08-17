@@ -63,5 +63,7 @@ CrewChat:
  - `crewchat.chat.info` -  Allows player to run `/chat info`
  - `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
  - `crewchat.reload` - Allows player to use `/crewchat reload`
+ - `crewchat.info` - Allows player to use `/crewchat info`
+ - `crewchat.info.channel` - Allows player to use `/crewchat info channel <channel>`
  
 Tested working on Paper 1.8.0-1.16.5. Not tested but should support 1.17.1.
