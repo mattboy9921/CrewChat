@@ -290,7 +290,6 @@ public class Messages {
     // Color
     private transient String channelInfoColor = "<white>Color: <channel_color>";
 
-    // TODO: Add version of this command to CC commands with all info for a channel
     public Component channelInfo(String name, String description, TextColor color) {
         // &7[&2Chat&7] &fChannel &l%name%&r info:
         // &2- &fName: %name%
