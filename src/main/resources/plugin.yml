@@ -11,15 +11,40 @@ loadbefore:
   - DiscordSRV
 
 permissions:
-  crewchat.chat.subscribe.channel:
-    description: Allows player to subscribe to [channel].
-  crewchat.chat.unsubscribe.channel:
-    description: Allows player to unsubscribe to [channel].
-  crewchat.chat.switch.channel:
-    description: Allows player to switch to [channel] as active channel.
-  crewchat.speak.channel:
-    description: Allows player to speak in [channel].
-  crewchat.reload:
-    description: Allows player to reload configuration.
+  crewchat.chat:
+    description: Allows player to use /chat
+  crewchat.me:
+    description: Allows player to use /me
+  crewchat.pm:
+    description: Allows player to use /msg and /reply
+
+  crewchat.chat.mute:
+    description: Allows player to mute/unmute players
+  crewchat.chat.deafen:
+    description: Allows player to deafen/undeafen themself
+  crewchat.chat.send:
+    description: Allows player to use /chat send
+  crewchat.chat.mention:
+    description: Allows player to use /chat mention
   crewchat.chat.info:
-    description: Allows player to run /chat info.
+    description: Allows players to use /chat info
+  crewchat.chat.color:
+    description: Allows player to use color codes/MiniMessage tags in chat
+
+  crewchat.chat.subscribe.<channel>:
+    description: Allows player to subscribe to <channel>
+  crewchat.chat.unsubscribe.<channel>:
+    description: Allows player to unsubscribe from <channel>
+  crewchat.chat.switch.<channel>:
+    description: Allows player to switch <channel> as active channel
+  crewchat.speak.<channel>:
+    description: Allows player to speak in <channel>
+
+  crewchat.use:
+    description: Allows player to use /crewchat
+  crewchat.broadcast:
+    description: Allows player to use /broadcast
+  crewchat.info:
+    description: Allows player to use /crewchat info
+  crewchat.reload:
+    description: Allows player to use /crewchat reload

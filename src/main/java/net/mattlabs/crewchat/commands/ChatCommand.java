@@ -85,11 +85,11 @@ public class ChatCommand extends BaseCommand {
     }
 
     @Subcommand("info")
+    @CommandPermission("crewchat.chat.info")
     public class Info extends BaseCommand {
         
         @Default
         @Description("Lists all channels, active channel and subscribed channels.")
-        @CommandPermission("crewchat.chat.info")
         public void onInfo(CommandSender commandSender) {
             if (commandSender instanceof Player) {
                 Player player = (Player) commandSender; 
@@ -116,7 +116,6 @@ public class ChatCommand extends BaseCommand {
 
         @Subcommand("channel")
         @Description("Lists info about specified channel.")
-        @CommandPermission("crewchat.chat.info.channel")
         @CommandCompletion("@channels")
         public void onChannel(CommandSender commandSender, Channel channel) {
             // Check if channel exists

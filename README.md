@@ -54,23 +54,30 @@ CrewChat:
  - Alias: `/r`
  
 **Permissions**
- - `crewchat.use` - Allows player to use `/crewchat`
- - `crewchat.chat` - Allows player to use `/chat`
- - `crewchat.me` - Allows player to use `/me`
- - `crewchat.pm` - Allows player to use `/msg` and `/reply`
- - `crewchat.broadcast` - Allows player to use `/broadcast`
- - `crewchat.chat.subscribe.<channel>` - Allows player to subscribe to `<channel>`
- - `crewchat.chat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
- - `crewchat.chat.switch.<channel>` - Allows player to switch `<channel>` as active channel
- - `crewchat.chat.mute` - Allows player to mute/unmute players
- - `crewchat.chat.deafen` - Allows player to deafen/undeafen themself
- - `crewchat.chat.send` - Allows player to use `/chat send`
- - `crewchat.chat.mention` - Allows player to use `/chata mention`
- - `crewchat.chat.info` -  Allows player to run `/chat info`
- - `crewchat.chat.color` - Allows player to use color codes/MiniMessage tags in chat
- - `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
- - `crewchat.reload` - Allows player to use `/crewchat reload`
- - `crewchat.info` - Allows player to use `/crewchat info`
- - `crewchat.info.channel` - Allows player to use `/crewchat info channel <channel>`
+
+General:
+- `crewchat.chat` - Allows player to use `/chat`
+- `crewchat.me` - Allows player to use `/me`
+- `crewchat.pm` - Allows player to use `/msg` and `/reply`
+
+Chat:
+- `crewchat.chat.mute` - Allows player to mute/unmute players
+- `crewchat.chat.deafen` - Allows player to deafen/undeafen themself
+- `crewchat.chat.send` - Allows player to use `/chat send`
+- `crewchat.chat.mention` - Allows player to use `/chata mention`
+- `crewchat.chat.info` -  Allows player to run `/chat info`
+- `crewchat.chat.color` - Allows player to use color codes/MiniMessage tags in chat
+
+Channels:
+- `crewchat.chat.subscribe.<channel>` - Allows player to subscribe to `<channel>`
+- `crewchat.chat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
+- `crewchat.chat.switch.<channel>` - Allows player to switch `<channel>` as active channel
+- `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
+
+Administrative:
+- `crewchat.use` - Allows player to use `/crewchat`
+- `crewchat.broadcast` - Allows player to use `/broadcast`
+- `crewchat.info` - Allows player to use `/crewchat info`
+- `crewchat.reload` - Allows player to use `/crewchat reload`
  
 Tested working on Paper 1.8.0-1.16.5. Not tested but should support 1.17.1.

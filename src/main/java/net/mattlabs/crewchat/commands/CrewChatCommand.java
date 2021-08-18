@@ -39,11 +39,11 @@ public class CrewChatCommand extends BaseCommand {
     }
 
     @Subcommand("info")
+    @CommandPermission("crewchat.info")
     public class Info extends BaseCommand {
 
         @Default
         @Description("List all info for the CrewChat plugin.")
-        @CommandPermission("crewchat.info")
         public void onInfo(CommandSender commandSender) {
             if (commandSender instanceof Player) {
                 Player player = (Player) commandSender;
@@ -63,7 +63,6 @@ public class CrewChatCommand extends BaseCommand {
 
         @Subcommand("channel")
         @Description("Lists info about specified channel.")
-        @CommandPermission("crewchat.info.channel")
         @CommandCompletion("@channels")
         public void onChannel(CommandSender commandSender, @Optional Channel channel) {
             if (channel == null) {
