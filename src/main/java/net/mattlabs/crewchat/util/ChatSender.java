@@ -36,7 +36,7 @@ public class ChatSender implements Runnable{
     private final String notificationSound;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
-    private boolean isDiscordMessage, excludeFromDiscord;
+    private boolean allowColor, isDiscordMessage, excludeFromDiscord;
 
     public ChatSender(){
         // Check version for notification sound
@@ -53,6 +53,7 @@ public class ChatSender implements Runnable{
     public void sendChatMessage(Player player, String intendedChannel, String message) {
         playerManager.updateMutedPlayers();
         isDiscordMessage = false;
+        allowColor = player.hasPermission("crewchat.chat.color") || crewChat.getConfigCC().isAllowColor();
 
         if (playerManager.isOnline(player)) {
             this.player = player;
@@ -71,7 +72,7 @@ public class ChatSender implements Runnable{
             subscribedPlayers = playerManager.getOnlineSubscribedPlayers(intendedChannel);
             mentionedPlayers = MessageUtil.getMentionedPlayers(message, subscribedPlayers);
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
-            this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, false);
+            this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
@@ -82,6 +83,7 @@ public class ChatSender implements Runnable{
 
     public void sendDiscordMessage(Member sender, TextChannel channel, String message) {
         isDiscordMessage = true;
+        allowColor = false;
 
         prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
         name = sender.getEffectiveName();
@@ -111,12 +113,12 @@ public class ChatSender implements Runnable{
         if (channelCount > 1) {
             intendedChannel = "<color:#7289DA>(Discord)<reset> " + channel.getName();
             channelColor = NamedTextColor.WHITE;
-            this.message = MessageUtil.parseMessage(message, NamedTextColor.WHITE, subscribedPlayers, discordChannelID, false);
+            this.message = MessageUtil.parseMessage(message, NamedTextColor.WHITE, subscribedPlayers, discordChannelID, allowColor);
         }
         else {
             intendedChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
-            this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, false);
+            this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
         }
 
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);

@@ -40,6 +40,9 @@ public class Config {
     @Comment("\nShow channel names on Discord to in game messages.")
     private boolean showDiscordChannelNameInGame = false;
 
+    @Comment("\nAllow color codes/MiniMessage tags in chat globally.")
+    private boolean allowColor = false;
+
     @Setting(value = "channels")
     @Comment("\nChannel Configuration\n" +
             "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
@@ -52,6 +55,11 @@ public class Config {
     public boolean isShowDiscordChannelNameInGame() {
         return showDiscordChannelNameInGame;
     }
+
+    public boolean isAllowColor() {
+        return allowColor;
+    }
+
     public List<Channel> getChannels() {
 
         // Convert map to arraylist
