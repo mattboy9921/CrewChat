@@ -65,32 +65,47 @@ public class CrewChatCommand extends BaseCommand {
         @Description("Lists info about specified channel.")
         @CommandPermission("crewchat.info.channel")
         @CommandCompletion("@channels")
-        public void onChannel(CommandSender commandSender, Channel channel) {
-            // Check if channel exists
-            if (!channelManager.getChannels().contains(channel)) {
-                if (commandSender instanceof Player)
-                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
-                else CrewChat.getInstance().getLogger().info("Channel " + channel.getName() + " doesn't exist!");
+        public void onChannel(CommandSender commandSender, @Optional Channel channel) {
+            if (channel == null) {
+                if (commandSender instanceof Player) {
+                    Player player = (Player) commandSender;
+                    platform.player(player).sendMessage(crewChat.getMessages().crewChatChannelListHeader());
+                    for (Channel listChannel : channelManager.getChannels())
+                        platform.player(player).sendMessage(crewChat.getMessages().crewChatChannelListEntry(listChannel.getName(), listChannel.getTextColor()));
+                }
+                else {
+                    CrewChat.getInstance().getLogger().info("Channel list: (Run /crewchat info channel [channel] for more info)");
+                    for (Channel listChannel : channelManager.getChannels())
+                        CrewChat.getInstance().getLogger().info(" - " + listChannel.getName());
+                }
             }
             else {
-                Channel requestedChannel = channelManager.channelFromString(channel.getName());
+                // Check if channel exists
+                if (!channelManager.getChannels().contains(channel)) {
+                    if (commandSender instanceof Player)
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
+                    else CrewChat.getInstance().getLogger().info("Channel " + channel.getName() + " doesn't exist!");
+                }
+                else {
+                    Channel requestedChannel = channelManager.channelFromString(channel.getName());
 
-                if (commandSender instanceof Player)
-                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().crewChatChannelInfo(requestedChannel.getName(),
-                            requestedChannel.getDescription(),
-                            requestedChannel.getTextColor(),
-                            playerManager.getSubscribedPlayers(requestedChannel.getName()).size(),
-                            requestedChannel.isAutoSubscribe(),
-                            requestedChannel.isExcludeFromDiscord(),
-                            requestedChannel.isShowChannelNameDiscord()));
-                else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
-                        + " info: " +
-                        "\n - Name: " + requestedChannel.getName() +
-                        "\n - Chat Color: " + requestedChannel.getTextColor().toString() +
-                        "\n - Subscribed players: " + playerManager.getSubscribedPlayers(requestedChannel.getName()).size() +
-                        "\n - Auto Subscribe: " + (requestedChannel.isAutoSubscribe() ? "True" : "False") +
-                        "\n - Exclude from Discord: " + (requestedChannel.isExcludeFromDiscord() ? "True" : "False") +
-                        "\n - Show Channel Name on Discord: " + (requestedChannel.isShowChannelNameDiscord() ? "True" : "False"));
+                    if (commandSender instanceof Player)
+                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().crewChatChannelInfo(requestedChannel.getName(),
+                                requestedChannel.getDescription(),
+                                requestedChannel.getTextColor(),
+                                playerManager.getSubscribedPlayers(requestedChannel.getName()).size(),
+                                requestedChannel.isAutoSubscribe(),
+                                requestedChannel.isExcludeFromDiscord(),
+                                requestedChannel.isShowChannelNameDiscord()));
+                    else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
+                            + " info: " +
+                            "\n - Name: " + requestedChannel.getName() +
+                            "\n - Chat Color: " + requestedChannel.getTextColor().toString() +
+                            "\n - Subscribed players: " + playerManager.getSubscribedPlayers(requestedChannel.getName()).size() +
+                            "\n - Auto Subscribe: " + (requestedChannel.isAutoSubscribe() ? "True" : "False") +
+                            "\n - Exclude from Discord: " + (requestedChannel.isExcludeFromDiscord() ? "True" : "False") +
+                            "\n - Show Channel Name on Discord: " + (requestedChannel.isShowChannelNameDiscord() ? "True" : "False"));
+                }
             }
         }
     }

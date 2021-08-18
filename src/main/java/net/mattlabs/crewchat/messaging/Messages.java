@@ -572,6 +572,39 @@ public class Messages {
     }
 
     // ** Info Channel **
+    // Base command
+    // Header
+    public Component crewChatChannelListHeader() {
+        return Component.text("----------------------")
+                .color(GRAY)
+                .append(Component.text("[")
+                        .color(DARK_GRAY))
+                .append(Component.text("CrewChat")
+                        .color(DARK_GREEN))
+                .append(Component.text("]")
+                        .color(DARK_GRAY))
+                .append(Component.text("----------------------")
+                        .color(GRAY))
+                .append(Component.text(channelListHeader)
+                        .color(GRAY));
+    }
+
+    // Channel Entry
+    public Component crewChatChannelListEntry(String name, TextColor textColor) {
+        return Component.text(" - ")
+                .color(DARK_GREEN)
+                .append(Component.text(name)
+                        .color(textColor)
+                        .decoration(BOLD, true)
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text("Click")
+                                        .color(AQUA)
+                                        .decoration(BOLD, true)
+                                        .append(Component.text(" for more info.")
+                                                .color(WHITE))))
+                        .clickEvent(ClickEvent.runCommand("/crewchat info channel " + name)));
+    }
+
     // Subscribers
     private transient String crewChatChannelInfoSubscribers = "<white><bold><subscribers></bold> subscriber(s).";
 
