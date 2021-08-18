@@ -35,6 +35,7 @@ public class CrewChat extends JavaPlugin{
 
     private ChatSender chatSender;
     private MeSender meSender;
+    private BroadcastSender broadcastSender;
 
     private static Chat chat = null;
     private BukkitAudiences platform;
@@ -143,6 +144,7 @@ public class CrewChat extends JavaPlugin{
         // Load Senders
         chatSender = new ChatSender();
         meSender = new MeSender();
+        broadcastSender = new BroadcastSender();
 
         // Register Listeners
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
@@ -160,6 +162,7 @@ public class CrewChat extends JavaPlugin{
         paperCommandManager.registerCommand(new CrewChatCommand());
         paperCommandManager.registerCommand(new ChatCommand());
         paperCommandManager.registerCommand(new MeCommand());
+        paperCommandManager.registerCommand(new BroadcastCommand());
         paperCommandManager.registerCommand(new MsgCommand());
         paperCommandManager.registerCommand(new ReplyCommand());
 
@@ -210,6 +213,10 @@ public class CrewChat extends JavaPlugin{
 
     public MeSender getMeSender() {
         return meSender;
+    }
+
+    public BroadcastSender getBroadcastSender() {
+        return broadcastSender;
     }
 
     public boolean getDiscordSRVEnabled() {

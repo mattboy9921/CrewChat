@@ -664,6 +664,17 @@ public class Messages {
         return MiniMessage.get().parse("<" + textColor.toString() + "><italic>* " + playerName + " " + message + " *");
     }
 
+    // *** Broadcast ***
+
+    @Comment("\nThis is the format used before every chat message sent.")
+    private String broadcastMessageHeader = "<gray>[<dark_green>Broadcast<gray>] <white>";
+
+    public Component broadcastMessage(String message) {
+        // [Broadcast] <message>
+        return MiniMessage.get().parse(broadcastMessageHeader)
+                .append(MiniMessage.get().parse(message));
+    }
+
     // *** Private Message ***
 
     // PM Header
