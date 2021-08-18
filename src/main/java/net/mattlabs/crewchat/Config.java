@@ -37,28 +37,28 @@ public class Config {
     @Comment("\nEnable DiscordSRV integration.")
     private boolean enableDiscordSRV = false;
 
-    @Comment("\nShow channel names on Discord to in game messages.")
-    private boolean showDiscordChannelNameInGame = false;
-
-    @Comment("\nAllow color codes/MiniMessage tags in chat globally.")
-    private boolean allowColor = false;
-
-    @Setting(value = "channels")
-    @Comment("\nChannel Configuration\n" +
-            "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
-    private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", "Global chat channel", NamedTextColor.WHITE, true, false, false)));
-
     public boolean isEnableDiscordSRV() {
         return enableDiscordSRV;
     }
+
+    @Comment("\nShow channel names on Discord to in game messages.")
+    private boolean showDiscordChannelNameInGame = false;
 
     public boolean isShowDiscordChannelNameInGame() {
         return showDiscordChannelNameInGame;
     }
 
+    @Comment("\nAllow color codes/MiniMessage tags in chat globally.")
+    private boolean allowColor = false;
+
     public boolean isAllowColor() {
         return allowColor;
     }
+
+    @Setting(value = "channels")
+    @Comment("\nChannel Configuration\n" +
+            "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
+    private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", "Global chat channel", NamedTextColor.WHITE, true, false, false)));
 
     public List<Channel> getChannels() {
 
