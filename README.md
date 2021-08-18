@@ -7,6 +7,7 @@ CrewChat is a chat plugin developed for the Crew Craft Server.
  - Chat channels
  - Permissions
  - Private messages
+ - Broadcast messages
  - RAW messages with hover and click actions
  - Support for clickable links in chat
  - Player info/status messages
@@ -39,6 +40,10 @@ CrewChat:
  
  Me:
  - `/me <message>` - Sends third person chat message
+
+ Broadcast:
+ - `/broadcast <message>` - Sends a message to every player online
+ - Alias: `/bc`, `/yell`
  
  Msg:
  - `/msg <player> <message>` - Sends a private message to a player
@@ -53,6 +58,7 @@ CrewChat:
  - `crewchat.chat` - Allows player to use `/chat`
  - `crewchat.me` - Allows player to use `/me`
  - `crewchat.pm` - Allows player to use `/msg` and `/reply`
+ - `crewchat.broadcast` - Allows player to use `/broadcast`
  - `crewchat.chat.subscribe.<channel>` - Allows player to subscribe to `<channel>`
  - `crewchat.chat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
  - `crewchat.chat.switch.<channel>` - Allows player to switch `<channel>` as active channel
