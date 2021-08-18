@@ -67,6 +67,7 @@ CrewChat:
  - `crewchat.chat.send` - Allows player to use `/chat send`
  - `crewchat.chat.mention` - Allows player to use `/chata mention`
  - `crewchat.chat.info` -  Allows player to run `/chat info`
+ - `crewchat.chat.color` - Allows player to use color codes/MiniMessage tags in chat
  - `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
  - `crewchat.reload` - Allows player to use `/crewchat reload`
  - `crewchat.info` - Allows player to use `/crewchat info`
