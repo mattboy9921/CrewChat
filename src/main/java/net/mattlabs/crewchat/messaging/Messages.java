@@ -649,7 +649,7 @@ public class Messages {
 
     public Component crewChatChannelNoExist(String name) {
         // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
-        return crewChatHeader.append(MiniMessage.get().parse(channelNoExist, "channel_name", name));
+        return crewChatHeader.append(MiniMessage.get().parse(crewChatChannelNoExist, "channel_name", name));
     }
 
     // Property No Exist
