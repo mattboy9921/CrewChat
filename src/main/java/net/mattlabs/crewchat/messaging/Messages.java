@@ -72,7 +72,7 @@ public class Messages {
                     .color(BLUE)
                     .hoverEvent(HoverEvent.showText(
                         Component.text("Click")
-                            .color(AQUA)
+                            .color(DARK_GREEN)
                             .decoration(BOLD, true)
                             .append(Component.text(" here for help.")
                                 .color(WHITE)
@@ -245,7 +245,7 @@ public class Messages {
                         .decoration(BOLD, true)
                         .hoverEvent(HoverEvent.showText(
                                 Component.text("Click")
-                                        .color(AQUA)
+                                        .color(DARK_GREEN)
                                         .decoration(BOLD, true)
                                         .append(Component.text(" for more info.")
                                                 .color(WHITE))))
@@ -511,7 +511,7 @@ public class Messages {
                     .decoration(BOLD, true)
                     .hoverEvent(HoverEvent.showText(
                         Component.text("Click")
-                            .color(AQUA)
+                            .color(DARK_GREEN)
                             .decoration(BOLD, true)
                             .append(Component.text(" here for help.")
                                 .color(WHITE)
@@ -598,7 +598,7 @@ public class Messages {
                         .decoration(BOLD, true)
                         .hoverEvent(HoverEvent.showText(
                                 Component.text("Click")
-                                        .color(AQUA)
+                                        .color(DARK_GREEN)
                                         .decoration(BOLD, true)
                                         .append(Component.text(" for more info.")
                                                 .color(WHITE))))
@@ -876,7 +876,7 @@ public class Messages {
     // Click to run
     private transient Component clickToRun =
             Component.text("Click")
-                .color(AQUA)
+                .color(DARK_GREEN)
                 .decoration(BOLD, true)
                 .append(Component.text(" to run.")
                     .decoration(BOLD, false)
