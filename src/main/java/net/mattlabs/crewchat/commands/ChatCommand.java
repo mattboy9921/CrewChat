@@ -49,9 +49,6 @@ public class ChatCommand extends BaseCommand {
         }));
 
         // Command Completions
-        // Channels
-        paperCommandManager.getCommandCompletions().registerStaticCompletion("channels", channelManager.getChannelNames());
-
         // Mentionable players/users
         paperCommandManager.getCommandCompletions().registerAsyncCompletion("mentionable", c -> {
             Player player = c.getPlayer();

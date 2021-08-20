@@ -13,11 +13,26 @@ public class ChannelManager {
 
     private ArrayList<Channel> channels  = new ArrayList<>();
 
+    private void loadChannel(Channel channel) {
+        Config config = configurateManager.get("config.conf");
+        ArrayList<Channel> channels = (ArrayList<Channel>) config.getChannels();
+        for (Channel listChannel : channels)
+            if (!this.channels.contains(listChannel)) {
+                this.channels.add(channel);
+                CrewChat.getInstance().getLogger().info("Channel \"" + channel.getName() + "\" added!");
+            }
+    }
+
     public void loadChannels() {
         Config config = configurateManager.get("config.conf");
         channels = (ArrayList<Channel>) config.getChannels();
         for (Channel channel : channels)
             CrewChat.getInstance().getLogger().info("Channel \"" + channel.getName() + "\" added!");
+    }
+
+    public void reloadChannel(Channel channel) {
+        channels.remove(channel);
+        loadChannel(channel);
     }
 
     public void reloadChannels() {

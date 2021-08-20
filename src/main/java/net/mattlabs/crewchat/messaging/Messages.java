@@ -643,6 +643,39 @@ public class Messages {
                 .append(MiniMessage.get().parse(crewChatChannelInfoShowChannelNameDiscord, "show_channel_name_discord", isShowChannelNameDiscord ? "True" : "False"));
     }
 
+    // ** Set **
+    // Channel No Exist
+    private transient String crewChatChannelNoExist = "<white>Channel <bold><channel_name></bold> doesn't exist!";
+
+    public Component crewChatChannelNoExist(String name) {
+        // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
+        return crewChatHeader.append(MiniMessage.get().parse(channelNoExist, "channel_name", name));
+    }
+
+    // Property No Exist
+    private transient String crewChatPropertyNoExist = "<white>Property <bold><property></bold> does not exist!";
+
+    public Component crewChatPropertyNoExist(String property) {
+        return crewChatHeader.append(MiniMessage.get().parse(crewChatPropertyNoExist, "property", property));
+    }
+
+    // Value Incorrect
+    private transient String crewChatValueIncorrect = "<white>Value <bold><value></bold> is incorrect!";
+
+    public Component crewChatValueIncorrect(String value) {
+        return crewChatHeader.append(MiniMessage.get().parse(crewChatPropertyNoExist, "value", value));
+    }
+
+    // Property Changed
+    private transient String crewChatPropertyChanged = "<white>Channel <bold><channel></bold> property <bold><property></bold> has been changed to <bold><value></bold>.";
+
+    public Component crewChatPropertyChanged(String channel, String property, String value) {
+        return crewChatHeader.append(MiniMessage.get().parse(crewChatPropertyChanged,
+                "channel", channel,
+                "property", property,
+                "value", value));
+    }
+
     // ** Help **
 
     // Help

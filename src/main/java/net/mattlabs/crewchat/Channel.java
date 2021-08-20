@@ -68,4 +68,28 @@ public class Channel {
     public boolean isExcludeFromDiscord() {
         return excludeFromDiscord;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTextColor(TextColor textColor) {
+        this.textColor = textColor;
+    }
+
+    public void setAutoSubscribe(boolean autoSubscribe) {
+        this.autoSubscribe = autoSubscribe;
+    }
+
+    public void setShowChannelNameDiscord(boolean showChannelNameDiscord) {
+        this.showChannelNameDiscord = showChannelNameDiscord;
+    }
+
+    public void setExcludeFromDiscord(boolean excludeFromDiscord) {
+        this.excludeFromDiscord = excludeFromDiscord;
+    }
 }
