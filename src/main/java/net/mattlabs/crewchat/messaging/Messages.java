@@ -643,6 +643,42 @@ public class Messages {
                 .append(MiniMessage.get().parse(crewChatChannelInfoShowChannelNameDiscord, "show_channel_name_discord", isShowChannelNameDiscord ? "True" : "False"));
     }
 
+    // ** Info Player **
+    // Header
+    private transient String crewChatInfoPlayerHeader = "<white>Player info for <bold><player></bold>:";
+
+    public Component crewChatInfoPlayerHeader(String player) {
+        return crewChatHeader.append(MiniMessage.get().parse(crewChatInfoPlayerHeader, "player", player));
+    }
+
+    // Subscribed Channels Header
+    private transient String crewChatChannelListHeader = "<gray>Subscribed channel(s):";
+
+    public Component crewChatChannelListHeaderSmall() {
+        return MiniMessage.get().parse(crewChatChannelListHeader);
+    }
+
+    // Active Channel
+    private transient String crewChatActiveChannel = "<gray>Active channel: <active_channel>";
+
+    public Component crewChatActiveChannel(String activeChannel, TextColor textColor) {
+        return MiniMessage.get().parse(crewChatActiveChannel, "active_channel", "<" + textColor.toString() + "><bold>" + activeChannel + "<reset><gray>");
+    }
+
+    // Status
+    private transient String crewChatStatus = "<gray>Status: <status>";
+
+    public Component crewChatStatus(String status) {
+        return MiniMessage.get().parse(crewChatStatus, "status", MessageUtil.sanitizeMessageColor(status));
+    }
+
+    // Mute Header
+    private transient String crewChatMuteHeader = "<gray>Muted player(s):";
+
+    public Component crewChatMuteHeader() {
+        return MiniMessage.get().parse(crewChatMuteHeader);
+    }
+
     // ** Set **
     // Channel No Exist
     private transient String crewChatChannelNoExist = "<white>Channel <bold><channel_name></bold> doesn't exist!";

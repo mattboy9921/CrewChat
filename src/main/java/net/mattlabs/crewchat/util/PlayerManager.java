@@ -50,6 +50,10 @@ public class PlayerManager {
     }
 
     public boolean playerExists(Player player) {
+        return playerExists((OfflinePlayer) player);
+    }
+
+    public boolean playerExists(OfflinePlayer player) {
         if (chatters == null) return false;
         for (Chatter chatter : chatters) {
             if (chatter.getUuid().equals(player.getUniqueId())) return true;
@@ -99,6 +103,10 @@ public class PlayerManager {
     }
 
     public String getActiveChannel(Player player) {
+        return getActiveChannel((OfflinePlayer) player);
+    }
+
+    public String getActiveChannel(OfflinePlayer player) {
         return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getActiveChannel();
     }
 
@@ -113,6 +121,10 @@ public class PlayerManager {
     }
 
     public List<String> getSubscribedChannels(Player player) {
+        return getSubscribedChannels((OfflinePlayer) player);
+    }
+
+    public List<String> getSubscribedChannels(OfflinePlayer player) {
         return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getSubscribedChannels();
     }
 
@@ -147,14 +159,26 @@ public class PlayerManager {
     }
 
     public String getStatus(Player player) {
+        return getStatus((OfflinePlayer) player);
+    }
+
+    public String getStatus(OfflinePlayer player) {
         return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getStatus();
     }
 
     public ArrayList<Mutee> getMutedPlayers(Player player) {
+        return getMutedPlayers((OfflinePlayer) player);
+    }
+
+    public ArrayList<Mutee> getMutedPlayers(OfflinePlayer player) {
         return chatters.get(chatters.indexOf(new Chatter(player.getUniqueId()))).getMutedPlayers();
     }
 
     public ArrayList<String> getMutedPlayerNames(Player player) {
+        return getMutedPlayerNames((OfflinePlayer) player);
+    }
+
+    public ArrayList<String> getMutedPlayerNames(OfflinePlayer player) {
         ArrayList<String> mutedPlayerNames = new ArrayList<>();
         chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getMutedPlayers().forEach(mutee ->
                 mutedPlayerNames.add(mutee.getName()));
@@ -235,5 +259,11 @@ public class PlayerManager {
 
     public int getOnlinePlayerCount() {
         return onlineChatters.size();
+    }
+
+    public ArrayList<String> getPlayerNames() {
+        ArrayList<String> playerNames = new ArrayList<>();
+        chatters.forEach(chatter -> playerNames.add(Bukkit.getOfflinePlayer(chatter.getUuid()).getName()));
+        return playerNames;
     }
 }

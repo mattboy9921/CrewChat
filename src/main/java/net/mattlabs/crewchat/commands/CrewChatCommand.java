@@ -9,9 +9,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
+import net.mattlabs.crewchat.Mutee;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.mattlabs.crewchat.util.TextColorSerializer;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -62,6 +65,8 @@ public class CrewChatCommand extends BaseCommand {
             else if (type.equals(TextColor.class)) return NamedTextColor.NAMES.keys();
             else return new ArrayList<>();
         });
+
+        crewChat.getPaperCommandManager().getCommandCompletions().registerAsyncCompletion("chatters", context -> playerManager.getPlayerNames());
     }
 
     @Default
@@ -148,6 +153,34 @@ public class CrewChatCommand extends BaseCommand {
                             "\n - Auto Subscribe: " + (requestedChannel.isAutoSubscribe() ? "True" : "False") +
                             "\n - Exclude from Discord: " + (requestedChannel.isExcludeFromDiscord() ? "True" : "False") +
                             "\n - Show Channel Name on Discord: " + (requestedChannel.isShowChannelNameDiscord() ? "True" : "False"));
+                }
+            }
+        }
+
+        @Subcommand("player")
+        @Description("Lists info about specified player.")
+        @CommandCompletion("@chatters")
+        public void onChannel(CommandSender commandSender, String player) {
+            OfflinePlayer requestedPlayer = Bukkit.getOfflinePlayer(player);
+            if (playerManager.playerExists(requestedPlayer)) {
+
+                // Header
+                platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatInfoPlayerHeader(requestedPlayer.getName()));
+                // Channel Header
+                platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatChannelListHeaderSmall());
+                // Channel Entry
+                for (String channel : playerManager.getSubscribedChannels(requestedPlayer))
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatChannelListEntry(channel, channelManager.getTextColor(channelManager.channelFromString(channel))));
+                // Active Channel
+                platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatActiveChannel(playerManager.getActiveChannel(requestedPlayer),
+                        channelManager.getTextColor(channelManager.channelFromString(playerManager.getActiveChannel(requestedPlayer)))));
+                // Status
+                platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatStatus(playerManager.getStatus(requestedPlayer)));
+                if (!playerManager.getMutedPlayerNames(requestedPlayer).isEmpty()) {
+                    // Mute Header
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatMuteHeader());
+                    for (Mutee mutee : playerManager.getMutedPlayers(requestedPlayer))
+                        platform.sender(commandSender).sendMessage(crewChat.getMessages().mutedListEntry(mutee.getName(), mutee.getTimeRemaining()));
                 }
             }
         }
