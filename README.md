@@ -23,6 +23,7 @@ CrewChat:
  - `/crewchat help` - Shows CrewChat command help
  - `/crewchat info` - Shows CrewChat general info
  - `/crewchat info channel <channel>` - Shows all information about specified channel
+ - `/crewchat info player <player>` - Shows all information about specified player
  - Alias: `/cc`
  
  Chat:
