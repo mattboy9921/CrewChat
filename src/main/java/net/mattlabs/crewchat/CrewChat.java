@@ -38,7 +38,6 @@ public class CrewChat extends JavaPlugin{
     private BroadcastSender broadcastSender;
 
     private static Chat chat = null;
-    private static Permission permissions = null;
     private BukkitAudiences platform;
     private Messages messages;
     private Config config;
@@ -270,7 +269,7 @@ public class CrewChat extends JavaPlugin{
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         if (rsp != null) {
-            permissions = rsp.getProvider();
+            rsp.getProvider();
             return true;
         }
         else return false;
