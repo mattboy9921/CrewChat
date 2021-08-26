@@ -3,11 +3,13 @@ package net.mattlabs.crewchat.messaging;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.util.HSVLike;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.MessageUtil;
 import org.apache.commons.lang.WordUtils;
@@ -198,6 +200,16 @@ public class Messages {
             "(Does not accept color codes)")
     private String channelListHeader = "Channel List: (Click for more info)";
 
+    // Party List Header
+    @Comment("\nAppears in the chat info command.\n" +
+            "(Does not accept color codes)")
+    private String partyListHeader = "Party List: (Click for more info)";
+
+    public Component partyListHeader() {
+        return Component.text(MessageUtil.sanitizeMessage(partyListHeader))
+                .color(GRAY);
+    }
+
     // Channel List Active
     @Comment("\nAppears in the chat info command.\n" +
             "(Does not accept color codes)")
@@ -207,6 +219,11 @@ public class Messages {
     @Comment("\nAppears in the chat info command.\n" +
             "(Does not accept color codes)")
     private String channelListSubscribedHeader = "Your subscribed channels are:";
+
+    // Channel List Subscribe Header
+    @Comment("\nAppears in the chat info command.\n" +
+            "(Does not accept color codes)")
+    private String partyListJoinedHeader = "Your joined parties are:";
 
     // Muted List Header
     @Comment("\nAppears in the chat info command.\n" +
@@ -252,6 +269,21 @@ public class Messages {
                         .clickEvent(ClickEvent.runCommand("/chat info channel " + name)));
     }
 
+    public Component partyListEntry(String name, TextColor textColor) {
+        return Component.text(" - ")
+                .color(DARK_GREEN)
+                .append(Component.text(name)
+                        .color(textColor)
+                        .decoration(BOLD, true)
+                        .hoverEvent(HoverEvent.showText(
+                                Component.text("Click")
+                                        .color(DARK_GREEN)
+                                        .decoration(BOLD, true)
+                                        .append(Component.text(" for more info.")
+                                                .color(WHITE))))
+                        .clickEvent(ClickEvent.runCommand("/chat info channel " + name)));
+    }
+
     public Component channelListActive(String name, TextColor textColor) {
         return MiniMessage.get().parse("<gray>" + channelListActive,
                 "channel_name", "<" + textColor.toString() + "><bold>" + name + "<reset><gray>");
@@ -259,6 +291,11 @@ public class Messages {
 
     public Component channelListSubscribedHeader() {
         return Component.text(channelListSubscribedHeader)
+                .color(GRAY);
+    }
+
+    public Component partyListJoinedHeader() {
+        return Component.text(partyListJoinedHeader)
                 .color(GRAY);
     }
 
@@ -435,7 +472,7 @@ public class Messages {
     private String cantUnsubscribeActive = "<white>You can't unsubscribe from <bold><channel_name></bold>, it is your active channel!";
 
     public Component cantUnsubscribeActive(String channelName, TextColor textColor) {
-        return chatHeader.append(MiniMessage.get().parse(cantUnsubscribeActive, "channel_name", "<color:" + textColor.toString() + ">" + channelName));
+        return chatHeader.append(MiniMessage.get().parse(cantUnsubscribeActive, "channel_name", "<color:" + textColor.toString() + "><reset>" + channelName));
     }
 
     // Not Subscribed
@@ -777,6 +814,139 @@ public class Messages {
                 .append(MiniMessage.get().parse(message));
     }
 
+    // *** Party ***
+
+    // Party
+    @Comment("\nText for the word \"party\"\n" +
+            "(Does not accept color codes.")
+    private String party = "party";
+
+    // Party Header
+    private transient Component partyHeader = MiniMessage.get().parse("<gray>[<dark_green>" + WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) + "<gray>] ");
+
+    // Party Exists
+    @Comment("\nAppears if a party already exists during creation.\n" +
+            "Possible tags: <party>")
+    private String partyAlreadyExists = "<white>Party <party> already exists!";
+
+    public Component partyAlreadyExists(String party, TextColor textColor) {
+        return partyHeader.append(MiniMessage.get().parse(partyAlreadyExists,
+                "party", "<" + textColor.toString() + ">" + party + "<reset>"));
+    }
+
+    // Channel Exists
+    @Comment("\nAppears if a channel already exists with desired party name during creation.\n" +
+            "Possible tags: <party>")
+    private String partyChannelAlreadyExists = "<white>Channel <channel> already exists with that name!";
+
+    public Component partyChannelAlreadyExists(String channel, TextColor textColor) {
+        return partyHeader.append(MiniMessage.get().parse(partyChannelAlreadyExists,
+                "channel", "<" + textColor.toString() + "><bold>" + channel + "<reset>"));
+    }
+
+    // Party will be created
+    @Comment("\nAppears when creating a party.\n" +
+            "Possible tags: <party>")
+    private String partyWillBeCreated = "<white>Party <bold><party></bold> will be created.";
+
+    // Color picker
+    @Comment("\nAppears above the party color picker.\n" +
+            "Possible tags: <hex>")
+    private String pickAColor = "<white>Please choose a color <hex>:";
+
+    // Hex
+    @Comment("\nAppears above the party color picker.")
+    private String hex = "<grey>(or enter #hex)";
+
+    // Click to select
+    @Comment("\nAppears when hovering over the color picker.")
+    private String clickToPick = "<dark_green><bold>Click</bold> <white>to select this color.";
+
+    // Preview
+    @Comment("\nValue for the word \"preview\".\n" +
+            "(Does not accept color codes.)")
+    private String preview = "preview";
+
+    private HoverEvent<Component> pickAColorHover(String party, TextColor textColor) {
+        return HoverEvent.showText(Component.text(WordUtils.capitalize(preview) + ": ")
+                    .color(WHITE)
+                .append(Component.text(party)
+                    .color(textColor)
+                    .decoration(BOLD, true))
+                .append(Component.text("\n"))
+                    .decoration(BOLD, false)
+                .append(MiniMessage.get().parse(clickToPick)));
+    }
+
+    public Component pickAColor(String party) {
+        Component message = partyHeader.append(MiniMessage.get().parse(partyWillBeCreated, "party", party))
+                .append(Component.text("\n"))
+                .append(MiniMessage.get().parse(pickAColor,
+                        "hex", MiniMessage.get().parse(hex)
+                                .hoverEvent(HoverEvent.showText(clickToRun))
+                                .clickEvent(ClickEvent.suggestCommand("/party create " + party + " #"))))
+                .append(Component.text("\n"));
+
+
+        // Color squares
+        for (float value = 1.0f; value >= 0.5f; value -= 0.5f) {
+            for (float hue = 0.0f; hue <= 1.0f; hue += 0.05f) {
+                message = message.append(Component.text("█")
+                        .color(TextColor.color(HSVLike.of(hue, 1.0f, value)))
+                        .hoverEvent(pickAColorHover(party, TextColor.color(HSVLike.of(hue, 1.0f, value))))
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + TextColor.color(HSVLike.of(hue, 1.0f, value)).asHexString())));
+            }
+            if (value == 1.0f) {
+                message = message.append(Component.text("█")
+                        .color(GRAY)
+                        .hoverEvent(pickAColorHover(party, GRAY))
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + GRAY)));
+                message = message.append(Component.text("█\n")
+                        .color(WHITE)
+                        .hoverEvent(pickAColorHover(party, WHITE))
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + WHITE)));
+            }
+            else if (value == 0.5f) {
+                message = message.append(Component.text("█")
+                        .color(DARK_GRAY)
+                        .hoverEvent(pickAColorHover(party, DARK_GRAY))
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + DARK_GRAY)));
+                message = message.append(Component.text("█")
+                        .color(BLACK)
+                        .hoverEvent(pickAColorHover(party, BLACK))
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + BLACK)));
+            }
+        }
+        return message;
+    }
+
+    // Invalid color
+    @Comment("Appears when specifying an invalid hex color for a party.\n" +
+            "Possible tags: <hex_color>")
+    private String invalidColor = "<white>Color \"<hex_color>\" is invalid!";
+
+    public Component invalidColor(String invalidHex) {
+        return partyHeader.append(MiniMessage.get().parse(invalidColor, "hex_color", invalidHex));
+    }
+
+    // Party Created
+    @Comment("Appears when a party is successfully created.\n" +
+            "Possible tags: <party>")
+    private String partyCreated = "<white>Party <party> has been created successfully.";
+
+    public Component partyCreated(String party, TextColor textColor) {
+        return partyHeader.append(MiniMessage.get().parse(partyCreated, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
+    }
+
+    // Party Joined
+    @Comment("Appears when joining a party.\n" +
+            "Possible tags: <party>")
+    private String partyJoined = "<white>You have joined <party>";
+
+    public Component partyJoined(String party, TextColor textColor) {
+        return partyHeader.append(MiniMessage.get().parse(partyJoined, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
+    }
+
     // *** Private Message ***
 
     // PM Header
@@ -842,12 +1012,13 @@ public class Messages {
             "Possible tags: <player_prefix>, <player_name>")
     private String chatMessageHeader = "<player_prefix><player_name><gray>: ";
 
-    public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
+    public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor, boolean isParty) {
         // %prefix%%playerName%: %message%
         return MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
                         this.status + ": " + status + "<reset>\n" +
-                        this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
+                        (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : this.channel) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
+                        "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</" + textColor.toString() + "><gray>]</gray> " +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
                 "player_prefix", serialize(prefix),
                 "player_name", playerName)
@@ -956,3 +1127,5 @@ public class Messages {
         return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(legacyColorCode))));
     }
 }
+
+enum Cycle {G_U_7F, R_D_7F_G_U_FF, R_D_00, B_U_7F, DONE}

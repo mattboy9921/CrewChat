@@ -40,6 +40,11 @@ public class ChannelManager {
         loadChannels();
     }
 
+    public void addChannel(Channel channel) {
+        channels.add(channel);
+        CrewChat.getInstance().getLogger().info("Party \"" + channel.getName() + "\" added!");
+    }
+
     public ArrayList<Channel> getChannels() {
         return channels;
     }

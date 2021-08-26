@@ -38,6 +38,7 @@ public class CrewChat extends JavaPlugin{
     private BroadcastSender broadcastSender;
 
     private static Chat chat = null;
+    private static Permission permissions = null;
     private BukkitAudiences platform;
     private Messages messages;
     private Config config;
@@ -157,7 +158,8 @@ public class CrewChat extends JavaPlugin{
 
         // ACF
         // Register Command Contexts
-        paperCommandManager.getCommandContexts().registerContext(Channel.class, Channel.getContextResolver());
+        paperCommandManager.getCommandContexts().registerContext(Channel.class, context -> new Channel(context.popFirstArg()));
+        paperCommandManager.getCommandContexts().registerContext(Party.class, context -> new Party(context.popFirstArg()));
         // Register Command Completions
         paperCommandManager.getCommandCompletions().registerAsyncCompletion("channels", context -> channelManager.getChannelNames());
         // Register Commands
@@ -167,6 +169,7 @@ public class CrewChat extends JavaPlugin{
         paperCommandManager.registerCommand(new BroadcastCommand());
         paperCommandManager.registerCommand(new MsgCommand());
         paperCommandManager.registerCommand(new ReplyCommand());
+        paperCommandManager.registerCommand(new PartyCommand());
 
         // bStats
         new Metrics(this, 5799);
@@ -267,7 +270,7 @@ public class CrewChat extends JavaPlugin{
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         if (rsp != null) {
-            rsp.getProvider();
+            permissions = rsp.getProvider();
             return true;
         }
         else return false;

@@ -15,6 +15,7 @@ import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.Mutee;
+import net.mattlabs.crewchat.Party;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
@@ -84,7 +85,8 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("info")
     @CommandPermission("crewchat.chat.info")
     public class Info extends BaseCommand {
-        
+
+        // TODO: Modify this method to compile list of channels and parties
         @Default
         @Description("Lists all channels, active channel and subscribed channels.")
         public void onInfo(CommandSender commandSender) {
@@ -92,12 +94,25 @@ public class ChatCommand extends BaseCommand {
                 Player player = (Player) commandSender; 
                 platform.player(player).sendMessage(crewChat.getMessages().channelListHeader());
                 for (Channel channel : channelManager.getChannels())
-                    platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel.getName(), channel.getTextColor()));
+                    if (!(channel instanceof Party))
+                        platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel.getName(), channel.getTextColor()));
+                if (playerManager.getSubscribedChannels(player).stream().anyMatch(string -> channelManager.channelFromString(string) instanceof Party))
+                    platform.player(player).sendMessage(crewChat.getMessages().partyListHeader());
+                for (Channel channel : channelManager.getChannels())
+                    if (channel instanceof Party)
+                        platform.player(player).sendMessage(crewChat.getMessages().partyListEntry(channel.getName(), channel.getTextColor()));
+                // TODO: Change this message to be channel/party specific
                 platform.player(player).sendMessage(crewChat.getMessages().channelListActive(playerManager.getActiveChannel(player),
                         channelManager.channelFromString(playerManager.getActiveChannel(player)).getTextColor()));
                 platform.player(player).sendMessage(crewChat.getMessages().channelListSubscribedHeader());
                 for (String channel : playerManager.getSubscribedChannels(player))
-                    platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
+                    if (!(channelManager.channelFromString(channel) instanceof Party))
+                        platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
+                if (playerManager.getSubscribedChannels(player).stream().anyMatch(string -> channelManager.channelFromString(string) instanceof Party))
+                    platform.player(player).sendMessage(crewChat.getMessages().partyListJoinedHeader());
+                for (String channel : playerManager.getSubscribedChannels(player))
+                    if (channelManager.channelFromString(channel) instanceof Party)
+                        platform.player(player).sendMessage(crewChat.getMessages().partyListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
                 if (!playerManager.getMutedPlayerNames(player).isEmpty()) {
                     platform.player(player).sendMessage(crewChat.getMessages().mutedListHeader());
                     for (Mutee mutee : playerManager.getMutedPlayers(player))

@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
+import net.mattlabs.crewchat.Party;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
 
@@ -36,7 +37,7 @@ public class ChatSender implements Runnable{
     private final String notificationSound;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
-    private boolean allowColor, isDiscordMessage, excludeFromDiscord;
+    private boolean allowColor, isDiscordMessage, excludeFromDiscord, isPartyMessage;
 
     public ChatSender(){
         // Check version for notification sound
@@ -72,6 +73,7 @@ public class ChatSender implements Runnable{
             subscribedPlayers = playerManager.getOnlineSubscribedPlayers(intendedChannel);
             mentionedPlayers = MessageUtil.getMentionedPlayers(message, subscribedPlayers);
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
+            isPartyMessage = channelManager.channelFromString(intendedChannel) instanceof Party;
             this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
@@ -151,14 +153,16 @@ public class ChatSender implements Runnable{
                     status,
                     MessageUtil.parseMarkdown(message),
                     intendedChannel,
-                    channelColor);
+                    channelColor,
+                    isPartyMessage);
             messageComponentMD = crewChat.getMessages().chatMessage(prefix,
                     name,
                     time,
                     status,
                     message,
                     intendedChannel,
-                    channelColor);
+                    channelColor,
+                    isPartyMessage);
         }
 
         for (Player subbedPlayer : subscribedPlayers) {
