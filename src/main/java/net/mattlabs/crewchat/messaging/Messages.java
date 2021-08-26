@@ -1127,5 +1127,3 @@ public class Messages {
         return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(legacyColorCode))));
     }
 }
-
-enum Cycle {G_U_7F, R_D_7F_G_U_FF, R_D_00, B_U_7F, DONE}
