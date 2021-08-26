@@ -53,4 +53,41 @@ public class PartyCommand extends BaseCommand {
             }
         }
     }
+
+    @CommandAlias("join")
+    @Description("Join the specified party.")
+    public void onJoin(Player player, Party party) {
+        // Check if party exists
+        if (channelManager.getChannels().contains(party) && channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party)) instanceof Party) {
+            // Get party
+            party = (Party) channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party));
+            // Join player to party
+            playerManager.addSubscription(player, party.getName());
+            playerManager.setActiveChannel(player, party.getName());
+            platform.player(player).sendMessage(crewChat.getMessages().partyJoined(party.getName(), party.getTextColor()));
+        }
+        else {
+            platform.player(player).sendMessage(crewChat.getMessages().partyNoExist(party.getName()));
+        }
+    }
+
+    @CommandAlias("leave")
+    @Description("Leaves the specified party.")
+    public void onLeave(Player player, Party party) {
+        // Check if party exists
+        if (channelManager.getChannels().contains(party) && channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party)) instanceof Party) {
+            // Check if player in party
+            if (playerManager.getSubscribedChannels(player).contains(party.getName())) {
+                // Get party
+                party = (Party) channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party));
+                // Leave party
+                playerManager.removeSubscription(player, party.getName());
+                playerManager.setActiveChannel(player, playerManager.getSubscribedChannels(player).get(0));
+                platform.player(player).sendMessage(crewChat.getMessages().partyLeft(party.getName(), party.getTextColor()));
+            }
+        }
+        else {
+            platform.player(player).sendMessage(crewChat.getMessages().partyNoExist(party.getName()));
+        }
+    }
 }

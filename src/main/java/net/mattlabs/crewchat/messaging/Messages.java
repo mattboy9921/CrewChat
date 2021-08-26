@@ -844,6 +844,16 @@ public class Messages {
                 "channel", "<" + textColor.toString() + "><bold>" + channel + "<reset>"));
     }
 
+    // Party No Exist
+    @Comment("\nAppears when joining a party that doesn't exist.\n" +
+            "Possible tags: <party_name>")
+    private String partyNoExist = "<white>Party <bold><party_name></bold> doesn't exist!";
+
+    public Component partyNoExist(String name) {
+        // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
+        return partyHeader.append(MiniMessage.get().parse(partyNoExist, "party_name", name));
+    }
+
     // Party will be created
     @Comment("\nAppears when creating a party.\n" +
             "Possible tags: <party>")
@@ -941,10 +951,19 @@ public class Messages {
     // Party Joined
     @Comment("Appears when joining a party.\n" +
             "Possible tags: <party>")
-    private String partyJoined = "<white>You have joined <party>";
+    private String partyJoined = "<white>You have joined <party>.";
 
     public Component partyJoined(String party, TextColor textColor) {
         return partyHeader.append(MiniMessage.get().parse(partyJoined, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
+    }
+
+    // Party Left
+    @Comment("Appears when leaving a party.\n" +
+            "Possible tags: <party>")
+    private String partyLeft = "<white>You have left <party>.";
+
+    public Component partyLeft(String party, TextColor textColor) {
+        return partyHeader.append(MiniMessage.get().parse(partyLeft, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
     }
 
     // *** Private Message ***
