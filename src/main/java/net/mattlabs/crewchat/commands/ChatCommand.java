@@ -96,7 +96,7 @@ public class ChatCommand extends BaseCommand {
                 for (Channel channel : channelManager.getChannels())
                     if (!(channel instanceof Party))
                         platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel.getName(), channel.getTextColor()));
-                if (playerManager.getSubscribedChannels(player).stream().anyMatch(string -> channelManager.channelFromString(string) instanceof Party))
+                if (channelManager.getChannelNames().stream().anyMatch(string -> channelManager.channelFromString(string) instanceof Party))
                     platform.player(player).sendMessage(crewChat.getMessages().partyListHeader());
                 for (Channel channel : channelManager.getChannels())
                     if (channel instanceof Party)
