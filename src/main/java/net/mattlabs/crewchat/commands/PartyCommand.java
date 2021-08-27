@@ -4,11 +4,14 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
+import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.Party;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 @CommandAlias("party|p")
 @CommandPermission("crewchat.party")
@@ -19,9 +22,20 @@ public class PartyCommand extends BaseCommand {
     private final PlayerManager playerManager = crewChat.getPlayerManager();
     private final BukkitAudiences platform = crewChat.getPlatform();
 
-    @CommandAlias("create")
+    public PartyCommand() {
+        // Register party completion
+        crewChat.getPaperCommandManager().getCommandCompletions().registerAsyncCompletion("parties", context -> {
+            ArrayList<String> parties = new ArrayList<>();
+            for (Channel channel : channelManager.getChannels())
+                if (channel instanceof Party) parties.add(channel.getName());
+            return parties;
+        });
+    }
+
+    @Subcommand("create")
     @CommandPermission("crewchat.party.create")
     @Description("Creates a party.")
+    @CommandCompletion("@nothing @nothing")
     public void onCreate(Player player, Party party, @Optional @Single String hexColor) {
         // Check if party exists
         if (channelManager.getChannels().contains(party))
@@ -55,8 +69,9 @@ public class PartyCommand extends BaseCommand {
         }
     }
 
-    @CommandAlias("join")
+    @Subcommand("join")
     @Description("Join the specified party.")
+    @CommandCompletion("@parties")
     public void onJoin(Player player, Party party) {
         // Check if party exists
         if (channelManager.getChannels().contains(party) && channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party)) instanceof Party) {
@@ -72,8 +87,9 @@ public class PartyCommand extends BaseCommand {
         }
     }
 
-    @CommandAlias("leave")
+    @Subcommand("leave")
     @Description("Leaves the specified party.")
+    @CommandCompletion("@parties")
     public void onLeave(Player player, Party party) {
         // Check if party exists
         if (channelManager.getChannels().contains(party) && channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party)) instanceof Party) {
