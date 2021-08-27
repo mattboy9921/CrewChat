@@ -957,6 +957,15 @@ public class Messages {
         return partyHeader.append(MiniMessage.get().parse(partyJoined, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
     }
 
+    // Already in Party
+    @Comment("Appears when trying to join a party a player is already in.\n" +
+            "Possible tags: <party>")
+    private String alreadyInParty = "<white>You are already in <party>!";
+
+    public Component alreadyInParty(String party, TextColor textColor) {
+        return partyHeader.append(MiniMessage.get().parse(alreadyInParty, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
+    }
+
     // Party Left
     @Comment("Appears when leaving a party.\n" +
             "Possible tags: <party>")
@@ -964,6 +973,15 @@ public class Messages {
 
     public Component partyLeft(String party, TextColor textColor) {
         return partyHeader.append(MiniMessage.get().parse(partyLeft, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
+    }
+
+    // Not in Party
+    @Comment("Appears when trying to leave a party a player is not in.\n" +
+            "Possible tags: <party>")
+    private String notInParty = "<white>You are not in <party>!";
+
+    public Component notInParty(String party, TextColor textColor) {
+        return partyHeader.append(MiniMessage.get().parse(notInParty, "party", "<" + textColor.toString() + "><bold>" + party + "</bold><reset>"));
     }
 
     // *** Private Message ***
