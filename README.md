@@ -5,6 +5,7 @@ CrewChat is a chat plugin developed for the Crew Craft Server.
 **Features**
  - General chat
  - Chat channels
+ - Party chat
  - Permissions
  - Private messages
  - Broadcast messages
@@ -53,6 +54,11 @@ CrewChat:
  Reply:
  - `/reply <message>` - Replies to the last received private message.
  - Alias: `/r`
+
+Party:
+- `/party create <party> [#hex]` Creates a party with the specified name. Without optional hex color code, displays a color picker.
+- `/party join <party>` Joins player to `<party>`
+- `/party leave <party>` Leaves player from `<party>`
  
 **Permissions**
 
@@ -74,6 +80,10 @@ Channels:
 - `crewchat.chat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
 - `crewchat.chat.switch.<channel>` - Allows player to switch `<channel>` as active channel
 - `crewchat.speak.<channel>` - Allows player to speak in `<channel>`
+
+Parties:
+- `crewchat.party` - Allows players to join and leave parties
+- `crewchat.party.create` - Allows players to create parties
 
 Administrative:
 - `crewchat.use` - Allows player to use `/crewchat`
