@@ -24,7 +24,6 @@ public class Party extends Channel {
 
     // Update the time if players are still subscribed to a party
     public void updateTime() {
-        crewChat.getLogger().info("Running update time...");
         if (crewChat.getPlayerManager().getOnlineSubscribedPlayers(this.getName()).isEmpty()) {
             if (LocalDateTime.now().isAfter(time.plusMinutes(crewChat.getConfigCC().getPartyTimeout()))) {
                 crewChat.getChannelManager().removeChannel(this);
@@ -36,7 +35,6 @@ public class Party extends Channel {
 
     // Check every minute to see if party is empty and past the timeout
     public void initialize() {
-        crewChat.getLogger().info("Creating update time...");
         watchdog = crewChat.getServer().getScheduler().runTaskTimerAsynchronously(crewChat, this::updateTime, 1200, 1200);
     }
 }
