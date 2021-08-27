@@ -910,21 +910,21 @@ public class Messages {
                 message = message.append(Component.text("█")
                         .color(GRAY)
                         .hoverEvent(pickAColorHover(party, GRAY))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + GRAY)));
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + GRAY.asHexString())));
                 message = message.append(Component.text("█\n")
                         .color(WHITE)
                         .hoverEvent(pickAColorHover(party, WHITE))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + WHITE)));
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + WHITE.asHexString())));
             }
             else if (value == 0.5f) {
                 message = message.append(Component.text("█")
                         .color(DARK_GRAY)
                         .hoverEvent(pickAColorHover(party, DARK_GRAY))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + DARK_GRAY)));
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + DARK_GRAY.asHexString())));
                 message = message.append(Component.text("█")
                         .color(BLACK)
                         .hoverEvent(pickAColorHover(party, BLACK))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + BLACK)));
+                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + BLACK.asHexString())));
             }
         }
         return message;
