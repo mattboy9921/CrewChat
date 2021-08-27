@@ -7,9 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class PlayerManager {
@@ -26,6 +24,7 @@ public class PlayerManager {
     public void loadPlayers() {
         PlayerData playerData = configurateManager.get("playerdata.conf");
         chatters = playerData.getChatters();
+        updateChannels();
         CrewChat.getInstance().getLogger().info(chatters.size() + " player(s) loaded.");
     }
 
@@ -47,6 +46,7 @@ public class PlayerManager {
         onlineChatters.clear();
         loadPlayers();
         loadOnlinePlayers();
+        updateChannels();
     }
 
     public boolean playerExists(Player player) {
@@ -239,6 +239,21 @@ public class PlayerManager {
                 for (Mutee mutee : removedMutees) chatter.removeMutedPlayer(mutee.getUuid());
             }
         });
+    }
+
+    public void updateChannels(Player player) {
+        Chatter chatter = chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId())));
+        chatter.getSubscribedChannels().removeIf(s -> !channelManager.getChannelNames().contains(s));
+        if (!channelManager.getChannelNames().contains(chatter.getActiveChannel())) chatter.setActiveChannel(chatter.getSubscribedChannels().get(0));
+        crewChat.getServer().getScheduler().runTaskAsynchronously(crewChat, () -> configurateManager.save("playerdata.conf"));
+    }
+
+    private void updateChannels() {
+        for (Chatter chatter : chatters) {
+            chatter.getSubscribedChannels().removeIf(s -> !channelManager.getChannelNames().contains(s));
+            if (!channelManager.getChannelNames().contains(chatter.getActiveChannel())) chatter.setActiveChannel(chatter.getSubscribedChannels().get(0));
+        }
+        crewChat.getServer().getScheduler().runTaskAsynchronously(crewChat, () -> configurateManager.save("playerdata.conf"));
     }
 
     public boolean hasMuted(Player muter, Player mutee) {

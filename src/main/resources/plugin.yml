@@ -40,6 +40,11 @@ permissions:
   crewchat.speak.<channel>:
     description: Allows player to speak in <channel>
 
+  crewchat.party:
+    description: Allows player to join/leave parties
+  crewchat.party.create:
+    description: Allows player to create parties
+
   crewchat.use:
     description: Allows player to use /crewchat
   crewchat.broadcast:

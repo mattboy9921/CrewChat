@@ -14,6 +14,7 @@ public class Channel {
     private String description = "No description";
     private TextColor textColor = NamedTextColor.WHITE;
     private boolean autoSubscribe = false;
+    private boolean showChannelNameInGame = false;
     private boolean showChannelNameDiscord = false;
     private boolean excludeFromDiscord = false;
 
@@ -22,21 +23,17 @@ public class Channel {
 
     // Constructor for comparable channel objects
     public Channel(String name) {
-        this(name, null, null, false, false, false);
+        this(name, null, null, false, false, false, false);
     }
 
-    public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameDiscord, boolean excludeFromDiscord) {
+    public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameInGame, boolean showChannelNameDiscord, boolean excludeFromDiscord) {
         this.name = name;
         this.description = description;
         this.textColor = textColor;
         this.autoSubscribe = autoSubscribe;
+        this.showChannelNameInGame = showChannelNameInGame;
         this.showChannelNameDiscord = showChannelNameDiscord;
         this.excludeFromDiscord = excludeFromDiscord;
-    }
-
-    // Context Resolver for ACF
-    public static ContextResolver<Channel, BukkitCommandExecutionContext> getContextResolver() {
-        return context -> new Channel(context.popFirstArg());
     }
 
     @Override
@@ -59,6 +56,10 @@ public class Channel {
 
     public boolean isAutoSubscribe() {
         return autoSubscribe;
+    }
+
+    public boolean isShowChannelNameInGame() {
+        return showChannelNameInGame;
     }
 
     public boolean isShowChannelNameDiscord() {

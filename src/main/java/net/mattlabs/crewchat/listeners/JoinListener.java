@@ -38,6 +38,7 @@ public class JoinListener implements Listener{
             if (!configError) playerManager.setOnline(player);
         }
         else {
+            playerManager.updateChannels(player);
             playerManager.setOnline(player);
             playerManager.setActiveChannel(player, activeChannel);
         }
