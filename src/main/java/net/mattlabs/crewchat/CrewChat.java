@@ -87,7 +87,6 @@ public class CrewChat extends JavaPlugin{
         }
 
         // Configuration Section
-        getLogger().info(LocalDateTime.now().toString());
         configurateManager = new ConfigurateManager();
 
         configurateManager.add("config.conf", TypeToken.get(Config.class), new Config(), Config::new,
@@ -112,7 +111,6 @@ public class CrewChat extends JavaPlugin{
 
         // Load Messages
         messages = configurateManager.get("messages.conf");
-        getLogger().info("Messages on load: " + messages.toString());
 
         // DiscordSRV Check
         if (!hasDiscordSRV()) {
