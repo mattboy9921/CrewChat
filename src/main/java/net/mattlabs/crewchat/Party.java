@@ -18,7 +18,7 @@ public class Party extends Channel {
     }
 
     public Party(String name, TextColor textColor) {
-        super(name, "Party", textColor, false, true, false, true);
+        super(name.substring(0, 19), "Party", textColor, false, true, false, true);
         time = LocalDateTime.now();
     }
 
