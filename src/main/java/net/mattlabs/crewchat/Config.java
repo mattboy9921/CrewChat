@@ -55,6 +55,13 @@ public class Config {
         return allowColor;
     }
 
+    @Comment("\nTime parties exist with nobody in them (in minutes).")
+    private int partyTimeout = 10;
+
+    public int getPartyTimeout() {
+        return partyTimeout;
+    }
+
     @Setting(value = "channels")
     @Comment("\nChannel Configuration\n" +
             "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")

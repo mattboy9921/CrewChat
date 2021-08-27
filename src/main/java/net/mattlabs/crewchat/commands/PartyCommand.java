@@ -41,6 +41,7 @@ public class PartyCommand extends BaseCommand {
                 else {
                     // Create party
                     party.setTextColor(TextColor.fromHexString(hexColor));
+                    party.initialize();
                     channelManager.addChannel(party);
                     platform.player(player).sendMessage(crewChat.getMessages().partyCreated(party.getName(), party.getTextColor()));
 

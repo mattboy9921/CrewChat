@@ -42,7 +42,20 @@ public class ChannelManager {
 
     public void addChannel(Channel channel) {
         channels.add(channel);
+        // TODO: Make this channel/party sensitive
         CrewChat.getInstance().getLogger().info("Party \"" + channel.getName() + "\" added!");
+    }
+
+    public void removeChannel(Channel channel) {
+        if (channels.contains(channel)) {
+            channels.remove(channel);
+            // TODO: Make this channel/party sensitive
+            CrewChat.getInstance().getLogger().info("Party \"" + channel.getName() + "\" removed!");
+        }
+        else {
+            // TODO: Make this channel/party sensitive
+            CrewChat.getInstance().getLogger().warning("Party \"" + channel.getName() + "\" could not be removed!");
+        }
     }
 
     public ArrayList<Channel> getChannels() {
