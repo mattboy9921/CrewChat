@@ -18,7 +18,8 @@ public class Party extends Channel {
     }
 
     public Party(String name, TextColor textColor) {
-        super(name.substring(0, 19), "Party", textColor, false, true, false, true);
+        // Truncate names to 20 characters
+        super(name.length() > 19 ? name.substring(0, 19) : name, "Party", textColor, false, true, false, true);
         time = LocalDateTime.now();
     }
 
