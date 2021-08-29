@@ -131,23 +131,21 @@ public class ChatCommand extends BaseCommand {
         @CommandCompletion("@channels")
         public void onChannel(CommandSender commandSender, Channel channel) {
             // Check if channel exists
-            if (!channelManager.getChannels().contains(channel)) {
+            if (channel == null) {
                 if (commandSender instanceof Player)
-                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
-                else CrewChat.getInstance().getLogger().info("Channel " + channel.getName() + " doesn't exist!");
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(getLastCommandOperationContext().getArgs()[0]));
+                else CrewChat.getInstance().getLogger().info("Channel " + getLastCommandOperationContext().getArgs()[0] + " doesn't exist!");
             }
             else {
-                Channel requestedChannel = channelManager.channelFromString(channel.getName());
-
                 if (commandSender instanceof Player)
-                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelInfo(requestedChannel.getName(),
-                            requestedChannel.getDescription(),
-                            requestedChannel.getTextColor()));
-                else CrewChat.getInstance().getLogger().info("Channel " + requestedChannel.getName()
+                    platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelInfo(channel.getName(),
+                            channel.getDescription(),
+                            channel.getTextColor()));
+                else CrewChat.getInstance().getLogger().info("Channel " + channel.getName()
                         + " info: " +
-                        "\n - Name: " + requestedChannel.getName() +
-                        "\n - Chat Color: " + requestedChannel.getTextColor().toString() +
-                        "\n - Auto Subscribe: " + requestedChannel.isAutoSubscribe());
+                        "\n - Name: " + channel.getName() +
+                        "\n - Chat Color: " + channel.getTextColor().toString() +
+                        "\n - Auto Subscribe: " + channel.isAutoSubscribe());
             }
         }
     }
@@ -189,27 +187,21 @@ public class ChatCommand extends BaseCommand {
         else {
             Player player = (Player) commandSender;
             // Check if channel exists
-            String channelName = null;
-            if (channelManager.getChannels().contains(channel))
-                channelName = channel.getName();
-            else {
-                platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
-            }
-            if (channelName != null) {
-                if (player.hasPermission("crewchat.chat.subscribe." + channelName)) {
-                    TextColor channelColor = channelManager.getTextColor(channelManager.channelFromString(channelName));
-                    if (playerManager.getSubscribedChannels(player).contains(channelName))
-                        platform.player(player).sendMessage(crewChat.getMessages().alreadySubscribed(channelName, channelColor));
+            if (channel != null) {
+                if (player.hasPermission("crewchat.chat.subscribe." + channel.getName())) {
+                    TextColor channelColor = channel.getTextColor();
+                    if (playerManager.getSubscribedChannels(player).contains(channel.getName()))
+                        platform.player(player).sendMessage(crewChat.getMessages().alreadySubscribed(channel.getName(), channelColor));
                     else {
-                        playerManager.addSubscription(player, channelName);
-                        platform.player(player).sendMessage(crewChat.getMessages().nowSubscribed(channelName, channelColor));
+                        playerManager.addSubscription(player, channel.getName());
+                        platform.player(player).sendMessage(crewChat.getMessages().nowSubscribed(channel.getName(), channelColor));
                     }
                 }
                 else {
                     platform.player(player).sendMessage(crewChat.getMessages().noPermission());
                 }
             }
-            else platform.player(player).sendMessage(crewChat.getMessages().cantSubscribe(channel.getName(), NamedTextColor.WHITE));
+            else platform.player(player).sendMessage(crewChat.getMessages().cantSubscribe(getLastCommandOperationContext().getArgs()[0], NamedTextColor.WHITE));
         }
     }
     
@@ -220,31 +212,24 @@ public class ChatCommand extends BaseCommand {
         if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
         else {
             Player player = (Player) commandSender;
-            // Check if channel exists
-            String channelName = null;
-            if (channelManager.getChannels().contains(channel))
-                channelName = channel.getName();
-            else {
-                platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
-            }
-            if (channelName != null) {
-                if (player.hasPermission("crewchat.chat.unsubscribe." + channelName)) {
-                    TextColor channelColor = channelManager.getTextColor(channelManager.channelFromString(channelName));
-                    if (!playerManager.getSubscribedChannels(player).contains(channelName))
-                        platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channelName, channelColor));
+            if (channel != null) {
+                if (player.hasPermission("crewchat.chat.unsubscribe." + channel.getName())) {
+                    TextColor channelColor = channel.getTextColor();
+                    if (!playerManager.getSubscribedChannels(player).contains(channel.getName()))
+                        platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channel.getName(), channelColor));
                     else if (channelManager.channelFromString(playerManager.getActiveChannel(player))
-                            .equals(channelManager.channelFromString(channelName)))
-                        platform.player(player).sendMessage(crewChat.getMessages().cantUnsubscribeActive(channelName, channelColor));
+                            .equals(channelManager.channelFromString(channel.getName())))
+                        platform.player(player).sendMessage(crewChat.getMessages().cantUnsubscribeActive(channel.getName(), channelColor));
                     else {
-                        playerManager.removeSubscription(player, channelName);
-                        platform.player(player).sendMessage(crewChat.getMessages().nowUnsubscribed(channelName, channelColor));
+                        playerManager.removeSubscription(player, channel.getName());
+                        platform.player(player).sendMessage(crewChat.getMessages().nowUnsubscribed(channel.getName(), channelColor));
                     }
                 }
                 else {
                     platform.player(player).sendMessage(crewChat.getMessages().noPermission());
                 }
             }
-            else platform.player(player).sendMessage(crewChat.getMessages().cantUnsubscribe(channel.getName(), NamedTextColor.WHITE));
+            else platform.player(player).sendMessage(crewChat.getMessages().cantUnsubscribe(getLastCommandOperationContext().getArgs()[0], NamedTextColor.WHITE));
         }
     }
     
@@ -256,20 +241,14 @@ public class ChatCommand extends BaseCommand {
         else {
             Player player = (Player) commandSender;
             // Check if channel exists
-            String channelName = null;
-            if (channelManager.getChannels().contains(channel))
-                channelName = channel.getName();
-            else {
-                platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
-            }
-            if (channelName != null) {
-                if (player.hasPermission("crewchat.chat.switch." + channelName)) {
-                    TextColor channelColor = channelManager.getTextColor(channelManager.channelFromString(channelName));
-                    if (!playerManager.getSubscribedChannels(player).contains(channelName))
-                        platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channelName, channelColor));
+            if (channel != null) {
+                if (player.hasPermission("crewchat.chat.switch." + channel.getName())) {
+                    TextColor channelColor = channel.getTextColor();
+                    if (!playerManager.getSubscribedChannels(player).contains(channel.getName()))
+                        platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channel.getName(), channelColor));
                     else {
-                        playerManager.setActiveChannel(player, channelName);
-                        platform.player(player).sendMessage(crewChat.getMessages().newActiveChannel(channelName, channelColor));
+                        playerManager.setActiveChannel(player, channel.getName());
+                        platform.player(player).sendMessage(crewChat.getMessages().newActiveChannel(channel.getName(), channelColor));
                     }
                 }
                 else {
@@ -277,7 +256,7 @@ public class ChatCommand extends BaseCommand {
                 }
             }
             else {
-                platform.player(player).sendMessage(crewChat.getMessages().cantSetActive(channel.getName(), NamedTextColor.WHITE));
+                platform.player(player).sendMessage(crewChat.getMessages().cantSetActive(getLastCommandOperationContext().getArgs()[0], NamedTextColor.WHITE));
             }
         }
     }
@@ -368,8 +347,8 @@ public class ChatCommand extends BaseCommand {
         else {
             Player player = (Player) commandSender;
             // Check if channel is real
-            if (!channelManager.getChannels().contains(channel))
-                platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(channel.getName()));
+            if (channel == null)
+                platform.player(player).sendMessage(crewChat.getMessages().channelNoExist(getLastCommandOperationContext().getArgs()[0]));
             // Check if player subscribed to channel
             else if (!playerManager.getSubscribedChannels(player).contains(channel.getName()))
                 platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channel.getName(), channelManager.channelFromString(channel.getName()).getTextColor()));

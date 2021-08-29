@@ -18,19 +18,19 @@ public class PlayerManager {
 
     private final BukkitAudiences platform = crewChat.getPlatform();
 
-    private ArrayList<Chatter> chatters = new ArrayList<>();
-    private final ArrayList<Chatter> onlineChatters = new ArrayList<>();
+    private final Map<UUID, Chatter> chatters = new HashMap<>();
+    private final Map<UUID, Chatter> onlineChatters = new HashMap<>();
 
     public void loadPlayers() {
         PlayerData playerData = configurateManager.get("playerdata.conf");
-        chatters = playerData.getChatters();
+        playerData.getChatters().forEach(chatter -> chatters.put(chatter.getUuid(), chatter));
         updateChannels();
         CrewChat.getInstance().getLogger().info(chatters.size() + " player(s) loaded.");
     }
 
     public void loadOnlinePlayers() {
         for (Player player : CrewChat.getInstance().getServer().getOnlinePlayers()) {
-            if (chatters.contains(new Chatter(player.getUniqueId())))
+            if (chatters.containsKey(player.getUniqueId()))
                 setOnline(player);
         }
         if (CrewChat.getInstance().getServer().getOnlinePlayers().size() == onlineChatters.size())
@@ -54,11 +54,8 @@ public class PlayerManager {
     }
 
     public boolean playerExists(OfflinePlayer player) {
-        if (chatters == null) return false;
-        for (Chatter chatter : chatters) {
-            if (chatter.getUuid().equals(player.getUniqueId())) return true;
-        }
-        return false;
+        if (chatters.isEmpty()) return false;
+        return chatters.containsKey(player.getUniqueId());
     }
 
     public void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) throws NullPointerException {
@@ -79,25 +76,23 @@ public class PlayerManager {
             PlayerData playerData = configurateManager.get("playerdata.conf");
             playerData.addChatter(chatter);
 
-            chatters.add(chatter);
+            chatters.put(chatter.getUuid(), chatter);
 
             configurateManager.save("playerdata.conf");
         }
     }
 
     public void setOffline(Player player) {
-        Chatter chatter = chatters.get(chatters.indexOf(new Chatter(player.getUniqueId())));
-        onlineChatters.remove(chatter);
+        onlineChatters.remove(player.getUniqueId());
     }
 
     public void setOnline(Player player) {
-        Chatter chatter = chatters.get(chatters.indexOf(new Chatter(player.getUniqueId())));
-        onlineChatters.add(chatter);
+        onlineChatters.put(player.getUniqueId(), chatters.get(player.getUniqueId()));
     }
 
     public boolean isOnline(Player player) {
         if (player.isOnline()) {
-            return onlineChatters.contains(new Chatter(player.getUniqueId()));
+            return onlineChatters.containsKey(player.getUniqueId());
         }
         else return false;
     }
@@ -107,12 +102,11 @@ public class PlayerManager {
     }
 
     public String getActiveChannel(OfflinePlayer player) {
-        return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getActiveChannel();
+        return chatters.get(player.getUniqueId()).getActiveChannel();
     }
 
     public void setActiveChannel(Player player, String channelName) {
-        Chatter chatter = new Chatter(player.getUniqueId());
-        chatter = chatters.get(chatters.indexOf(chatter));
+        Chatter chatter = chatters.get(player.getUniqueId());
         chatter.setActiveChannel(channelName);
         // Save to config
         PlayerData playerData = configurateManager.get("playerdata.conf");
@@ -125,32 +119,27 @@ public class PlayerManager {
     }
 
     public List<String> getSubscribedChannels(OfflinePlayer player) {
-        return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getSubscribedChannels();
+        return chatters.get(player.getUniqueId()).getSubscribedChannels();
     }
 
     public ArrayList<Player> getSubscribedPlayers(String activeChannel) {
         ArrayList<Player> subscribedPlayers = new ArrayList<>();
-        for (Chatter chatter : chatters) {
-            if (chatter.isSubscribedTo(activeChannel)) {
-                subscribedPlayers.add(chatter.toPlayer());
-            }
-        }
+        chatters.forEach((uuid, chatter) -> {
+            if (chatter.isSubscribedTo(activeChannel)) subscribedPlayers.add(chatter.toPlayer());
+        });
         return subscribedPlayers;
     }
 
     public ArrayList<Player> getOnlineSubscribedPlayers(String activeChannel) {
         ArrayList<Player> subscribedPlayers = new ArrayList<>();
-        for (Chatter chatter : onlineChatters) {
-            if (chatter.isOnline() && chatter.isSubscribedTo(activeChannel)) {
-                subscribedPlayers.add(chatter.toPlayer());
-            }
-        }
+        onlineChatters.values().forEach(chatter -> {
+            if (chatter.isOnline() && chatter.isSubscribedTo(activeChannel)) subscribedPlayers.add(chatter.toPlayer());
+        });
         return subscribedPlayers;
     }
 
     public void setStatus(Player player, String status) {
-        Chatter chatter = new Chatter(player.getUniqueId());
-        chatter = chatters.get(chatters.indexOf(chatter));
+        Chatter chatter = chatters.get(player.getUniqueId());
         chatter.setStatus(status);
         // Save to config
         PlayerData playerData = configurateManager.get("playerdata.conf");
@@ -163,7 +152,7 @@ public class PlayerManager {
     }
 
     public String getStatus(OfflinePlayer player) {
-        return chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getStatus();
+        return chatters.get(player.getUniqueId()).getStatus();
     }
 
     public ArrayList<Mutee> getMutedPlayers(Player player) {
@@ -171,7 +160,7 @@ public class PlayerManager {
     }
 
     public ArrayList<Mutee> getMutedPlayers(OfflinePlayer player) {
-        return chatters.get(chatters.indexOf(new Chatter(player.getUniqueId()))).getMutedPlayers();
+        return chatters.get(player.getUniqueId()).getMutedPlayers();
     }
 
     public ArrayList<String> getMutedPlayerNames(Player player) {
@@ -180,14 +169,12 @@ public class PlayerManager {
 
     public ArrayList<String> getMutedPlayerNames(OfflinePlayer player) {
         ArrayList<String> mutedPlayerNames = new ArrayList<>();
-        chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId()))).getMutedPlayers().forEach(mutee ->
-                mutedPlayerNames.add(mutee.getName()));
+        chatters.get(player.getUniqueId()).getMutedPlayers().forEach(mutee -> mutedPlayerNames.add(mutee.getName()));
         return mutedPlayerNames;
     }
 
     public void addSubscription(Player player, String channelName) {
-        Chatter chatter = new Chatter(player.getUniqueId());
-        chatter = chatters.get(chatters.indexOf(chatter));
+        Chatter chatter = chatters.get(player.getUniqueId());
         chatter.addSubscription(channelName);
         // Save to config
         PlayerData playerData = configurateManager.get("playerdata.conf");
@@ -196,8 +183,7 @@ public class PlayerManager {
     }
 
     public void removeSubscription(Player player, String channelName) {
-        Chatter chatter = new Chatter(player.getUniqueId());
-        chatter = chatters.get(chatters.indexOf(chatter));
+        Chatter chatter = chatters.get(player.getUniqueId());
         chatter.removeSubscription(channelName);
         // Save to config
         PlayerData playerData = configurateManager.get("playerdata.conf");
@@ -206,29 +192,26 @@ public class PlayerManager {
     }
 
     public void addMutedPlayer(Player muterPlayer, Player muteePlayer) {
-        Chatter muter = new Chatter(muterPlayer.getUniqueId());
-        muter = chatters.get(chatters.indexOf(muter));
+        Chatter muter = chatters.get(muterPlayer.getUniqueId());
         muter.addMutedPlayer(muteePlayer.getUniqueId());
         configurateManager.save("playerdata.conf");
     }
 
     public void removeMutedPlayer(Player muterPlayer, Player muteePlayer) {
-        Chatter muter = new Chatter(muterPlayer.getUniqueId());
-        muter = chatters.get(chatters.indexOf(muter));
+        Chatter muter = chatters.get(muterPlayer.getUniqueId());
         muter.removeMutedPlayer(muteePlayer.getUniqueId());
         configurateManager.save("playerdata.conf");
     }
 
     public void removeMutedPlayer(Player muterPlayer, OfflinePlayer muteePlayer) {
-        Chatter muter = new Chatter(muterPlayer.getUniqueId());
-        muter = chatters.get(chatters.indexOf(muter));
+        Chatter muter = chatters.get(muterPlayer.getUniqueId());
         muter.removeMutedPlayer(muteePlayer.getUniqueId());
         configurateManager.save("playerdata.conf");
     }
 
     public void updateMutedPlayers() {
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
-            for (Chatter chatter : onlineChatters) {
+            for (Chatter chatter : onlineChatters.values()) {
                 ArrayList<Mutee> removedMutees = new ArrayList<>();
                 for (Mutee mutee : chatter.getMutedPlayers())
                     if (LocalDateTime.now().isAfter(mutee.getTime().plusHours(24))) {
@@ -242,30 +225,30 @@ public class PlayerManager {
     }
 
     public void updateChannels(Player player) {
-        Chatter chatter = chatters.get(chatters.lastIndexOf(new Chatter(player.getUniqueId())));
+        Chatter chatter = chatters.get(player.getUniqueId());
         chatter.getSubscribedChannels().removeIf(s -> !channelManager.getChannelNames().contains(s));
         if (!channelManager.getChannelNames().contains(chatter.getActiveChannel())) chatter.setActiveChannel(chatter.getSubscribedChannels().get(0));
         crewChat.getServer().getScheduler().runTaskAsynchronously(crewChat, () -> configurateManager.save("playerdata.conf"));
     }
 
     private void updateChannels() {
-        for (Chatter chatter : chatters) {
+        chatters.values().forEach(chatter -> {
             chatter.getSubscribedChannels().removeIf(s -> !channelManager.getChannelNames().contains(s));
             if (!channelManager.getChannelNames().contains(chatter.getActiveChannel())) chatter.setActiveChannel(chatter.getSubscribedChannels().get(0));
-        }
+        });
         crewChat.getServer().getScheduler().runTaskAsynchronously(crewChat, () -> configurateManager.save("playerdata.conf"));
     }
 
     public boolean hasMuted(Player muter, Player mutee) {
-        return onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(muter.getUniqueId()))).hasMuted(mutee.getUniqueId());
+        return onlineChatters.get(muter.getUniqueId()).hasMuted(mutee.getUniqueId());
     }
 
     public boolean isDeafened(Player player) {
-        return onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(player.getUniqueId()))).isDeafened();
+        return onlineChatters.get(player.getUniqueId()).isDeafened();
     }
 
     public void setDeafened(Player player, boolean deafen) {
-        onlineChatters.get(onlineChatters.lastIndexOf(new Chatter(player.getUniqueId()))).setDeafened(deafen);
+        onlineChatters.get(player.getUniqueId()).setDeafened(deafen);
     }
 
     public int getPlayerCount() {
@@ -278,7 +261,7 @@ public class PlayerManager {
 
     public ArrayList<String> getPlayerNames() {
         ArrayList<String> playerNames = new ArrayList<>();
-        chatters.forEach(chatter -> playerNames.add(Bukkit.getOfflinePlayer(chatter.getUuid()).getName()));
+        chatters.values().forEach(chatter -> playerNames.add(Bukkit.getOfflinePlayer(chatter.getUuid()).getName()));
         return playerNames;
     }
 }

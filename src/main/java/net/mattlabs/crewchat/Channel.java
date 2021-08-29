@@ -1,8 +1,6 @@
 package net.mattlabs.crewchat;
 
 
-import co.aikar.commands.BukkitCommandExecutionContext;
-import co.aikar.commands.contexts.ContextResolver;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -20,11 +18,6 @@ public class Channel {
 
     // Empty constructor for Configurate
     public Channel() { }
-
-    // Constructor for comparable channel objects
-    public Channel(String name) {
-        this(name, null, null, false, false, false, false);
-    }
 
     public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameInGame, boolean showChannelNameDiscord, boolean excludeFromDiscord) {
         this.name = name;

@@ -3,6 +3,7 @@ package net.mattlabs.crewchat.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
@@ -38,14 +39,18 @@ public class PartyCommand extends BaseCommand {
     @CommandCompletion("@nothing @nothing")
     public void onCreate(Player player, Party party, @Optional @Single String hexColor) {
         // Check if party exists
-        if (channelManager.getChannels().contains(party))
-            if (channelManager.channelFromString(party.getName()) instanceof Party)
-                platform.player(player).sendMessage(crewChat.getMessages().partyAlreadyExists(
-                        channelManager.channelFromString(party.getName()).getName(), channelManager.getTextColor(party)));
-            else
-                platform.player(player).sendMessage(crewChat.getMessages().partyChannelAlreadyExists(
-                        channelManager.channelFromString(party.getName()).getName(), channelManager.getTextColor(party)));
+        if (party != null)
+            platform.player(player).sendMessage(crewChat.getMessages().partyAlreadyExists(
+                    channelManager.channelFromString(party.getName()).getName(), channelManager.getTextColor(party)));
+        // Check if channel exists with same name
+        else if (channelManager.channelFromString(getLastCommandOperationContext().getArgs()[0]) != null) {
+
+            platform.player(player).sendMessage(crewChat.getMessages().partyChannelAlreadyExists(
+                    channelManager.channelFromString(getLastCommandOperationContext().getArgs()[0]).getName(),
+                    channelManager.getTextColor(channelManager.channelFromString(getLastCommandOperationContext().getArgs()[0]))));
+        }
         else {
+            party = new Party(getLastCommandOperationContext().getArgs()[0], NamedTextColor.WHITE);
             // Color picker
             if (hexColor == null)
                 platform.player(player).sendMessage(crewChat.getMessages().pickAColor(party.getName()));
@@ -74,9 +79,7 @@ public class PartyCommand extends BaseCommand {
     @CommandCompletion("@parties")
     public void onJoin(Player player, Party party) {
         // Check if party exists
-        if (channelManager.getChannels().contains(party) && channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party)) instanceof Party) {
-            // Get party
-            party = (Party) channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party));
+        if (party != null) {
             // Check if player not in party
             if (!playerManager.getSubscribedChannels(player).contains(party.getName())) {
                 // Join player to party
@@ -88,7 +91,7 @@ public class PartyCommand extends BaseCommand {
                 platform.player(player).sendMessage(crewChat.getMessages().alreadyInParty(party.getName(), party.getTextColor()));
         }
         else {
-            platform.player(player).sendMessage(crewChat.getMessages().partyNoExist(party.getName()));
+            platform.player(player).sendMessage(crewChat.getMessages().partyNoExist(getLastCommandOperationContext().getArgs()[0]));
         }
     }
 
@@ -97,9 +100,7 @@ public class PartyCommand extends BaseCommand {
     @CommandCompletion("@parties")
     public void onLeave(Player player, Party party) {
         // Check if party exists
-        if (channelManager.getChannels().contains(party) && channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party)) instanceof Party) {
-            // Get party
-            party = (Party) channelManager.getChannels().get(channelManager.getChannels().lastIndexOf(party));
+        if (party != null) {
             // Check if player is already in party
             if (playerManager.getSubscribedChannels(player).contains(party.getName())) {
                 // Leave party
@@ -111,7 +112,7 @@ public class PartyCommand extends BaseCommand {
                 platform.player(player).sendMessage(crewChat.getMessages().notInParty(party.getName(), party.getTextColor()));
         }
         else {
-            platform.player(player).sendMessage(crewChat.getMessages().partyNoExist(party.getName()));
+            platform.player(player).sendMessage(crewChat.getMessages().partyNoExist(getLastCommandOperationContext().getArgs()[0]));
         }
     }
 }

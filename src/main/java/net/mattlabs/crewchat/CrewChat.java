@@ -155,8 +155,13 @@ public class CrewChat extends JavaPlugin{
 
         // ACF
         // Register Command Contexts
-        paperCommandManager.getCommandContexts().registerContext(Channel.class, context -> new Channel(context.popFirstArg()));
-        paperCommandManager.getCommandContexts().registerContext(Party.class, context -> new Party(context.popFirstArg()));
+        paperCommandManager.getCommandContexts().registerContext(Channel.class, context -> channelManager.channelFromString(context.popFirstArg()));
+        paperCommandManager.getCommandContexts().registerContext(Party.class, context -> {
+            String party = context.popFirstArg();
+            if (channelManager.channelFromString(party) instanceof Party)
+                return (Party) channelManager.channelFromString(party);
+            else return null;
+        });
         // Register Command Completions
         paperCommandManager.getCommandCompletions().registerAsyncCompletion("channels", context -> channelManager.getChannelNames());
         // Register Commands

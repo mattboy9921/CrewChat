@@ -1,6 +1,5 @@
 package net.mattlabs.crewchat;
 
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -12,10 +11,6 @@ public class Party extends Channel {
 
     private LocalDateTime time;
     private BukkitTask watchdog;
-
-    public Party(String name) {
-        this(name, NamedTextColor.WHITE);
-    }
 
     public Party(String name, TextColor textColor) {
         // Truncate names to 20 characters

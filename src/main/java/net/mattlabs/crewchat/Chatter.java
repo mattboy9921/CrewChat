@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @ConfigSerializable
@@ -13,26 +15,18 @@ public class Chatter {
     private transient UUID uuid;
     private String activeChannel, status;
     private ArrayList<String> subscribedChannels;
-    private ArrayList<Mutee> mutedPlayers;
+    private Map<UUID, Mutee> mutedPlayers;
     private transient boolean deafened;
 
     // Empty constructor for Configurate
     public Chatter() {}
 
-    public Chatter(UUID uuid) {
-        this.uuid = uuid;
-        activeChannel = null;
-        subscribedChannels = null;
-        mutedPlayers = null;
-        status = null;
-        deafened = false;
-    }
-
     public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, ArrayList<Mutee> mutedPlayers, String status) {
         this.uuid = uuid;
         this.activeChannel = activeChannel;
         this.subscribedChannels = subscribedChannels;
-        this.mutedPlayers = mutedPlayers;
+        this.mutedPlayers = new HashMap<>();
+        mutedPlayers.forEach(mutee -> this.mutedPlayers.put(mutee.getUuid(), mutee));
         this.status = status;
         deafened = false;
     }
@@ -91,24 +85,20 @@ public class Chatter {
     }
 
     public ArrayList<Mutee> getMutedPlayers() {
-        return mutedPlayers;
+        return new ArrayList<>(mutedPlayers.values());
     }
 
     public void addMutedPlayer(UUID uuid) {
-        if (mutedPlayers.contains(new Mutee(uuid, null, null)))
-            mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid, null, null))).updateTime();
-        else {
-            mutedPlayers.add(new Mutee(uuid, CrewChat.getChat().getPlayerPrefix(Bukkit.getPlayer(uuid)), Bukkit.getPlayer(uuid).getName()));
-            CrewChat.getInstance().getLogger().info(mutedPlayers.get(mutedPlayers.lastIndexOf(new Mutee(uuid,null, null))).getTime().toString());
-        }
+        if (mutedPlayers.containsKey(uuid)) mutedPlayers.get(uuid).updateTime();
+        else mutedPlayers.put(uuid, new Mutee(uuid, CrewChat.getChat().getPlayerPrefix(Bukkit.getPlayer(uuid)), Bukkit.getPlayer(uuid).getName()));
     }
 
     public void removeMutedPlayer(UUID uuid) {
-        mutedPlayers.remove(new Mutee(uuid, null, null));
+        mutedPlayers.remove(uuid);
     }
 
     public boolean hasMuted(UUID uuid) {
-        return mutedPlayers.contains(new Mutee(uuid, null, null));
+        return mutedPlayers.containsKey(uuid);
     }
 
     public boolean isDeafened() {
