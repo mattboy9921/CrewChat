@@ -23,13 +23,16 @@ public class JoinListener implements Listener{
         playerManager.updateMutedPlayers();
 
         Player player = event.getPlayer();
+        // Find active channel
         String activeChannel = null;
         for (Channel channel : channelManager.getChannels()) {
             if (player.hasPermission("crewchat.default.active." + channel.getName())) {
                 activeChannel = channel.getName();
             }
         }
+        // Check if player already played
         if (!playerManager.playerExists(player)) {
+            // Find subscriptions
             ArrayList<String> subscribedChannels = new ArrayList<>();
             for (Channel channel : channelManager.getChannels()) {
                 if (channel.isAutoSubscribe()) subscribedChannels.add(channel.getName());
@@ -44,6 +47,7 @@ public class JoinListener implements Listener{
         }
     }
 
+    // Adds a new player, will fail if there's a configuration issue (usually default active channel)
     private void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) {
         try {
             playerManager.addPlayer(player, activeChannel, subscribedChannels);

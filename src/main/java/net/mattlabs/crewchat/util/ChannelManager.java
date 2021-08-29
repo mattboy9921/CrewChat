@@ -15,6 +15,7 @@ public class ChannelManager {
 
     private final Map<String, Channel> channels = new CaseInsensitiveHashMap();
 
+    // Loads specified channel from config
     private void loadChannel(Channel channel) {
         Config config = configurateManager.get("config.conf");
         ArrayList<Channel> channels = (ArrayList<Channel>) config.getChannels();
@@ -24,6 +25,7 @@ public class ChannelManager {
         });
     }
 
+    // Loads all channels from config
     public void loadChannels() {
         Config config = configurateManager.get("config.conf");
         config.getChannels().forEach(channel -> {
@@ -32,22 +34,26 @@ public class ChannelManager {
         });
     }
 
+    // Reloads specified channel
     public void reloadChannel(Channel channel) {
         channels.remove(channel.getName());
         loadChannel(channel);
     }
 
+    // Reloads all channels
     public void reloadChannels() {
         channels.clear();
         loadChannels();
     }
 
+    // Adds specified channel to the list of channels
     public void addChannel(Channel channel) {
         channels.put(channel.getName(), channel);
         // TODO: Make this channel/party sensitive
         CrewChat.getInstance().getLogger().info("Party \"" + channel.getName() + "\" added!");
     }
 
+    // Removes specified channel from the list of channels if possible
     public void removeChannel(Channel channel) {
         if (channels.containsKey(channel.getName())) {
             channels.remove(channel.getName());
@@ -70,15 +76,18 @@ public class ChannelManager {
         return channelNames;
     }
 
+    // Gets the corresponding channel from the name
     public Channel channelFromString(String channelName) {
         return channels.get(channelName);
     }
 
+    // Get the text color for the given channel
     public TextColor getTextColor(Channel channel) {
         if (channels.containsKey(channel.getName())) return channels.get(channel.getName()).getTextColor();
         else return null;
     }
 
+    // Modified HashMap class to ignore case for channels/parties
     private static class CaseInsensitiveHashMap extends HashMap<String, Channel> {
         @Override
         public Channel put(String key, Channel value) {

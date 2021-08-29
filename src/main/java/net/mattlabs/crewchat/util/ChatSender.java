@@ -51,12 +51,15 @@ public class ChatSender implements Runnable{
         sendChatMessage(player, playerManager.getActiveChannel(player), message);
     }
 
+    // Send a message originating from an in game channel
     public void sendChatMessage(Player player, String intendedChannel, String message) {
         playerManager.updateMutedPlayers();
         isDiscordMessage = false;
         allowColor = player.hasPermission("crewchat.chat.color") || crewChat.getConfigCC().isAllowColor();
 
+        // Check for configuration issue
         if (playerManager.isOnline(player)) {
+            // Gather relavent info
             this.player = player;
             if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
             prefix = chat.getPlayerPrefix(player);
@@ -75,6 +78,7 @@ public class ChatSender implements Runnable{
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
             isPartyMessage = channelManager.channelFromString(intendedChannel) instanceof Party;
             this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
+            // Schedule message to be sent
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
@@ -83,10 +87,12 @@ public class ChatSender implements Runnable{
         }
     }
 
+    // Send a message originating from a Discord channel
     public void sendDiscordMessage(Member sender, TextChannel channel, String message) {
         isDiscordMessage = true;
         allowColor = false;
 
+        // Gather info
         prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
         name = sender.getEffectiveName();
         discordHeader = crewChat.getConfigCC().isShowDiscordChannelNameInGame() ? "Discord #" + channel.getName() : "Discord";
@@ -123,10 +129,13 @@ public class ChatSender implements Runnable{
             this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
         }
 
+        // Schedule message to be sent
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
     }
 
+    // Handles actually sending messages to Discord/Minecraft
     public void run() {
+        // Create messages
         Component messageComponent, messageComponentMD;
         if (isDiscordMessage) {
             messageComponent = crewChat.getMessages().discordMessage(discordHeader,
@@ -166,7 +175,9 @@ public class ChatSender implements Runnable{
         }
 
         for (Player subbedPlayer : subscribedPlayers) {
+            // Check if player has muted the sender or is deafened
             if (!playerManager.getMutedPlayerNames(subbedPlayer).contains(name) && !playerManager.isDeafened(subbedPlayer)) {
+                // Send mentioned players a musical audio notification
                 for (Player mentionedPlayer : mentionedPlayers)
                     if (mentionedPlayer.equals(subbedPlayer)) {
                         platform.player(subbedPlayer).playSound(Sound.sound(Key.key("minecraft", notificationSound), Sound.Source.PLAYER, 1f, (float) Math.pow(2f, -5f/12f))); // C#
@@ -182,6 +193,7 @@ public class ChatSender implements Runnable{
         }
         platform.console().sendMessage(messageComponent);
 
+        // Send the message on Discord
         if (!isDiscordMessage && !excludeFromDiscord)
             if (CrewChat.getInstance().getDiscordSRVEnabled())
                 if (DiscordSRV.config().getBoolean("Experiment_WebhookChatMessageDelivery")) {
@@ -199,6 +211,7 @@ public class ChatSender implements Runnable{
                             DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
                 }
 
+        // TODO: Add all the new fields
         prefix = null;
         status = null;
         message = null;

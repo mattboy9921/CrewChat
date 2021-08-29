@@ -16,7 +16,6 @@ public class BroadcastSender implements Runnable{
     public void sendBroadcast(String message) {
 
         this.message = MessageUtil.sanitizeMessage(message);
-
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
     }
 

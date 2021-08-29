@@ -109,6 +109,7 @@ public class CrewChatCommand extends BaseCommand {
         @Description("Lists info about specified channel.")
         @CommandCompletion("@channels")
         public void onChannel(CommandSender commandSender, @Optional Channel channel) {
+            // Check if channel specified
             if (getLastCommandOperationContext().getArgs().length == 0) {
                 if (commandSender instanceof Player) {
                     Player player = (Player) commandSender;
@@ -145,7 +146,6 @@ public class CrewChatCommand extends BaseCommand {
         public void onChannel(CommandSender commandSender, @Values("@chatters") String player) {
             OfflinePlayer requestedPlayer = Bukkit.getOfflinePlayer(player);
             if (playerManager.playerExists(requestedPlayer)) {
-
                 // Header
                 platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatInfoPlayerHeader(requestedPlayer.getName()));
                 // Channel Header

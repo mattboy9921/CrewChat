@@ -1,6 +1,8 @@
 package net.mattlabs.crewchat;
 
+import co.aikar.commands.MessageType;
 import co.aikar.commands.PaperCommandManager;
+import com.google.common.collect.ImmutableList;
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.dependencies.jda.api.requests.GatewayIntent;
 import github.scarsz.discordsrv.dependencies.jda.api.utils.cache.CacheFlag;
@@ -18,10 +20,14 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class CrewChat extends JavaPlugin{
 
@@ -154,6 +160,12 @@ public class CrewChat extends JavaPlugin{
         if (discordSRVEnabled) DiscordSRV.api.subscribe(discordSRVListener);
 
         // ACF
+        // Set Message Format
+        ChatColor[] colors = {ChatColor.WHITE, ChatColor.DARK_GREEN, ChatColor.GRAY};
+        paperCommandManager.setFormat(MessageType.ERROR, colors);
+        paperCommandManager.setFormat(MessageType.HELP, colors);
+        paperCommandManager.setFormat(MessageType.INFO, colors);
+        paperCommandManager.setFormat(MessageType.SYNTAX, colors);
         // Register Command Contexts
         paperCommandManager.getCommandContexts().registerContext(Channel.class, context -> channelManager.channelFromString(context.popFirstArg()));
         paperCommandManager.getCommandContexts().registerContext(Party.class, context -> {

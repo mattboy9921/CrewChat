@@ -75,6 +75,8 @@ public class Channel {
         this.textColor = textColor;
     }
 
+    // Used reflectively
+
     public void setAutoSubscribe(boolean autoSubscribe) {
         this.autoSubscribe = autoSubscribe;
     }

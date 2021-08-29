@@ -91,28 +91,34 @@ public class ChatCommand extends BaseCommand {
         @Description("Lists all channels, active channel and subscribed channels.")
         public void onInfo(CommandSender commandSender) {
             if (commandSender instanceof Player) {
-                Player player = (Player) commandSender; 
+                Player player = (Player) commandSender;
+                // Channel List
                 platform.player(player).sendMessage(crewChat.getMessages().channelListHeader());
                 for (Channel channel : channelManager.getChannels())
                     if (!(channel instanceof Party))
                         platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel.getName(), channel.getTextColor()));
+                // Party List
                 if (channelManager.getChannelNames().stream().anyMatch(string -> channelManager.channelFromString(string) instanceof Party))
                     platform.player(player).sendMessage(crewChat.getMessages().partyListHeader());
                 for (Channel channel : channelManager.getChannels())
                     if (channel instanceof Party)
                         platform.player(player).sendMessage(crewChat.getMessages().partyListEntry(channel.getName(), channel.getTextColor()));
                 // TODO: Change this message to be channel/party specific
+                // Active Channel
                 platform.player(player).sendMessage(crewChat.getMessages().channelListActive(playerManager.getActiveChannel(player),
                         channelManager.channelFromString(playerManager.getActiveChannel(player)).getTextColor()));
+                // Subscribed Channel List
                 platform.player(player).sendMessage(crewChat.getMessages().channelListSubscribedHeader());
                 for (String channel : playerManager.getSubscribedChannels(player))
                     if (!(channelManager.channelFromString(channel) instanceof Party))
                         platform.player(player).sendMessage(crewChat.getMessages().channelListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
+                // Joined Party List
                 if (playerManager.getSubscribedChannels(player).stream().anyMatch(string -> channelManager.channelFromString(string) instanceof Party))
                     platform.player(player).sendMessage(crewChat.getMessages().partyListJoinedHeader());
                 for (String channel : playerManager.getSubscribedChannels(player))
                     if (channelManager.channelFromString(channel) instanceof Party)
                         platform.player(player).sendMessage(crewChat.getMessages().partyListEntry(channel, channelManager.channelFromString(channel).getTextColor()));
+                // Muted Player List
                 if (!playerManager.getMutedPlayerNames(player).isEmpty()) {
                     platform.player(player).sendMessage(crewChat.getMessages().mutedListHeader());
                     for (Mutee mutee : playerManager.getMutedPlayers(player))
@@ -147,6 +153,7 @@ public class ChatCommand extends BaseCommand {
     @CommandPermission("crewchat.chat.status")
     @CommandCompletion("@nothing")
     public void onStatus(Player player, @Optional String status) {
+        // If no status given, display current status
         if (status == null) {
             try {
                 platform.player(player).sendMessage(crewChat.getMessages().statusIs(playerManager.getStatus(player)));
@@ -155,6 +162,7 @@ public class ChatCommand extends BaseCommand {
                 platform.player(player).sendMessage(crewChat.getMessages().statusSyntaxError());
             }
         }
+        // Set new status
         else {
             // Make sure the status string doesn't have any syntax errors
             try {
@@ -173,8 +181,10 @@ public class ChatCommand extends BaseCommand {
     public void onSubscribe(Player player, Channel channel) {
         // Check if channel exists
         if (channel != null) {
+            // Check permission
             if (player.hasPermission("crewchat.chat.subscribe." + channel.getName())) {
                 TextColor channelColor = channel.getTextColor();
+                // Check if already subscribed
                 if (playerManager.getSubscribedChannels(player).contains(channel.getName()))
                     platform.player(player).sendMessage(crewChat.getMessages().alreadySubscribed(channel.getName(), channelColor));
                 else {
@@ -193,11 +203,15 @@ public class ChatCommand extends BaseCommand {
     @Description("Unsubscribes player from channel.")
     @CommandCompletion("@channels")
     public void onUnsubscribe(Player player, Channel channel) {
+        // Check if channel exists
         if (channel != null) {
+            // Check permission
             if (player.hasPermission("crewchat.chat.unsubscribe." + channel.getName())) {
                 TextColor channelColor = channel.getTextColor();
+                // Check if already unsubscribed
                 if (!playerManager.getSubscribedChannels(player).contains(channel.getName()))
                     platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channel.getName(), channelColor));
+                // Check if channel is active channel
                 else if (channelManager.channelFromString(playerManager.getActiveChannel(player))
                         .equals(channelManager.channelFromString(channel.getName())))
                     platform.player(player).sendMessage(crewChat.getMessages().cantUnsubscribeActive(channel.getName(), channelColor));
@@ -219,8 +233,10 @@ public class ChatCommand extends BaseCommand {
     public void onSwitch(Player player, Channel channel) {
         // Check if channel exists
         if (channel != null) {
+            // Check if player has permission
             if (player.hasPermission("crewchat.chat.switch." + channel.getName())) {
                 TextColor channelColor = channel.getTextColor();
+                // Check if player subscribed to channel
                 if (!playerManager.getSubscribedChannels(player).contains(channel.getName()))
                     platform.player(player).sendMessage(crewChat.getMessages().notSubscribed(channel.getName(), channelColor));
                 else {
@@ -291,6 +307,7 @@ public class ChatCommand extends BaseCommand {
     @Description("Suppresses all chat messages for player.")
     @CommandPermission("crewchat.chat.deafen")
     public void onDeafen(Player player) {
+        // Check if already deafened
         if (!playerManager.isDeafened(player)) {
             playerManager.setDeafened(player, true);
             platform.player(player).sendMessage(crewChat.getMessages().playerDeafened());

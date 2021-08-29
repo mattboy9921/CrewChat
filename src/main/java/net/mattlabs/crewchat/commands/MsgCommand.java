@@ -31,7 +31,9 @@ public class MsgCommand extends BaseCommand {
         playerManager.updateMutedPlayers();
 
         Player recipient = Bukkit.getPlayerExact(recipientString);
+        // Check if player exists
         if (recipient == null) platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
+        // Check if messaging self
         else if (sender.getName().equalsIgnoreCase(recipient.getName())) {
             platform.player(sender).sendMessage(crewChat.getMessages().cantMessageSelf());
         }
@@ -40,10 +42,12 @@ public class MsgCommand extends BaseCommand {
             String time = format.format(new Date());
 
             msgManager.updatePlayer(recipient.getName(), sender.getName());
+            // Send message to sender
             platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
                     chat.getPlayerPrefix(recipient), recipient.getName(),
                     playerManager.getStatus(sender),
                     playerManager.getStatus(recipient), time, message));
+            // Check if recipient is muted, otherwise send message
             if (!playerManager.hasMuted(recipient, sender))
                 platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
                         chat.getPlayerPrefix(recipient), sender.getName(),

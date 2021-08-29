@@ -30,20 +30,25 @@ public class ReplyCommand extends BaseCommand {
     public void onDefault(Player sender, String message) {
         playerManager.updateMutedPlayers();
 
+        // Check if player has received a message
         if (msgManager.playerExists(sender.getName())) {
+            // Check if recipient still online
             if (Bukkit.getPlayer(msgManager.getLastSender(sender.getName())) == null)
                 platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
             else {
                 SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
                 String time = format.format(new Date());
 
+
                 Player recipient = Bukkit.getPlayer(msgManager.getLastSender(sender.getName()));
                 msgManager.updatePlayer(recipient.getName(), sender.getName());
+                // Send message to sender
                 platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
                         chat.getPlayerPrefix(recipient), recipient.getName(),
                         playerManager.getStatus(sender),
                         playerManager.getStatus(recipient), time, message));
 
+                // If not muted, send to recipient
                 if (!playerManager.hasMuted(recipient, sender))
                     platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
                             chat.getPlayerPrefix(recipient), sender.getName(),

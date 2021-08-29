@@ -21,6 +21,7 @@ public class PlayerManager {
     private final Map<UUID, Chatter> chatters = new HashMap<>();
     private final Map<UUID, Chatter> onlineChatters = new HashMap<>();
 
+    // Load each player from the data file
     public void loadPlayers() {
         PlayerData playerData = configurateManager.get("playerdata.conf");
         playerData.getChatters().forEach(chatter -> chatters.put(chatter.getUuid(), chatter));
@@ -28,6 +29,7 @@ public class PlayerManager {
         CrewChat.getInstance().getLogger().info(chatters.size() + " player(s) loaded.");
     }
 
+    // Load the online players specifically
     public void loadOnlinePlayers() {
         for (Player player : CrewChat.getInstance().getServer().getOnlinePlayers()) {
             if (chatters.containsKey(player.getUniqueId()))
@@ -58,6 +60,7 @@ public class PlayerManager {
         return chatters.containsKey(player.getUniqueId());
     }
 
+    // Add a new player
     public void addPlayer(Player player, String activeChannel, ArrayList<String> subscribedChannels) throws NullPointerException {
         boolean configError = true;
         for (Channel channel : channelManager.getChannels()) {
@@ -209,6 +212,7 @@ public class PlayerManager {
         configurateManager.save("playerdata.conf");
     }
 
+    // Checks each online chatter's mutes to see if any have expired and removes them accordingly
     public void updateMutedPlayers() {
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), () -> {
             for (Chatter chatter : onlineChatters.values()) {
@@ -224,6 +228,7 @@ public class PlayerManager {
         });
     }
 
+    // Updates channels/parties for a specified player
     public void updateChannels(Player player) {
         Chatter chatter = chatters.get(player.getUniqueId());
         chatter.getSubscribedChannels().removeIf(s -> !channelManager.getChannelNames().contains(s));
@@ -231,6 +236,7 @@ public class PlayerManager {
         crewChat.getServer().getScheduler().runTaskAsynchronously(crewChat, () -> configurateManager.save("playerdata.conf"));
     }
 
+    // Updates channels/parties
     private void updateChannels() {
         chatters.values().forEach(chatter -> {
             chatter.getSubscribedChannels().removeIf(s -> !channelManager.getChannelNames().contains(s));
