@@ -34,8 +34,8 @@ public class PartyCommand extends BaseCommand {
     }
 
     @Subcommand("create")
-    @CommandPermission("crewchat.party.create")
     @Description("Creates a party.")
+    @CommandPermission("crewchat.party.create")
     @CommandCompletion("@nothing @nothing")
     public void onCreate(Player player, Party party, @Optional @Single String hexColor) {
         // Check if party exists

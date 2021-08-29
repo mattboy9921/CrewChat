@@ -83,8 +83,7 @@ public class CrewChatCommand extends BaseCommand {
     public void onReload(CommandSender commandSender) {
         CrewChat.getInstance().reload();
 
-        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().configReloaded());
-        CrewChat.getInstance().getLogger().info("CrewChat reloaded.");
+        platform.sender(commandSender).sendMessage(crewChat.getMessages().configReloaded());
     }
 
     @Subcommand("info")
@@ -94,20 +93,16 @@ public class CrewChatCommand extends BaseCommand {
         @Default
         @Description("List all info for the CrewChat plugin.")
         public void onInfo(CommandSender commandSender) {
-            if (commandSender instanceof Player) {
-                Player player = (Player) commandSender;
-
-                // Header
-                platform.player(player).sendMessage(crewChat.getMessages().crewChatInfoHeader());
-                // Channels
-                platform.player(player).sendMessage(crewChat.getMessages().crewChatChannelsLoaded(String.valueOf(channelManager.getChannels().size())));
-                // Players
-                platform.player(player).sendMessage(crewChat.getMessages().crewChatPlayersLoaded(String.valueOf(playerManager.getPlayerCount())));
-                // Online Players
-                platform.player(player).sendMessage(crewChat.getMessages().crewChatOnlinePlayersLoaded(String.valueOf(playerManager.getOnlinePlayerCount())));
-                // Discord Integration
-                platform.player(player).sendMessage(crewChat.getMessages().crewChatDiscordIntegration(crewChat.getDiscordSRVEnabled()));
-            }
+            // Header
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatInfoHeader());
+            // Channels
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatChannelsLoaded(String.valueOf(channelManager.getChannels().size())));
+            // Players
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatPlayersLoaded(String.valueOf(playerManager.getPlayerCount())));
+            // Online Players
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatOnlinePlayersLoaded(String.valueOf(playerManager.getOnlinePlayerCount())));
+            // Discord Integration
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatDiscordIntegration(crewChat.getDiscordSRVEnabled()));
         }
 
         @Subcommand("channel")
@@ -130,27 +125,16 @@ public class CrewChatCommand extends BaseCommand {
             else {
                 // Check if channel exists
                 if (channel == null) {
-                    if (commandSender instanceof Player)
-                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().channelNoExist(getLastCommandOperationContext().getArgs()[0]));
-                    else CrewChat.getInstance().getLogger().info("Channel " + getLastCommandOperationContext().getArgs()[0] + " doesn't exist!");
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().channelNoExist(getLastCommandOperationContext().getArgs()[0]));
                 }
                 else {
-                    if (commandSender instanceof Player)
-                        platform.player((Player) commandSender).sendMessage(crewChat.getMessages().crewChatChannelInfo(channel.getName(),
-                                channel.getDescription(),
-                                channel.getTextColor(),
-                                playerManager.getSubscribedPlayers(channel.getName()).size(),
-                                channel.isAutoSubscribe(),
-                                channel.isExcludeFromDiscord(),
-                                channel.isShowChannelNameDiscord()));
-                    else CrewChat.getInstance().getLogger().info("Channel " + channel.getName()
-                            + " info: " +
-                            "\n - Name: " + channel.getName() +
-                            "\n - Chat Color: " + channel.getTextColor().toString() +
-                            "\n - Subscribed players: " + playerManager.getSubscribedPlayers(channel.getName()).size() +
-                            "\n - Auto Subscribe: " + (channel.isAutoSubscribe() ? "True" : "False") +
-                            "\n - Exclude from Discord: " + (channel.isExcludeFromDiscord() ? "True" : "False") +
-                            "\n - Show Channel Name on Discord: " + (channel.isShowChannelNameDiscord() ? "True" : "False"));
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatChannelInfo(channel.getName(),
+                            channel.getDescription(),
+                            channel.getTextColor(),
+                            playerManager.getSubscribedPlayers(channel.getName()).size(),
+                            channel.isAutoSubscribe(),
+                            channel.isExcludeFromDiscord(),
+                            channel.isShowChannelNameDiscord()));
                 }
             }
         }
@@ -158,7 +142,7 @@ public class CrewChatCommand extends BaseCommand {
         @Subcommand("player")
         @Description("Lists info about specified player.")
         @CommandCompletion("@chatters")
-        public void onChannel(CommandSender commandSender, String player) {
+        public void onChannel(CommandSender commandSender, @Values("@chatters") String player) {
             OfflinePlayer requestedPlayer = Bukkit.getOfflinePlayer(player);
             if (playerManager.playerExists(requestedPlayer)) {
 

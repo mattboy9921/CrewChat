@@ -1,10 +1,7 @@
 package net.mattlabs.crewchat.commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.MsgManager;
@@ -29,34 +26,31 @@ public class ReplyCommand extends BaseCommand {
 
     @Default
     @Description("Replies to last received private message.")
-    public void onDefault(CommandSender commandSender, String message) {
-        if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
-        else {
-            playerManager.updateMutedPlayers();
+    @CommandCompletion("@nothing")
+    public void onDefault(Player sender, String message) {
+        playerManager.updateMutedPlayers();
 
-            Player sender = (Player) commandSender;
-            if (msgManager.playerExists(sender.getName())) {
-                if (Bukkit.getPlayer(msgManager.getLastSender(sender.getName())) == null)
-                    platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
-                else {
-                    SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
-                    String time = format.format(new Date());
+        if (msgManager.playerExists(sender.getName())) {
+            if (Bukkit.getPlayer(msgManager.getLastSender(sender.getName())) == null)
+                platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
+            else {
+                SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
+                String time = format.format(new Date());
 
-                    Player recipient = Bukkit.getPlayer(msgManager.getLastSender(sender.getName()));
-                    msgManager.updatePlayer(recipient.getName(), sender.getName());
-                    platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
-                            chat.getPlayerPrefix(recipient), recipient.getName(),
+                Player recipient = Bukkit.getPlayer(msgManager.getLastSender(sender.getName()));
+                msgManager.updatePlayer(recipient.getName(), sender.getName());
+                platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
+                        chat.getPlayerPrefix(recipient), recipient.getName(),
+                        playerManager.getStatus(sender),
+                        playerManager.getStatus(recipient), time, message));
+
+                if (!playerManager.hasMuted(recipient, sender))
+                    platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
+                            chat.getPlayerPrefix(recipient), sender.getName(),
                             playerManager.getStatus(sender),
                             playerManager.getStatus(recipient), time, message));
-
-                    if (!playerManager.hasMuted(recipient, sender))
-                        platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
-                                chat.getPlayerPrefix(recipient), sender.getName(),
-                                playerManager.getStatus(sender),
-                                playerManager.getStatus(recipient), time, message));
-                }
             }
-            else platform.player(sender).sendMessage(crewChat.getMessages().noPMReceived());
         }
+        else platform.player(sender).sendMessage(crewChat.getMessages().noPMReceived());
     }
 }

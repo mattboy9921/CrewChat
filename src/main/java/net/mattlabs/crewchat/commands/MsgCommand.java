@@ -25,34 +25,30 @@ public class MsgCommand extends BaseCommand {
     private final Chat chat = CrewChat.getChat();
 
     @Default
-    @CommandCompletion("@players @nothing")
     @Description("Sends a private message to another player.")
-    public void onDefault(CommandSender commandSender, String recipientString, String message) {
-        if (!(commandSender instanceof Player)) CrewChat.getInstance().getLogger().info("Can't be run from console!");
+    @CommandCompletion("@players @nothing")
+    public void onDefault(Player sender, @Name("recipient") String recipientString, String message) {
+        playerManager.updateMutedPlayers();
+
+        Player recipient = Bukkit.getPlayerExact(recipientString);
+        if (recipient == null) platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
+        else if (sender.getName().equalsIgnoreCase(recipient.getName())) {
+            platform.player(sender).sendMessage(crewChat.getMessages().cantMessageSelf());
+        }
         else {
-            playerManager.updateMutedPlayers();
+            SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
+            String time = format.format(new Date());
 
-            Player sender = (Player) commandSender; 
-            Player recipient = Bukkit.getPlayerExact(recipientString);
-            if (recipient == null) platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
-            else if (sender.getName().equalsIgnoreCase(recipient.getName())) {
-                platform.player(sender).sendMessage(crewChat.getMessages().cantMessageSelf());
-            }
-            else {
-                SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
-                String time = format.format(new Date());
-
-                msgManager.updatePlayer(recipient.getName(), sender.getName());
-                platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
-                        chat.getPlayerPrefix(recipient), recipient.getName(),
+            msgManager.updatePlayer(recipient.getName(), sender.getName());
+            platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
+                    chat.getPlayerPrefix(recipient), recipient.getName(),
+                    playerManager.getStatus(sender),
+                    playerManager.getStatus(recipient), time, message));
+            if (!playerManager.hasMuted(recipient, sender))
+                platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
+                        chat.getPlayerPrefix(recipient), sender.getName(),
                         playerManager.getStatus(sender),
                         playerManager.getStatus(recipient), time, message));
-                if (!playerManager.hasMuted(recipient, sender))
-                    platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
-                            chat.getPlayerPrefix(recipient), sender.getName(),
-                            playerManager.getStatus(sender),
-                            playerManager.getStatus(recipient), time, message));
-            }
         }
     }
 }
