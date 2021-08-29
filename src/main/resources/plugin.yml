@@ -31,6 +31,8 @@ permissions:
   crewchat.chat.color:
     description: Allows player to use color codes/MiniMessage tags in chat
 
+  crewchat.chat.default.active.<channel>:
+    description: Makes specified <channel> the default active channel on first join
   crewchat.chat.subscribe.<channel>:
     description: Allows player to subscribe to <channel>
   crewchat.chat.unsubscribe.<channel>:

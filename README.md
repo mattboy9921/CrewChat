@@ -76,6 +76,7 @@ Chat:
 - `crewchat.chat.color` - Allows player to use color codes/MiniMessage tags in chat
 
 Channels:
+- `crewchat.chat.default.active.<channel>` - Makes specified `<channel>` the default active channel on first join
 - `crewchat.chat.subscribe.<channel>` - Allows player to subscribe to `<channel>`
 - `crewchat.chat.unsubscribe.<channel>` - Allows player to unsubscribe from `<channel>`
 - `crewchat.chat.switch.<channel>` - Allows player to switch `<channel>` as active channel
