@@ -86,7 +86,6 @@ public class ChatCommand extends BaseCommand {
     @CommandPermission("crewchat.chat.info")
     public class Info extends BaseCommand {
 
-        // TODO: Modify this method to compile list of channels and parties
         @Default
         @Description("Lists all channels, active channel and subscribed channels.")
         public void onInfo(CommandSender commandSender) {
