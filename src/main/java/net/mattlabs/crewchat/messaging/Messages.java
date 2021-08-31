@@ -1227,7 +1227,7 @@ public class Messages {
     public Component playerLeftParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(playerJoinedParty,
+                .append(MiniMessage.get().parse(playerLeftParty,
                         "player_name", MessageUtil.serialize(prefix) + playerName,
                         "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold><" + textColor.toString() + ">"))
                 .build();
