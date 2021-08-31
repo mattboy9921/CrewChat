@@ -37,7 +37,7 @@ public class ChatSender implements Runnable{
     private final String notificationSound;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
-    private boolean allowColor, isDiscordMessage, excludeFromDiscord, isPartyMessage;
+    private boolean allowColor, isDiscordMessage, excludeFromDiscord, isPartyMessage, showChannelName;
 
     public ChatSender(){
         // Check version for notification sound
@@ -77,6 +77,7 @@ public class ChatSender implements Runnable{
             mentionedPlayers = MessageUtil.getMentionedPlayers(message, subscribedPlayers);
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
             isPartyMessage = channelManager.channelFromString(intendedChannel) instanceof Party;
+            showChannelName = (isPartyMessage || channelManager.channelFromString(intendedChannel).isShowChannelNameInGame());
             this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
             // Schedule message to be sent
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
@@ -163,6 +164,7 @@ public class ChatSender implements Runnable{
                     MessageUtil.parseMarkdown(message),
                     intendedChannel,
                     channelColor,
+                    showChannelName,
                     isPartyMessage);
             messageComponentMD = crewChat.getMessages().chatMessage(prefix,
                     name,
@@ -171,6 +173,7 @@ public class ChatSender implements Runnable{
                     message,
                     intendedChannel,
                     channelColor,
+                    showChannelName,
                     isPartyMessage);
         }
 

@@ -1282,14 +1282,14 @@ public class Messages {
             "Possible tags: <player_prefix>, <player_name>")
     private String chatMessageHeader = "<player_prefix><player_name><gray>: ";
 
-    public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor, boolean isParty) {
+    public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor, boolean showChannelName, boolean isParty) {
         // %prefix%%playerName%: %message%
         return Component.text()
                 .append(MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
                         MessageUtil.sanitizeMessage(this.status) + ": " + status + "<reset>\n" +
                         (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(this.channel)) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
-                        "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</" + textColor.toString() + "><gray>]</gray> " +
+                        (showChannelName ? "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</" + textColor.toString() + "><gray>]</gray> " : "") +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
                 "player_prefix", MessageUtil.serialize(prefix),
                 "player_name", playerName))
