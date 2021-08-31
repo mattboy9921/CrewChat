@@ -5,27 +5,28 @@ import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.CaseFormat;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.Mutee;
+import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.mattlabs.crewchat.util.TextColorSerializer;
+import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.serialize.SerializationException;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 @CommandAlias("crewchat|cc")
 @CommandPermission("crewchat.use")
@@ -38,7 +39,7 @@ public class CrewChatCommand extends BaseCommand {
     private final PlayerManager playerManager = crewChat.getPlayerManager();
 
     ArrayList<String> properties;
-    HashMap<String, Method> channelMethods;
+    HashMap<String, Method> channelMethods, messagesMethods;
     HashMap<String, Field> channelFields;
 
     public CrewChatCommand() {
@@ -48,6 +49,9 @@ public class CrewChatCommand extends BaseCommand {
         channelFields = new HashMap<>();
         for (Field field : Channel.class.getDeclaredFields()) channelFields.put(field.getName(), field);
         properties = new ArrayList<>();
+        // Get Messages Methods
+        messagesMethods = new HashMap<>();
+        for (Method method : Messages.class.getMethods()) messagesMethods.put(method.getName(), method);
 
         // Register ACF Completions
         crewChat.getPaperCommandManager().getCommandCompletions().registerStaticCompletion("properties", () -> {
@@ -70,6 +74,13 @@ public class CrewChatCommand extends BaseCommand {
         });
 
         crewChat.getPaperCommandManager().getCommandCompletions().registerAsyncCompletion("chatters", context -> playerManager.getPlayerNames());
+
+        crewChat.getPaperCommandManager().getCommandCompletions().registerStaticCompletion("messages", () -> {
+            ArrayList<String> messages = new ArrayList<>();
+            for (String method : messagesMethods.keySet())
+                messages.add(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_HYPHEN, method));
+            return messages;
+        });
     }
 
     @Default
@@ -211,5 +222,47 @@ public class CrewChatCommand extends BaseCommand {
     @Description("CrewChat help command.")
     public void onHelp(CommandSender commandSender) {
         platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatHelpCommand());
+    }
+
+    @Subcommand("debug")
+    @Description("Crewchat debug command.")
+    @CommandPermission("crewchat.debug")
+    @CommandCompletion("@messages")
+    public void onDebug(CommandSender commandSender, String message) {
+        // Convert formatting
+        message = CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, message);
+        // Check for valid method
+        if (!messagesMethods.containsKey(message)) {
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().invalidMessage());
+        }
+        else {
+            Method method = messagesMethods.get(message);
+            Parameter[] parameters = method.getParameters();
+            Type[] types = method.getParameterTypes();
+            Object[] args = new Object[method.getParameterCount()];
+            Random random = new Random();
+            for (int count = 0; count < types.length; count++) {
+                switch (types[count].getTypeName()) {
+                    case "java.lang.String":
+                        args[count] = "{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2) + "}";
+                        break;
+                    case "net.mattlabs.crewchat.adventure.text.Component":
+                        args[count] = Component.text("{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2)+ "}");
+                        break;
+                    case "net.mattlabs.crewchat.adventure.text.format.TextColor":
+                        args[count] = TextColor.color(random.nextFloat(), random.nextFloat(), random.nextFloat());
+                        break;
+                    case "boolean":
+                        args[count] = random.nextBoolean();
+                        break;
+                }
+            }
+            try {
+                platform.sender(commandSender).sendMessage((Component) method.invoke(crewChat.getMessages(), args));
+            }
+            catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
