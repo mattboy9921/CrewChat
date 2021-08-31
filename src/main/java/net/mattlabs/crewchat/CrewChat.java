@@ -160,6 +160,8 @@ public class CrewChat extends JavaPlugin{
         if (discordSRVEnabled) DiscordSRV.api.subscribe(discordSRVListener);
 
         // ACF
+        // Enable Unstable API
+        paperCommandManager.enableUnstableAPI("help");
         // Set Message Format
         ChatColor[] colors = {ChatColor.WHITE, ChatColor.DARK_GREEN, ChatColor.GRAY};
         paperCommandManager.setFormat(MessageType.ERROR, colors);

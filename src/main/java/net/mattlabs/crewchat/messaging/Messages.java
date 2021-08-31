@@ -7,7 +7,6 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.minimessage.parser.ParsingException;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.util.HSVLike;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.MessageUtil;
@@ -73,16 +72,18 @@ public class Messages {
     // Welcome to chat
     @Comment("\nAppears in the chat base command.")
     private String welcomeToChat = "<white>Welcome to chat!";
-
-    // TODO: Use user defined strings for hover text
+    
+    // Click here for help
+    @Comment("\nAppears in the chat base command.")
+    private String clickForHelp = "<dark_green><bold>Click<reset> <white>here for help.";
+    
     public Component chatBaseCommand() {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(welcomeToChat))
                 .append(Component.text(" [" + help + "]", BLUE, BOLD)
                         .hoverEvent(HoverEvent.showText(Component.text()
-                                .append(Component.text("Click", DARK_GREEN, BOLD))
-                                .append(Component.text(" here for help.", WHITE, BOLD))))
+                                .append(MiniMessage.get().parse(clickForHelp))))
                         .clickEvent(ClickEvent.runCommand("/chat help")))
                 .build();
     }
@@ -141,9 +142,12 @@ public class Messages {
     // ** Help **
     public Component chatHelpCommand() {
         return Component.text()
+                // Header
                 .append(chatHeader)
                 .append(Component.text("Command Help:", WHITE))
                 .append(Component.text(" - Alias: /c <args> - (Click to run) -", GRAY))
+                .append(Component.text("\n"))
+                // chat
                 .append(Component.text("/chat", DARK_GREEN)
                         .hoverEvent(HoverEvent.showText(Component.text()
                                 .append(clickToRun)
@@ -151,6 +155,8 @@ public class Messages {
                         .clickEvent(ClickEvent.runCommand("/chat ")))
                 .append(Component.text(" - ", GRAY))
                 .append(Component.text("Base Chat command.", WHITE))
+                .append(Component.text("\n"))
+                // chat help
                 .append(Component.text("/chat help", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
@@ -158,47 +164,104 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/chat help")))
                 .append(Component.text(" - ", GRAY))
                 .append(Component.text("Shows this screen.", WHITE))
+                .append(Component.text("\n"))
+                // chat info
                 .append(Component.text("/chat info", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
                             .build()))
                     .clickEvent(ClickEvent.runCommand("/chat info")))
                 .append(Component.text(" - ", GRAY))
-                .append(Component.text("Lists all channels, active channel and subscribed channels.", WHITE))
+                .append(Component.text("Shows channel list, party list, active channel, subscribed channels and joined parties.", WHITE))
+                .append(Component.text("\n"))
+                // chat info channel <channel>
                 .append(Component.text("/chat info channel <channel>", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)))
                     .clickEvent(ClickEvent.suggestCommand("/chat info channel ")))
                 .append(Component.text(" - ", GRAY))
                 .append(Component.text("Lists info about specified channel.", WHITE))
-                .append(Component.text("/chat status <status>", DARK_GREEN)
+                .append(Component.text("\n"))
+                // chat status [status]
+                .append(Component.text("/chat status [status]", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
                             .build()))
                     .clickEvent(ClickEvent.suggestCommand("/chat status ")))
                 .append(Component.text(" - ", GRAY))
-                .append(Component.text("Sets player's status.", WHITE))
+                .append(Component.text("Sets (or shows) your status.", WHITE))
+                .append(Component.text("\n"))
+                // chat subscribe <channel>
                 .append(Component.text("/chat subscribe <channel>", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
                             .build()))
                     .clickEvent(ClickEvent.suggestCommand("/chat subscribe ")))
                 .append(Component.text(" - ", GRAY))
-                .append(Component.text("Subscribes player to channel.", WHITE))
+                .append(Component.text("Subscribes you to specified channel.", WHITE))
+                .append(Component.text("\n"))
+                // chat unsubscribe <channel>
                 .append(Component.text("/chat unsubscribe <channel>", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
                             .build()))
                     .clickEvent(ClickEvent.suggestCommand("/chat unsubscribe ")))
                 .append(Component.text(" - ", GRAY))
-                .append(Component.text("Unsubscribes player from channel.", WHITE))
+                .append(Component.text("Unsubscribes you from specified channel.", WHITE))
+                .append(Component.text("\n"))
+                // chat switch <channel>
                 .append(Component.text("/chat switch <channel>", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
                             .build()))
                     .clickEvent(ClickEvent.suggestCommand("/chat switch ")))
                 .append(Component.text(" - ", GRAY))
-                .append(Component.text("Switches active channel.", WHITE))
+                .append(Component.text("Switches your active channel.", WHITE))
+                .append(Component.text("\n"))
+                // chat mute <player>
+                .append(Component.text("/chat mute <player>", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.suggestCommand("/chat mute ")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Mutes the specified player for 24 hours.", WHITE))
+                .append(Component.text("\n"))
+                // chat mute <player>
+                .append(Component.text("/chat mute <player>", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.suggestCommand("/chat mute ")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Mutes specified player for 24 hours.", WHITE))
+                .append(Component.text("\n"))
+                // chat deafen
+                .append(Component.text("/chat deafen", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.suggestCommand("/chat mute ")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Toggles your deafened state (block all chat).", WHITE))
+                .append(Component.text("\n"))
+                // chat send <channel> <message>
+                .append(Component.text("/chat send <channel> <message>", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.suggestCommand("/chat send ")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Sends a message to the specified channel without switching to the channel.", WHITE))
+                .append(Component.text("\n"))
+                // chat mention <player>
+                .append(Component.text("/chat mention <player>", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.suggestCommand("/chat mention ")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Provides a list of players/Discord accounts to mention.", WHITE))
                 .build();
     }
 
@@ -817,13 +880,15 @@ public class Messages {
 
     // ** Help **
 
-    // TODO: Add new lines, update commands
     // Help
     public Component crewChatHelpCommand() {
         return Component.text()
+                // Header
                 .append(crewChatHeader)
                 .append(Component.text("Command Help:", WHITE))
                 .append(Component.text(" - Alias: /cc <args> - (Click to run) -", GRAY))
+                .append(Component.text("\n"))
+                // crewchat
                 .append(Component.text("/crewchat", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
@@ -831,6 +896,8 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/crewchat")))
                 .append(Component.text(" - ", GRAY))
                 .append(Component.text("Base CrewChat command.", WHITE))
+                .append(Component.text("\n"))
+                // crewchat help
                 .append(Component.text("/crewchat help", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
@@ -838,6 +905,35 @@ public class Messages {
                     .clickEvent(ClickEvent.runCommand("/crewchat help")))
                 .append(Component.text(" - ", GRAY))
                 .append(Component.text("Shows this screen.", WHITE))
+                .append(Component.text("\n"))
+                // crewchat info
+                .append(Component.text("/crewchat info", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.runCommand("/crewchat info")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Shows CrewChat general info.", WHITE))
+                .append(Component.text("\n"))
+                // crewchat info channel <channel>
+                .append(Component.text("/crewchat info channel <channel>", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.suggestCommand("/crewchat info channel ")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Shows all information about specified channel.", WHITE))
+                .append(Component.text("\n"))
+                // crewchat info player <player>
+                .append(Component.text("/crewchat info player <player>", DARK_GREEN)
+                        .hoverEvent(HoverEvent.showText(Component.text()
+                                .append(clickToRun)
+                                .build()))
+                        .clickEvent(ClickEvent.suggestCommand("/crewchat info player ")))
+                .append(Component.text(" - ", GRAY))
+                .append(Component.text("Shows all information about specified player.", WHITE))
+                .append(Component.text("\n"))
+                // crewchat reload
                 .append(Component.text("/crewchat reload", DARK_GREEN)
                     .hoverEvent(HoverEvent.showText(Component.text()
                             .append(clickToRun)
