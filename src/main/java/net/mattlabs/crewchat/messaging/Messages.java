@@ -632,55 +632,18 @@ public class Messages {
     // Info Header
     private transient String crewChatInfoHeader = "<white>Version <bold><version></bold> Info:";
 
-    public Component crewChatInfoHeader() {
-        return Component.text()
-                .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatInfoHeader,
-                "version", CrewChat.getInstance().getDescription().getVersion()))
-                .build();
-    }
-
     // Info Channels
     private transient String crewChatChannelsLoaded = "<white><bold><channels></bold> channel(s) loaded.";
-
-    public Component crewChatChannelsLoaded(String channels) {
-        return Component.text()
-                .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatChannelsLoaded, "channels", channels))
-                .build();
-    }
 
     // Info Players
     private transient String crewChatPlayersLoaded = "<white><bold><players></bold> player(s) loaded.";
 
-    public Component crewChatPlayersLoaded(String players) {
-        return Component.text()
-                .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatPlayersLoaded, "players", players))
-                .build();
-    }
-
     // Info Online Players
     private transient String crewChatOnlinePlayersLoaded = "<white><bold><players></bold> online player(s) loaded.";
 
-    public Component crewChatOnlinePlayersLoaded(String players) {
-        return Component.text()
-                .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatOnlinePlayersLoaded, "players", players))
-                .build();
-    }
-
     // Info Discord Integration
     private transient String crewChatDiscordIntegration = "<white>Discord integration enabled: <bold><enabled></bold>.";
-
-    public Component crewChatDiscordIntegration(Boolean enabled) {
-        return Component.text()
-                .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatDiscordIntegration, "enabled", enabled ? "True" : "False"))
-                .build();
-    }
-
-    // TODO: Use this
+    
     // Info
     public Component crewChatInfo(int channelsLoaded, int playersLoaded, int onlinePlayersLoaded, boolean discordIntegration) {
         return Component.text()

@@ -96,16 +96,11 @@ public class CrewChatCommand extends BaseCommand {
         @Default
         @Description("List all info for the CrewChat plugin.")
         public void onInfo(CommandSender commandSender) {
-            // Header
-            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatInfoHeader());
-            // Channels
-            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatChannelsLoaded(String.valueOf(channelManager.getChannels().size())));
-            // Players
-            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatPlayersLoaded(String.valueOf(playerManager.getPlayerCount())));
-            // Online Players
-            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatOnlinePlayersLoaded(String.valueOf(playerManager.getOnlinePlayerCount())));
-            // Discord Integration
-            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatDiscordIntegration(crewChat.getDiscordSRVEnabled()));
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatInfo(
+                    channelManager.getChannels().size(),
+                    playerManager.getPlayerCount(),
+                    playerManager.getOnlinePlayerCount(),
+                    crewChat.getDiscordSRVEnabled()));
         }
 
         @Subcommand("channel")
