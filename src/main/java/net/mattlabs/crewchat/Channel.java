@@ -85,6 +85,10 @@ public class Channel {
         this.showChannelNameDiscord = showChannelNameDiscord;
     }
 
+    public void setShowChannelNameInGame(boolean showChannelNameInGame) {
+        this.showChannelNameInGame = showChannelNameInGame;
+    }
+
     public void setExcludeFromDiscord(boolean excludeFromDiscord) {
         this.excludeFromDiscord = excludeFromDiscord;
     }
