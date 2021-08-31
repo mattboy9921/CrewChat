@@ -286,7 +286,7 @@ public class Messages {
     // Party List Header
     @Comment("\nAppears in the chat info command.\n" +
             "(Does not accept color codes)")
-    private String partyListHeader = "Party List: (Click for more info)";
+    private String partyListHeader = "Party List:";
 
     public Component partyListHeader() {
         return Component.text()
@@ -373,11 +373,7 @@ public class Messages {
     public Component partyListEntry(String name, TextColor textColor) {
         return Component.text()
                 .append(Component.text(" - ", DARK_GREEN))
-                .append(Component.text(name, textColor, BOLD)
-                        .hoverEvent(HoverEvent.showText(Component.text()
-                                .append(Component.text("Click", DARK_GREEN, BOLD))
-                                .append(Component.text(" for more info.", WHITE))))
-                        .clickEvent(ClickEvent.runCommand("/chat info channel " + name)))
+                .append(Component.text(name, textColor, BOLD))
                 .build();
     }
 
