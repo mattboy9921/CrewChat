@@ -59,11 +59,14 @@ public class CrewChatCommand extends BaseCommand {
 
         crewChat.getPaperCommandManager().getCommandCompletions().registerAsyncCompletion("values", context -> {
             String property = context.getContextValueByName(String.class, "property");
-            Type type;
-            type = channelFields.get(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, property)).getType();
-            if (type.equals(boolean.class)) return new ArrayList<>(Arrays.asList("true", "false"));
-            else if (type.equals(TextColor.class)) return NamedTextColor.NAMES.keys();
-            else return new ArrayList<>();
+            if (channelFields.get(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, property)) == null) return new ArrayList<>();
+            else {
+                Type type;
+                type = channelFields.get(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, property)).getType();
+                if (type.equals(boolean.class)) return new ArrayList<>(Arrays.asList("true", "false"));
+                else if (type.equals(TextColor.class)) return NamedTextColor.NAMES.keys();
+                else return new ArrayList<>();
+            }
         });
 
         crewChat.getPaperCommandManager().getCommandCompletions().registerAsyncCompletion("chatters", context -> playerManager.getPlayerNames());
@@ -186,7 +189,8 @@ public class CrewChatCommand extends BaseCommand {
                 try {
                     // Change property
                     if (channelFields.get(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, property)).getType().equals(boolean.class))
-                        valueObj = Boolean.parseBoolean(value);
+                        if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) throw new SerializationException();
+                        else valueObj = Boolean.parseBoolean(value);
                     else if (channelFields.get(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, property)).getType().equals(TextColor.class))
                         valueObj = TextColorSerializer.INSTANCE.deserialize(TextColor.class, value);
                     channelMethods.get("set" + CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, property)).invoke(actualChannel, valueObj);
@@ -196,9 +200,12 @@ public class CrewChatCommand extends BaseCommand {
 
                     platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatPropertyChanged(actualChannel.getName(), property, value));
                 }
-                catch (IllegalAccessException | InvocationTargetException | NullPointerException | SerializationException e) {
+                catch (IllegalAccessException | InvocationTargetException | NullPointerException e) {
                     e.printStackTrace();
                     throw new InvalidCommandArgument();
+                }
+                catch (SerializationException e) {
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatValueIncorrect(value));
                 }
             }
         }

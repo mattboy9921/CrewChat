@@ -828,15 +828,14 @@ public class Messages {
                 .append(MiniMessage.get().parse(crewChatPropertyNoExist, "property", property))
                 .build();
     }
-
-    // TODO: Use this...
+    
     // Value Incorrect
     private transient String crewChatValueIncorrect = "<white>Value <bold><value></bold> is incorrect!";
 
     public Component crewChatValueIncorrect(String value) {
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatPropertyNoExist, "value", value))
+                .append(MiniMessage.get().parse(crewChatValueIncorrect, "value", value))
                 .build();
     }
 
