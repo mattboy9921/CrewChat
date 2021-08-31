@@ -1191,6 +1191,34 @@ public class Messages {
                 .build();
     }
 
+    // Player Joined Party
+    @Comment("\nAppears when another player joins a party.\n" +
+            "Possible tags: <player>, <party>")
+    private String playerJoinedParty = "<white><player> has joined <party>.";
+
+    public Component playerJoinedParty(String prefix, String player, String party, TextColor textColor) {
+        return Component.text()
+                .append(partyHeader)
+                .append(MiniMessage.get().parse(playerJoinedParty,
+                        "player", MessageUtil.serialize(prefix) + player,
+                        "party", "<" + textColor.toString() + "><bold>" + party + "</bold><" + textColor.toString() + ">"))
+                .build();
+    }
+
+    // Player Joined Party
+    @Comment("\nAppears when another player leaves a party.\n" +
+            "Possible tags: <player>, <party>")
+    private String playerLeftParty = "<white><player> has left <party>.";
+
+    public Component playerLeftParty(String prefix, String player, String party, TextColor textColor) {
+        return Component.text()
+                .append(partyHeader)
+                .append(MiniMessage.get().parse(playerJoinedParty,
+                        "player", MessageUtil.serialize(prefix) + player,
+                        "party", "<" + textColor.toString() + "><bold>" + party + "</bold><" + textColor.toString() + ">"))
+                .build();
+    }
+
     /*================================================================================
 
                                 Private Message Command

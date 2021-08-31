@@ -86,6 +86,13 @@ public class PartyCommand extends BaseCommand {
                 playerManager.addSubscription(player, party.getName());
                 playerManager.setActiveChannel(player, party.getName());
                 platform.player(player).sendMessage(crewChat.getMessages().partyJoined(party.getName(), party.getTextColor()));
+                // Notify others in party
+                playerManager.getSubscribedPlayers(party.getName()).forEach(subbedPlayer ->
+                        platform.player(subbedPlayer).sendMessage(crewChat.getMessages().playerJoinedParty(
+                                CrewChat.getChat().getPlayerPrefix(player),
+                                player.getName(),
+                                party.getName(),
+                                party.getTextColor())));
             }
             else
                 platform.player(player).sendMessage(crewChat.getMessages().alreadyInParty(party.getName(), party.getTextColor()));
@@ -107,6 +114,13 @@ public class PartyCommand extends BaseCommand {
                 playerManager.removeSubscription(player, party.getName());
                 playerManager.setActiveChannel(player, playerManager.getSubscribedChannels(player).get(0));
                 platform.player(player).sendMessage(crewChat.getMessages().partyLeft(party.getName(), party.getTextColor()));
+                // Notify others in party
+                playerManager.getSubscribedPlayers(party.getName()).forEach(subbedPlayer ->
+                        platform.player(subbedPlayer).sendMessage(crewChat.getMessages().playerLeftParty(
+                                CrewChat.getChat().getPlayerPrefix(player),
+                                player.getName(),
+                                party.getName(),
+                                party.getTextColor())));
             }
             else
                 platform.player(player).sendMessage(crewChat.getMessages().notInParty(party.getName(), party.getTextColor()));
