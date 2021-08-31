@@ -28,7 +28,7 @@ CrewChat:
  - `/crewchat info player <player>` - Shows all information about specified player
  - Alias: `/cc`
  
- Chat:
+Chat:
  - `/chat` - Show Chat welcome message
  - `/chat help` - Shows chat command help
  - `/chat info` - Shows channel list, active channel and subscribed channels
@@ -44,26 +44,26 @@ CrewChat:
  - `/chat mention <player>` - Mention a player in game or user on Discord
  - Alias: `/c`
  
- Me:
+Me:
  - `/me <message>` - Sends third person chat message
 
- Broadcast:
+Broadcast:
  - `/broadcast <message>` - Sends a message to every player online
  - Alias: `/bc`, `/yell`
  
- Msg:
+Msg:
  - `/msg <player> <message>` - Sends a private message to a player
  - Alias: `/tell`, `/whisper`, `/w`
  
- Reply:
+Reply:
  - `/reply <message>` - Replies to the last received private message.
  - Alias: `/r`
-
- Party:
-- `/party create <party> [#hex]` Creates a party with the specified name. Without optional hex color code, displays a color picker.
-- `/party join <party>` Joins player to `<party>`
-- `/party leave <party>` Leaves player from `<party>`
-- `/party list <party>` Lists all players currently in `<party>`
+ 
+Party:
+ - `/party create <party> [#hex]` Creates a party with the specified name. Without optional hex color code, displays a color picker.
+ - `/party join <party>` Joins player to `<party>`
+ - `/party leave <party>` Leaves player from `<party>`
+ - `/party list <party>` Lists all players currently in `<party>`
  
 **Permissions**
 
