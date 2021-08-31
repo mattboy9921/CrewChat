@@ -213,14 +213,18 @@ public class ChatSender implements Runnable{
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(discordChannelID),
                             DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
                 }
-
-        // TODO: Add all the new fields
+        // Reset fields
         prefix = null;
+        name = null;
+        discordHeader = null;
+        time = null;
         status = null;
         message = null;
+        channelColor = null;
         intendedChannel = null;
         discordChannelID = null;
         subscribedPlayers.clear();
+        mentionedPlayers.clear();
     }
 }
 
