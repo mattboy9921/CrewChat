@@ -81,7 +81,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(welcomeToChat))
-                .append(Component.text(" [" + MessageUtil.sanitizeMessage(help) + "]", BLUE, BOLD)
+                .append(Component.text(" [" + MessageUtil.sanitizeMessage(WordUtils.capitalize(help)) + "]", BLUE, BOLD)
                         .hoverEvent(HoverEvent.showText(Component.text()
                                 .append(MiniMessage.get().parse(clickForHelp))))
                         .clickEvent(ClickEvent.runCommand("/chat help")))
@@ -275,7 +275,7 @@ public class Messages {
         return Component.text()
                 .append(Component.text("------------------------", GRAY))
                 .append(Component.text("[", DARK_GRAY))
-                .append(Component.text(MessageUtil.sanitizeMessage(chat), DARK_GREEN))
+                .append(Component.text(MessageUtil.sanitizeMessage(WordUtils.capitalize(chat)), DARK_GREEN))
                 .append(Component.text("]", DARK_GRAY))
                 .append(Component.text("------------------------", GRAY))
                 .append(Component.text(MessageUtil.sanitizeMessage(channelListHeader), GRAY))
@@ -541,91 +541,91 @@ public class Messages {
     // Already Subscribed
     @Comment("\nAppears when a player tries to subscribe to a channel they already subscribe to.\n" +
             "Possibe tags: <channel_name>")
-    private String alreadySubscribed = "<white>You are already subscribed to <bold><channel_name></bold>.";
+    private String alreadySubscribed = "<white>You are already subscribed to <channel_name>.";
 
     public Component alreadySubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(alreadySubscribed,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
     // Can't Subscribe
     @Comment("\nAppears when a player can't subscribe to a channel.\n" +
             "Possibe tags: <channel_name>")
-    private String cantSubscribe = "<white>You can't subscribe to <bold><channel_name></bold>!";
+    private String cantSubscribe = "<white>You can't subscribe to <channel_name>!";
 
     public Component cantSubscribe(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantSubscribe,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
     // Can't Unsubscribe
     @Comment("\nAppears when a player can't unsubscribe from a channel.\n" +
             "Possibe tags: <channel_name>")
-    private String cantUnsubscribe = "<white>You can't unsubscribe from <bold><channel_name></bold>!";
+    private String cantUnsubscribe = "<white>You can't unsubscribe from <channel_name>!";
 
     public Component cantUnsubscribe(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantUnsubscribe,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName + "</color:" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
     // Can't Unsubscribe Active
     @Comment("\nAppears when a player can't unsubscribe from a channel because it is their active channel.\n" +
             "Possibe tags: <channel_name>")
-    private String cantUnsubscribeActive = "<white>You can't unsubscribe from <bold><channel_name></bold>, it is your active channel!";
+    private String cantUnsubscribeActive = "<white>You can't unsubscribe from <channel_name>, it is your active channel!";
 
     public Component cantUnsubscribeActive(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantUnsubscribeActive,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName + "</color:" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
     // Not Subscribed
     @Comment("\nAppears when a player unsubscribes from a channel they are not subscribed to.\n" +
             "Possibe tags: <channel_name>")
-    private String notSubscribed = "<white>You aren't subscribed to <bold><channel_name></bold>.";
+    private String notSubscribed = "<white>You aren't subscribed to <channel_name>.";
 
     public Component notSubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(notSubscribed,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName + "</color:" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
     // Now Subscribed
     @Comment("\nAppears when a player subscribes to a channel.\n" +
             "Possibe tags: <channel_name>")
-    private String nowSubscribed = "<white>You are now subscribed to <bold><channel_name></bold>.";
+    private String nowSubscribed = "<white>You are now subscribed to <channel_name>.";
 
     public Component nowSubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(nowSubscribed,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
     // Now Unsubscribed
     @Comment("\nAppears when a player unsubscribes from a channel.\n" +
             "Possibe tags: <channel_name>")
-    private String nowUnsubscribed = "<white>You are no longer subscribed to <bold><channel_name></bold>.";
+    private String nowUnsubscribed = "<white>You are no longer subscribed to <channel_name>.";
 
     public Component nowUnsubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(nowUnsubscribed,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -634,26 +634,26 @@ public class Messages {
     // New Active Channel
     @Comment("\nAppears when a player changes their active channel.\n" +
             "Possibe tags: <channel_name>")
-    private String newActiveChannel = "<white>Your active channel is now <bold><channel_name></bold>.";
+    private String newActiveChannel = "<white>Your active channel is now <channel_name>.";
 
     public Component newActiveChannel(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(newActiveChannel,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
     // Can't Set Active
     @Comment("\nAppears when a player can't change their active channel.\n" +
             "Possibe tags: <channel_name>")
-    private String cantSetActive = "<white>You can't set <bold><channel_name></bold> as your active channel!";
+    private String cantSetActive = "<white>You can't set <channel_name> as your active channel!";
 
     public Component cantSetActive(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantSetActive,
-                        "channel_name", "<color:" + textColor.toString() + ">" + channelName))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -1013,26 +1013,26 @@ public class Messages {
     // Party Exists
     @Comment("\nAppears if a party already exists during creation.\n" +
             "Possible tags: <party>")
-    private String partyAlreadyExists = "<white>Party <party> already exists!";
+    private String partyAlreadyExists = "<white>Party <party_name> already exists!";
 
-    public Component partyAlreadyExists(String party, TextColor textColor) {
+    public Component partyAlreadyExists(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyAlreadyExists,
-                "party", "<" + textColor.toString() + "><bold>" + party + "</" + textColor.toString() + "></bold>"))
+                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
                 .build();
     }
 
     // Channel Exists
     @Comment("\nAppears if a channel already exists with desired party name during creation.\n" +
-            "Possible tags: <party>")
-    private String partyChannelAlreadyExists = "<white>Channel <channel> already exists with that name!";
+            "Possible tags: <channel_name>")
+    private String partyChannelAlreadyExists = "<white>Channel <channel_name> already exists with that name!";
 
-    public Component partyChannelAlreadyExists(String channel, TextColor textColor) {
+    public Component partyChannelAlreadyExists(String channelName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyChannelAlreadyExists,
-                "channel", "<" + textColor.toString() + "><bold>" + channel + "</" + textColor.toString() + "></bold>"))
+                "channel_name", "<" + textColor.toString() + "><bold>" + channelName + "</" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1041,27 +1041,27 @@ public class Messages {
             "Possible tags: <party_name>")
     private String partyNoExist = "<white>Party <bold><party_name></bold> doesn't exist!";
 
-    public Component partyNoExist(String name) {
+    public Component partyNoExist(String partyName) {
         // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyNoExist, "party_name", name))
+                .append(MiniMessage.get().parse(partyNoExist, "party_name", partyName))
                 .build();
     }
 
     // Party will be created
     @Comment("\nAppears when creating a party.\n" +
-            "Possible tags: <party>")
-    private String partyWillBeCreated = "<white>Party <bold><party></bold> will be created.";
+            "Possible tags: <party_name>")
+    private String partyWillBeCreated = "<white>Party <bold><party_name></bold> will be created.";
 
     // Color picker
     @Comment("\nAppears above the party color picker.\n" +
-            "Possible tags: <hex>")
-    private String pickAColor = "<white>Please choose a color <hex>:";
+            "Possible tags: <hex_color>")
+    private String pickAColor = "<white>Please choose a color <hex_color>:";
 
     // Hex
     @Comment("\nAppears above the party color picker.")
-    private String hex = "<grey>(or enter #hex)";
+    private String hexColor = "<grey>(or enter #hex)";
 
     // Click to select
     @Comment("\nAppears when hovering over the color picker.")
@@ -1073,25 +1073,25 @@ public class Messages {
     private String preview = "preview";
 
     // Pick a Color Swatch Hover Text
-    private HoverEvent<Component> pickAColorHover(String party, TextColor textColor) {
+    private HoverEvent<Component> pickAColorHover(String partyName, TextColor textColor) {
         return HoverEvent.showText(Component.text()
                 .append(Component.text(WordUtils.capitalize(MessageUtil.sanitizeMessage(preview)) + ": ", WHITE))
-                .append(Component.text(party, textColor, BOLD))
+                .append(Component.text(partyName, textColor, BOLD))
                 .append(Component.text("\n"))
                 .append(MiniMessage.get().parse(clickToPick))
                 .build());
     }
 
     // Color Palette
-    public Component pickAColor(String party) {
+    public Component pickAColor(String partyName) {
         Component message = Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyWillBeCreated, "party", party))
+                .append(MiniMessage.get().parse(partyWillBeCreated, "party_name", partyName))
                 .append(Component.text("\n"))
                 .append(MiniMessage.get().parse(pickAColor,
-                        "hex", MiniMessage.get().parse(hex)
+                        "hex_color", MiniMessage.get().parse(hexColor)
                                 .hoverEvent(HoverEvent.showText(clickToRun))
-                                .clickEvent(ClickEvent.suggestCommand("/party create " + party + " #"))))
+                                .clickEvent(ClickEvent.suggestCommand("/party create " + partyName + " #"))))
                 .append(Component.text("\n"))
                 .build();
 
@@ -1101,28 +1101,28 @@ public class Messages {
             for (float hue = 0.0f; hue <= 1.0f; hue += 0.05f) {
                 message = message.append(Component.text("█")
                         .color(TextColor.color(HSVLike.of(hue, 1.0f, value)))
-                        .hoverEvent(pickAColorHover(party, TextColor.color(HSVLike.of(hue, 1.0f, value))))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + TextColor.color(HSVLike.of(hue, 1.0f, value)).asHexString())));
+                        .hoverEvent(pickAColorHover(partyName, TextColor.color(HSVLike.of(hue, 1.0f, value))))
+                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + TextColor.color(HSVLike.of(hue, 1.0f, value)).asHexString())));
             }
             if (value == 1.0f) {
                 message = message.append(Component.text("█")
                         .color(GRAY)
-                        .hoverEvent(pickAColorHover(party, GRAY))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + GRAY.asHexString())));
+                        .hoverEvent(pickAColorHover(partyName, GRAY))
+                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + GRAY.asHexString())));
                 message = message.append(Component.text("█\n")
                         .color(WHITE)
-                        .hoverEvent(pickAColorHover(party, WHITE))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + WHITE.asHexString())));
+                        .hoverEvent(pickAColorHover(partyName, WHITE))
+                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + WHITE.asHexString())));
             }
             else if (value == 0.5f) {
                 message = message.append(Component.text("█")
                         .color(DARK_GRAY)
-                        .hoverEvent(pickAColorHover(party, DARK_GRAY))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + DARK_GRAY.asHexString())));
+                        .hoverEvent(pickAColorHover(partyName, DARK_GRAY))
+                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_GRAY.asHexString())));
                 message = message.append(Component.text("█")
                         .color(BLACK)
-                        .hoverEvent(pickAColorHover(party, BLACK))
-                        .clickEvent(ClickEvent.runCommand("/party create " + party + " " + BLACK.asHexString())));
+                        .hoverEvent(pickAColorHover(partyName, BLACK))
+                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + BLACK.asHexString())));
             }
         }
         return message;
@@ -1142,113 +1142,113 @@ public class Messages {
 
     // Party Created
     @Comment("\nAppears when a party is successfully created.\n" +
-            "Possible tags: <party>")
-    private String partyCreated = "<white>Party <party> has been created successfully.";
+            "Possible tags: <party_name>")
+    private String partyCreated = "<white>Party <party_name> has been created successfully.";
 
-    public Component partyCreated(String party, TextColor textColor) {
+    public Component partyCreated(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyCreated,
-                        "party", "<" + textColor.toString() + "><bold>" + party + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
                 .build();
     }
 
     // Party Joined
     @Comment("\nAppears when joining a party.\n" +
-            "Possible tags: <party>")
-    private String partyJoined = "<white>You have joined <party>.";
+            "Possible tags: <party_name>")
+    private String partyJoined = "<white>You have joined <party_name>.";
 
-    public Component partyJoined(String party, TextColor textColor) {
+    public Component partyJoined(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyJoined,
-                "party", "<" + textColor.toString() + "><bold>" + party + "</" + textColor.toString() + "></bold>"))
+                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
                 .build();
     }
 
     // Already in Party
     @Comment("\nAppears when trying to join a party a player is already in.\n" +
-            "Possible tags: <party>")
-    private String alreadyInParty = "<white>You are already in <party>!";
+            "Possible tags: <party_name>")
+    private String alreadyInParty = "<white>You are already in <party_name>!";
 
-    public Component alreadyInParty(String party, TextColor textColor) {
+    public Component alreadyInParty(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(alreadyInParty,
-                        "party", "<" + textColor.toString() + "><bold>" + party + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
                 .build();
     }
 
     // Party Left
     @Comment("\nAppears when leaving a party.\n" +
-            "Possible tags: <party>")
-    private String partyLeft = "<white>You have left <party>.";
+            "Possible tags: <party_name>")
+    private String partyLeft = "<white>You have left <party_name>.";
 
-    public Component partyLeft(String party, TextColor textColor) {
+    public Component partyLeft(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyLeft,
-                        "party", "<" + textColor.toString() + "><bold>" + party + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
                 .build();
     }
 
     // Not in Party
     @Comment("\nAppears when trying to leave a party a player is not in.\n" +
-            "Possible tags: <party>")
-    private String notInParty = "<white>You are not in <party>!";
+            "Possible tags: <party_name>")
+    private String notInParty = "<white>You are not in <party_name>!";
 
-    public Component notInParty(String party, TextColor textColor) {
+    public Component notInParty(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(notInParty,
-                        "party", "<" + textColor.toString() + "><bold>" + party + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
                 .build();
     }
 
     // Player Joined Party
     @Comment("\nAppears when another player joins a party.\n" +
-            "Possible tags: <player>, <party>")
-    private String playerJoinedParty = "<white><player> has joined <party>.";
+            "Possible tags: <player_name>, <party_name>")
+    private String playerJoinedParty = "<white><player_name> has joined <party_name>.";
 
-    public Component playerJoinedParty(String prefix, String player, String party, TextColor textColor) {
+    public Component playerJoinedParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(playerJoinedParty,
-                        "player", MessageUtil.serialize(prefix) + player,
-                        "party", "<" + textColor.toString() + "><bold>" + party + "</bold><" + textColor.toString() + ">"))
+                        "player_name", MessageUtil.serialize(prefix) + playerName,
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold><" + textColor.toString() + ">"))
                 .build();
     }
 
     // Player Joined Party
     @Comment("\nAppears when another player leaves a party.\n" +
-            "Possible tags: <player>, <party>")
-    private String playerLeftParty = "<white><player> has left <party>.";
+            "Possible tags: <player_name>, <party_name>")
+    private String playerLeftParty = "<white><player_name> has left <party_name>.";
 
-    public Component playerLeftParty(String prefix, String player, String party, TextColor textColor) {
+    public Component playerLeftParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(playerJoinedParty,
-                        "player", MessageUtil.serialize(prefix) + player,
-                        "party", "<" + textColor.toString() + "><bold>" + party + "</bold><" + textColor.toString() + ">"))
+                        "player_name", MessageUtil.serialize(prefix) + playerName,
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold><" + textColor.toString() + ">"))
                 .build();
     }
 
     @Comment("\nAppears in the party player list command.\n" +
-            "Possible tags: <party>")
-    private String partyPlayerListHeader = "<white>List of players in <party>:";
+            "Possible tags: <party_name>")
+    private String partyPlayerListHeader = "<white>List of players in <party_name>:";
 
-    public Component partyPlayerListHeader(String party, TextColor textColor) {
+    public Component partyPlayerListHeader(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyPlayerListHeader,
-                        "party", "<" + textColor.toString() + "><bold>" + party + "</bold><" + textColor.toString() + ">"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold><" + textColor.toString() + ">"))
                 .build();
     }
 
-    public Component partyPlayerListEntry(String prefix, String player) {
+    public Component partyPlayerListEntry(String prefix, String playerName) {
         return Component.text()
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(MessageUtil.serialize(prefix) + player))
+                .append(MiniMessage.get().parse(MessageUtil.serialize(prefix) + playerName))
                 .build();
     }
 
@@ -1269,7 +1269,7 @@ public class Messages {
         return Component.text()
                 .append(MiniMessage.get().parse(privateMessageHeader,
                 "sender_prefix", MessageUtil.serialize(senderPrefix),
-                "sender_name", MessageUtil.sanitizeMessage(you) + "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>",
+                "sender_name", MessageUtil.sanitizeMessage(WordUtils.capitalize(you)) + "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>",
                 "recipient_prefix", MessageUtil.serialize(recipientPrefix),
                 "recipient_name", recipientName + "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>"))
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(message))
@@ -1278,7 +1278,7 @@ public class Messages {
 
     // Click to reply
     @Comment("\nAppears when hovering over private messages.")
-    private String clickToReply = "<bold><dark_green>Click<reset> this message to reply.";
+    private String clickToReply = "<bold><dark_green>Click</bold><white> this message to reply.";
 
     public Component privateMessageReceive(String senderPrefix, String recipientPrefix, String senderName,
                                            String senderStatus, String recipientStatus, String time, String message) {
@@ -1288,7 +1288,7 @@ public class Messages {
                 "sender_prefix", MessageUtil.serialize(senderPrefix),
                 "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName,
                 "recipient_prefix", MessageUtil.serialize(recipientPrefix),
-                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + MessageUtil.sanitizeMessage(you)))
+                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you))))
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(
                         "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message))
                 .build();
@@ -1343,8 +1343,8 @@ public class Messages {
         return Component.text()
                 .append(MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
-                        MessageUtil.sanitizeMessage(this.status) + ": " + status + "<reset>\n" +
-                        (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(this.channel)) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
+                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + status + "<reset>\n" +
+                        (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel))) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         (showChannelName ? "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</" + textColor.toString() + "><gray>]</gray> " : "") +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
                 "player_prefix", MessageUtil.serialize(prefix),
@@ -1362,8 +1362,8 @@ public class Messages {
         // [Discord] %prefix%%playerName%: %message%
         return Component.text()
                 .append(MiniMessage.get().parse("<hover:show_text:'<white>" + time + "\n" +
-                        MessageUtil.sanitizeMessage(this.status) + ": " + status + "\n" +
-                        MessageUtil.sanitizeMessage(this.channel) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
+                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + status + "\n" +
+                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel)) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         discordMessageHeader,
                 "discord", discordHeader,
                 "player_prefix", MessageUtil.serialize(prefix),
@@ -1381,28 +1381,28 @@ public class Messages {
     // General fields used in many strings
     @Comment("\n\"Chat\" text that appears before many messages.\n" +
             "(Does not accept color codes)")
-    private String chat = "Chat";
+    private String chat = "chat";
 
     @Comment("\nValue for the word \"Status\".\n" +
             "(Does not accept color codes)")
-    private String status = "Status";
+    private String status = "status";
 
     @Comment("\nValue for the word \"Channel\".\n" +
             "(Does not accept color codes)")
-    private String channel = "Channel";
+    private String channel = "channel";
 
     @Comment("\nValue for the word \"You\".\n" +
             "(Does not accept color codes)")
-    private String you = "You";
+    private String you = "you";
 
     @Comment("\nValue for the word \"Help\".\n" +
             "(Does not accept color codes)")
-    private String help = "Help";
+    private String help = "help";
 
     // [Chat]
     private transient Component chatHeader = Component.text()
             .append(Component.text("[", GRAY))
-            .append(Component.text(MessageUtil.sanitizeMessage(chat), DARK_GREEN))
+            .append(Component.text(MessageUtil.sanitizeMessage(WordUtils.capitalize(chat)), DARK_GREEN))
             .append(Component.text("] ", GRAY))
             .build();
 
