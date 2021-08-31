@@ -200,6 +200,23 @@ public class CrewChat extends JavaPlugin{
     }
 
     public void onDisable() {
+        this.getLogger().info("Shutting down CrewChat...");
+        // Config
+        configurateManager.save("config.conf");
+        configurateManager.save("playerdata.conf");
+
+        // ACF
+        paperCommandManager.unregisterCommands();
+
+        // Kill party watchdogs
+        for (Channel channel : channelManager.getChannels())
+            if (channel instanceof Party)
+                ((Party) channel).kill();
+
+        // DiscordSRV
+        DiscordSRV.api.unsubscribe(discordSRVListener);
+
+        this.getLogger().info("CrewChat shutdown complete. Goodbye!");
     }
 
     public void reload() {

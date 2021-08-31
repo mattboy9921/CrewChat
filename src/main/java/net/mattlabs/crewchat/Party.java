@@ -33,4 +33,9 @@ public class Party extends Channel {
     public void initialize() {
         watchdog = crewChat.getServer().getScheduler().runTaskTimerAsynchronously(crewChat, this::updateTime, 1200, 1200);
     }
+
+    // Kill party watchdog
+    public void kill() {
+        watchdog.cancel();
+    }
 }
