@@ -71,6 +71,8 @@ public class ChatCommand extends BaseCommand {
             }
             return  mentionable;
         });
+        // Channels and Parties
+        paperCommandManager.getCommandCompletions().registerAsyncCompletion("channels-parties", c -> channelManager.getChannelNames());
     }
 
     @Default
@@ -227,12 +229,12 @@ public class ChatCommand extends BaseCommand {
     
     @Subcommand("switch")
     @Description("Switches active channel.")
-    @CommandCompletion("@channels")
+    @CommandCompletion("@channels-parties")
     public void onSwitch(Player player, Channel channel) {
         // Check if channel exists
         if (channel != null) {
             // Check if player has permission
-            if (player.hasPermission("crewchat.chat.switch." + channel.getName())) {
+            if (player.hasPermission("crewchat.chat.switch." + channel.getName()) || channel instanceof Party) {
                 TextColor channelColor = channel.getTextColor();
                 // Check if player subscribed to channel
                 if (!playerManager.getSubscribedChannels(player).contains(channel.getName()))

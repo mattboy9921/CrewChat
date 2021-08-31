@@ -169,12 +169,7 @@ public class CrewChat extends JavaPlugin{
         paperCommandManager.setFormat(MessageType.INFO, colors);
         paperCommandManager.setFormat(MessageType.SYNTAX, colors);
         // Register Command Contexts
-        paperCommandManager.getCommandContexts().registerContext(Channel.class, context -> {
-            String channel = context.popFirstArg();
-            if (!(channelManager.channelFromString(channel) instanceof Party))
-                return channelManager.channelFromString(channel);
-            else return null;
-        });
+        paperCommandManager.getCommandContexts().registerContext(Channel.class, context -> channelManager.channelFromString(context.popFirstArg()));
         paperCommandManager.getCommandContexts().registerContext(Party.class, context -> {
             String party = context.popFirstArg();
             if (channelManager.channelFromString(party) instanceof Party)
