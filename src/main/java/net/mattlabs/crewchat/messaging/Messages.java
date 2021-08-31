@@ -954,6 +954,20 @@ public class Messages {
                 .build();
     }
 
+    // ** Debug **
+
+    // Invalid Message
+    private transient Component invalidMessage = Component.text()
+            .append(Component.text("There is no message method with that name.", WHITE))
+            .build();
+
+    public Component invalidMessage() {
+        return Component.text()
+                .append(crewChatHeader)
+                .append(invalidMessage)
+                .build();
+    }
+
     /*================================================================================
 
                                        Me Command

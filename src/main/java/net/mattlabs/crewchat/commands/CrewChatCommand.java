@@ -22,10 +22,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.serialize.SerializationException;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -240,20 +237,21 @@ public class CrewChatCommand extends BaseCommand {
         message = CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, message);
         // Check for valid method
         if (!messagesMethods.containsKey(message)) {
-            // TODO: Message invalid message
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().invalidMessage());
         }
         else {
             Method method = messagesMethods.get(message);
+            Parameter[] parameters = method.getParameters();
             Type[] types = method.getParameterTypes();
             Object[] args = new Object[method.getParameterCount()];
             Random random = new Random();
             for (int count = 0; count < types.length; count++) {
                 switch (types[count].getTypeName()) {
                     case "java.lang.String":
-                        args[count] = "String-" + RandomStringUtils.randomAlphanumeric(5);
+                        args[count] = "{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2) + "}";
                         break;
                     case "net.mattlabs.crewchat.adventure.text.Component":
-                        args[count] = Component.text("Component-" + RandomStringUtils.randomAlphanumeric(5));
+                        args[count] = Component.text("{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2)+ "}");
                         break;
                     case "net.mattlabs.crewchat.adventure.text.format.TextColor":
                         args[count] = TextColor.color(random.nextFloat(), random.nextFloat(), random.nextFloat());
