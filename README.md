@@ -63,6 +63,7 @@ Party:
 - `/party create <party> [#hex]` Creates a party with the specified name. Without optional hex color code, displays a color picker.
 - `/party join <party>` Joins player to `<party>`
 - `/party leave <party>` Leaves player from `<party>`
+- `/party list <party>` Lists all players currently in `<party>`
  
 **Permissions**
 

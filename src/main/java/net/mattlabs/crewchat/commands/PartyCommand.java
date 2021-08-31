@@ -10,6 +10,7 @@ import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.Party;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -132,5 +133,20 @@ public class PartyCommand extends BaseCommand {
         else {
             platform.player(player).sendMessage(crewChat.getMessages().partyNoExist(getLastCommandOperationContext().getArgs()[0]));
         }
+    }
+
+    @Subcommand("list")
+    @Description("Lists all members of a party.")
+    @CommandCompletion("@parties")
+    public void onList(CommandSender commandSender, Party party) {
+        // Check if party exists
+        if (party != null) {
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().partyPlayerListHeader(party.getName(), party.getTextColor()));
+            playerManager.getSubscribedPlayers(party.getName()).forEach(subbedPlayer -> {
+                platform.sender(commandSender).sendMessage(crewChat.getMessages().partyPlayerListEntry(CrewChat.getChat().getPlayerPrefix(subbedPlayer), subbedPlayer.getName()));
+            });
+        }
+        else
+            platform.sender(commandSender).sendMessage(crewChat.getMessages().partyNoExist(getLastCommandOperationContext().getArgs()[0]));
     }
 }

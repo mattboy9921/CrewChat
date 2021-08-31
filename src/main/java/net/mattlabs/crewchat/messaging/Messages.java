@@ -1219,6 +1219,25 @@ public class Messages {
                 .build();
     }
 
+    @Comment("\nAppears in the party player list command.\n" +
+            "Possible tags: <party>")
+    private String partyPlayerListHeader = "<white>List of players in <party>:";
+
+    public Component partyPlayerListHeader(String party, TextColor textColor) {
+        return Component.text()
+                .append(partyHeader)
+                .append(MiniMessage.get().parse(partyPlayerListHeader,
+                        "party", "<" + textColor.toString() + "><bold>" + party + "</bold><" + textColor.toString() + ">"))
+                .build();
+    }
+
+    public Component partyPlayerListEntry(String prefix, String player) {
+        return Component.text()
+                .append(hyphenHeader)
+                .append(MiniMessage.get().parse(MessageUtil.serialize(prefix) + player))
+                .build();
+    }
+
     /*================================================================================
 
                                 Private Message Command
