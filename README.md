@@ -59,7 +59,7 @@ CrewChat:
  - `/reply <message>` - Replies to the last received private message.
  - Alias: `/r`
 
-Party:
+ Party:
 - `/party create <party> [#hex]` Creates a party with the specified name. Without optional hex color code, displays a color picker.
 - `/party join <party>` Joins player to `<party>`
 - `/party leave <party>` Leaves player from `<party>`
