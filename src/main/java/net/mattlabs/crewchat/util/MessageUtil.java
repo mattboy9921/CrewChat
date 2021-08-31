@@ -10,7 +10,6 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import org.bukkit.entity.Player;
 import org.jsoup.Jsoup;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import static net.kyori.adventure.text.minimessage.transformation.TransformationType.*;
-import static net.kyori.adventure.text.minimessage.transformation.TransformationType.RESET;
 
 public class MessageUtil {
 
@@ -44,7 +42,7 @@ public class MessageUtil {
     public static String sanitizeMessage(String message) {
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(message));
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(message));
-        message = PlainComponentSerializer.plain().serialize(MiniMessage.get().parse(message));
+        message = MiniMessage.get().stripTokens(message);
         return message;
     }
 
