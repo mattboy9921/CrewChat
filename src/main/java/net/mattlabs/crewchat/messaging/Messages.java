@@ -301,7 +301,7 @@ public class Messages {
 
     public Component channelListActive(String name, TextColor textColor) {
         return MiniMessage.get().parse("<gray>" + MessageUtil.sanitizeMessage(channelListActive),
-                "channel_name", "<" + textColor.toString() + "><bold>" + name + "</" + textColor.toString() + "></bold><gray>");
+                "channel_name", "<" + textColor.toString() + "><bold>" + name + "</color:" + textColor.toString() + "></bold><gray>");
     }
 
     // Channel List Subscribe Header
@@ -548,7 +548,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(alreadySubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -561,7 +561,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantSubscribe,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -574,7 +574,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantUnsubscribe,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -587,7 +587,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantUnsubscribeActive,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -600,7 +600,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(notSubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -613,7 +613,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(nowSubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -626,7 +626,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(nowUnsubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -641,7 +641,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(newActiveChannel,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -654,7 +654,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(cantSetActive,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></" + textColor.toString() + ">"))
+                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -810,7 +810,7 @@ public class Messages {
 
     public Component crewChatActiveChannel(String activeChannel, TextColor textColor) {
         return MiniMessage.get().parse(crewChatActiveChannel,
-                "active_channel", "<" + textColor.toString() + "><bold>" + activeChannel + "</" + textColor.toString() + "></bold><gray>");
+                "active_channel", "<" + textColor.toString() + "><bold>" + activeChannel + "</color:" + textColor.toString() + "></bold><gray>");
     }
 
     // Status
@@ -1020,7 +1020,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyAlreadyExists,
-                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
+                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1033,7 +1033,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyChannelAlreadyExists,
-                "channel_name", "<" + textColor.toString() + "><bold>" + channelName + "</" + textColor.toString() + "></bold>"))
+                "channel_name", "<" + textColor.toString() + "><bold>" + channelName + "</color:" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1150,7 +1150,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyCreated,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1163,7 +1163,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyJoined,
-                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
+                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1176,7 +1176,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(alreadyInParty,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1189,7 +1189,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyLeft,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1202,7 +1202,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(notInParty,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</" + textColor.toString() + "></bold>"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
                 .build();
     }
 
@@ -1242,7 +1242,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyPlayerListHeader,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold></" + textColor.toString() + ">"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold></color:" + textColor.toString() + ">"))
                 .build();
     }
 
@@ -1346,7 +1346,7 @@ public class Messages {
                         "<hover:show_text:'<white>" + time + "\n" +
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + status + "<reset>\n" +
                         (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel))) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
-                        (showChannelName ? "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</" + textColor.toString() + "><gray>]</gray> " : "") +
+                        (showChannelName ? "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</color:" + textColor.toString() + "><gray>]</gray> " : "") +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
                 "player_prefix", MessageUtil.serialize(prefix),
                 "player_name", playerName))
