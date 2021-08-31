@@ -60,6 +60,11 @@ public class MessageUtil {
         return MiniMessage.get().serialize(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(message));
     }
 
+    // Upgrade legacy color codes to MiniMessage tags
+    public static String serialize(String legacyColorText) {
+        return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(legacyColorText))));
+    }
+
     // Standard process to parse a message
     public static Component parseMessage(String message, TextColor textColor, ArrayList<Player> subscribedPlayers, String discordChannelID, boolean allowColor) {
         // Filter out any legacy codes/MiniMessage tags

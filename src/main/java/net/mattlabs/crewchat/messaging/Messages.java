@@ -388,7 +388,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(playerAlreadyMuted,
-                "player_prefix", serialize(playerPrefix),
+                "player_prefix", MessageUtil.serialize(playerPrefix),
                 "player_name", playerName))
                 .build();
     }
@@ -402,7 +402,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(playerAlreadyUnmuted,
-                "player_prefix", serialize(playerPrefix),
+                "player_prefix", MessageUtil.serialize(playerPrefix),
                 "player_name", playerName))
                 .build();
     }
@@ -416,7 +416,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(playerMuted,
-                "player_prefix", serialize(playerPrefix),
+                "player_prefix", MessageUtil.serialize(playerPrefix),
                 "player_name", player))
                 .build();
     }
@@ -430,7 +430,7 @@ public class Messages {
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(playerUnmuted,
-                "player_prefix", serialize(playerPrefix),
+                "player_prefix", MessageUtil.serialize(playerPrefix),
                 "player_name", player))
                 .build();
     }
@@ -448,7 +448,7 @@ public class Messages {
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(
                         MessageUtil.sanitizeMessageColor(statusSet),
-                        "status", serialize(status) + "<reset>"))
+                        "status", MessageUtil.serialize(status) + "<reset>"))
                 .build();
     }
 
@@ -463,7 +463,7 @@ public class Messages {
                 .append(chatHeader)
                 .append(MiniMessage.get().parse(
                         MessageUtil.sanitizeMessageColor(statusIs),
-                        "status", serialize(status) + "<reset>"))
+                        "status", MessageUtil.serialize(status) + "<reset>"))
                 .build();
     }
 
@@ -1153,9 +1153,9 @@ public class Messages {
         // &7[%senderPrefix%me &7-> %recipientPrefix%%recipientName%&7] &r%message%
         return Component.text()
                 .append(MiniMessage.get().parse(privateMessageHeader,
-                "sender_prefix", serialize(senderPrefix),
+                "sender_prefix", MessageUtil.serialize(senderPrefix),
                 "sender_name", you + "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>",
-                "recipient_prefix", serialize(recipientPrefix),
+                "recipient_prefix", MessageUtil.serialize(recipientPrefix),
                 "recipient_name", recipientName + "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>"))
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(message))
                 .build();
@@ -1170,9 +1170,9 @@ public class Messages {
         // &7[%senderPrefix%%senderName% &7-> %recipientPrefix%Me&7] &r%message%
         return Component.text()
                 .append(MiniMessage.get().parse(privateMessageHeader,
-                "sender_prefix", serialize(senderPrefix),
+                "sender_prefix", MessageUtil.serialize(senderPrefix),
                 "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName,
-                "recipient_prefix", serialize(recipientPrefix),
+                "recipient_prefix", MessageUtil.serialize(recipientPrefix),
                 "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + you))
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(
                         "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message))
@@ -1232,7 +1232,7 @@ public class Messages {
                         (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : this.channel) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</" + textColor.toString() + "><gray>]</gray> " +
                         chatMessageHeader + "<reset><" + textColor.toString() + ">",
-                "player_prefix", serialize(prefix),
+                "player_prefix", MessageUtil.serialize(prefix),
                 "player_name", playerName))
                 .append(message)
                 .build();
@@ -1251,7 +1251,7 @@ public class Messages {
                         this.channel + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
                         discordMessageHeader,
                 "discord", discordHeader,
-                "player_prefix", serialize(prefix),
+                "player_prefix", MessageUtil.serialize(prefix),
                 "player_name", playerName))
                 .append(message)
                 .build();
@@ -1332,11 +1332,5 @@ public class Messages {
         //  command. Please contact the server administrators if you
         //  believe that this is in error.
         return MiniMessage.get().parse(noPermission);
-    }
-
-    // *** Helper Methods ***
-    // TODO: Don't use this...
-    private static String serialize(String legacyColorCode) {
-        return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(legacyColorCode))));
     }
 }
