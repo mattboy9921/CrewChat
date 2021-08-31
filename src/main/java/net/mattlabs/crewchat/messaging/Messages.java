@@ -1115,7 +1115,7 @@ public class Messages {
     }
 
     // Invalid color
-    @Comment("Appears when specifying an invalid hex color for a party.\n" +
+    @Comment("\nAppears when specifying an invalid hex color for a party.\n" +
             "Possible tags: <hex_color>")
     private String invalidColor = "<white>Color \"<hex_color>\" is invalid!";
 
@@ -1127,7 +1127,7 @@ public class Messages {
     }
 
     // Party Created
-    @Comment("Appears when a party is successfully created.\n" +
+    @Comment("\nAppears when a party is successfully created.\n" +
             "Possible tags: <party>")
     private String partyCreated = "<white>Party <party> has been created successfully.";
 
@@ -1140,7 +1140,7 @@ public class Messages {
     }
 
     // Party Joined
-    @Comment("Appears when joining a party.\n" +
+    @Comment("\nAppears when joining a party.\n" +
             "Possible tags: <party>")
     private String partyJoined = "<white>You have joined <party>.";
 
@@ -1153,7 +1153,7 @@ public class Messages {
     }
 
     // Already in Party
-    @Comment("Appears when trying to join a party a player is already in.\n" +
+    @Comment("\nAppears when trying to join a party a player is already in.\n" +
             "Possible tags: <party>")
     private String alreadyInParty = "<white>You are already in <party>!";
 
@@ -1166,7 +1166,7 @@ public class Messages {
     }
 
     // Party Left
-    @Comment("Appears when leaving a party.\n" +
+    @Comment("\nAppears when leaving a party.\n" +
             "Possible tags: <party>")
     private String partyLeft = "<white>You have left <party>.";
 
@@ -1179,7 +1179,7 @@ public class Messages {
     }
 
     // Not in Party
-    @Comment("Appears when trying to leave a party a player is not in.\n" +
+    @Comment("\nAppears when trying to leave a party a player is not in.\n" +
             "Possible tags: <party>")
     private String notInParty = "<white>You are not in <party>!";
 
