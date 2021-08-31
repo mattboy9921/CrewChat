@@ -1270,9 +1270,9 @@ public class Messages {
         return Component.text()
                 .append(MiniMessage.get().parse(privateMessageHeader,
                 "sender_prefix", MessageUtil.serialize(senderPrefix),
-                "sender_name", MessageUtil.sanitizeMessage(WordUtils.capitalize(you)) + "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>",
+                "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you)),
                 "recipient_prefix", MessageUtil.serialize(recipientPrefix),
-                "recipient_name", recipientName + "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>"))
+                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + recipientName))
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(message))
                 .build();
     }
