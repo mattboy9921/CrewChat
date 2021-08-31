@@ -231,6 +231,7 @@ public class CrewChatCommand extends BaseCommand {
 
     @Subcommand("debug")
     @Description("Crewchat debug command.")
+    @CommandPermission("crewchat.debug")
     @CommandCompletion("@messages")
     public void onDebug(CommandSender commandSender, String message) {
         // Convert formatting
