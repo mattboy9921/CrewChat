@@ -9,8 +9,9 @@ CrewChat is a chat plugin developed for the Crew Craft Server.
  - Permissions
  - Private messages
  - Broadcast messages
- - RAW messages with hover and click actions
- - Support for clickable links in chat
+ - Rich messages with hover and click actions
+ - Markdown support
+ - Support for clickable links in chat with SEO
  - Player info/status messages
  - Ping players by name
  - Mute/deafen functions
@@ -23,20 +24,22 @@ CrewChat:
  - `/crewchat reload` - Reloads plugin
  - `/crewchat help` - Shows CrewChat command help
  - `/crewchat info` - Shows CrewChat general info
- - `/crewchat info channel <channel>` - Shows all information about specified channel
+ - `/crewchat info channel [channel]` - Lists channels or shows all information about specified channel
  - `/crewchat info player <player>` - Shows all information about specified player
  - Alias: `/cc`
  
  Chat:
+ - `/chat help` - Shows chat command help
  - `/chat info` - Shows channel list, active channel and subscribed channels
  - `/chat info channel <channel>` - Shows channel name and color
- - `/chat status <status>` - Sets player status message
+ - `/chat status [status]` - Sets or displays player status message
  - `/chat subscribe <channel>` - Subscribes player to `<channel>`
  - `/chat unsubscribe <channel>` - Unsubscribes player from `<channel>`
  - `/chat switch <channel>` - Switches player's active channel
  - `/chat mute <player>` - Mutes `<player>` for 24 hours
+ - `/chat unmute <player>` - Unmutes `<player>`
  - `/chat deafen` - Deafens player from all chat messages
- - `/chat send <channel> [message]` - Sends a message to a specified channel without switching to it
+ - `/chat send <channel> <message>` - Sends a message to a specified channel without switching to it
  - `/chat mention <player>` - Mention a player in game or user on Discord
  - Alias: `/c`
  
