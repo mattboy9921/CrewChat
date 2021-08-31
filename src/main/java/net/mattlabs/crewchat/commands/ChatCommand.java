@@ -102,7 +102,6 @@ public class ChatCommand extends BaseCommand {
                 for (Channel channel : channelManager.getChannels())
                     if (channel instanceof Party)
                         platform.player(player).sendMessage(crewChat.getMessages().partyListEntry(channel.getName(), channel.getTextColor()));
-                // TODO: Change this message to be channel/party specific
                 // Active Channel
                 platform.player(player).sendMessage(crewChat.getMessages().channelListActive(playerManager.getActiveChannel(player),
                         channelManager.channelFromString(playerManager.getActiveChannel(player)).getTextColor()));

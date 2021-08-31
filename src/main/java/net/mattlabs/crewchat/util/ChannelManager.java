@@ -4,6 +4,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.mattlabs.crewchat.Channel;
 import net.mattlabs.crewchat.Config;
 import net.mattlabs.crewchat.CrewChat;
+import net.mattlabs.crewchat.Party;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,20 +50,20 @@ public class ChannelManager {
     // Adds specified channel to the list of channels
     public void addChannel(Channel channel) {
         channels.put(channel.getName(), channel);
-        // TODO: Make this channel/party sensitive
-        CrewChat.getInstance().getLogger().info("Party \"" + channel.getName() + "\" added!");
+        String type = channel instanceof Party ? "Party" : "Channel";
+        CrewChat.getInstance().getLogger().info(type + " \"" + channel.getName() + "\" added!");
     }
 
     // Removes specified channel from the list of channels if possible
     public void removeChannel(Channel channel) {
         if (channels.containsKey(channel.getName())) {
             channels.remove(channel.getName());
-            // TODO: Make this channel/party sensitive
-            CrewChat.getInstance().getLogger().info("Party \"" + channel.getName() + "\" removed!");
+            String type = channel instanceof Party ? "Party" : "Channel";
+            CrewChat.getInstance().getLogger().info(type + " \"" + channel.getName() + "\" removed!");
         }
         else {
-            // TODO: Make this channel/party sensitive
-            CrewChat.getInstance().getLogger().warning("Party \"" + channel.getName() + "\" could not be removed!");
+            String type = channel instanceof Party ? "Party" : "Channel";
+            CrewChat.getInstance().getLogger().warning(type + " \"" + channel.getName() + "\" could not be removed!");
         }
     }
 

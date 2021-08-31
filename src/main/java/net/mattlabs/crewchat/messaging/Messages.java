@@ -138,7 +138,6 @@ public class Messages {
                 .build();
     }
 
-    // TODO: **Possibly remove this**, Add new commands, add newline characters
     // ** Help **
     public Component chatHelpCommand() {
         return Component.text()
@@ -297,7 +296,7 @@ public class Messages {
     // Channel List Active
     @Comment("\nAppears in the chat info command.\n" +
             "(Does not accept color codes)")
-    private String channelListActive = "Your active channel is: <channel_name>.";
+    private String channelListActive = "You are currently active in: <channel_name>.";
 
     public Component channelListActive(String name, TextColor textColor) {
         return MiniMessage.get().parse("<gray>" + MessageUtil.sanitizeMessage(channelListActive),
