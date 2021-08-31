@@ -278,6 +278,7 @@ public class Messages {
                 .append(Component.text(MessageUtil.sanitizeMessage(WordUtils.capitalize(chat)), DARK_GREEN))
                 .append(Component.text("]", DARK_GRAY))
                 .append(Component.text("------------------------", GRAY))
+                .append(Component.text("\n"))
                 .append(Component.text(MessageUtil.sanitizeMessage(channelListHeader), GRAY))
                 .build();
     }
@@ -338,7 +339,7 @@ public class Messages {
 
     // Click to unmute
     @Comment("\nAppears in the chat info command.")
-    private String clickToUnmute = "<bold><dark_green>>Click<</bold></dark_green> <white>to unmute.";
+    private String clickToUnmute = "<bold><dark_green>Click</bold></dark_green> <white>to unmute.";
 
 
     // Time remaining
@@ -1241,7 +1242,7 @@ public class Messages {
         return Component.text()
                 .append(partyHeader)
                 .append(MiniMessage.get().parse(partyPlayerListHeader,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold><" + textColor.toString() + ">"))
+                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold></" + textColor.toString() + ">"))
                 .build();
     }
 
