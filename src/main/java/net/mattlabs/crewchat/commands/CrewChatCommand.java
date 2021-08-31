@@ -210,11 +210,6 @@ public class CrewChatCommand extends BaseCommand {
     @Subcommand("help")
     @Description("CrewChat help command.")
     public void onHelp(CommandSender commandSender) {
-        if (commandSender instanceof Player) platform.player((Player) commandSender).sendMessage(crewChat.getMessages().crewChatHelpCommand());
-        else CrewChat.getInstance().getLogger().info("Command Help:\n"
-                + "Alias: /cc <args>\n"
-                + "/crewchat - Base CrewChat command.\n"
-                + "/crewchat help - Shows this screen.\n"
-                + "/crewchat reload - Reloads configuration files.");
+        platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatHelpCommand());
     }
 }
