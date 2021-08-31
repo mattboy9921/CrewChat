@@ -29,6 +29,7 @@ CrewChat:
  - Alias: `/cc`
  
  Chat:
+ - `/chat` - Show Chat welcome message
  - `/chat help` - Shows chat command help
  - `/chat info` - Shows channel list, active channel and subscribed channels
  - `/chat info channel <channel>` - Shows channel name and color
