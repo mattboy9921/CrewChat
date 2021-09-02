@@ -814,7 +814,7 @@ public class Messages {
     }
 
     // Status
-    private transient String crewChatStatus = "<gray>Status: <status>";
+    private transient String crewChatStatus = "<gray>Status:<reset> <status>";
 
     public Component crewChatStatus(String status) {
         return MiniMessage.get().parse(crewChatStatus,
