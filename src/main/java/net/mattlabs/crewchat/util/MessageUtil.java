@@ -113,7 +113,7 @@ public class MessageUtil {
                 }
                 catch (IOException ignored) {}
 
-                nextComponent = Component.text(part).color(NamedTextColor.BLUE).hoverEvent(HoverEvent.showText(Component.text(description).color(NamedTextColor.WHITE))).clickEvent(ClickEvent.openUrl(part));
+                nextComponent = Component.text(part).color(TextColor.fromHexString("#0000EE")).hoverEvent(HoverEvent.showText(Component.text(description).color(NamedTextColor.WHITE))).clickEvent(ClickEvent.openUrl(part));
                 if (linkParts.length == 2) {
                     Component afterLink = Component.text(linkParts[1]).color(textColor);
                     nextComponent = nextComponent.append(afterLink);
