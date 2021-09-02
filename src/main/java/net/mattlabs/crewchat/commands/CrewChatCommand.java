@@ -117,7 +117,7 @@ public class CrewChatCommand extends BaseCommand {
         @Subcommand("channel")
         @Description("Lists info about specified channel.")
         @CommandCompletion("@channels")
-        public void onChannel(CommandSender commandSender, @Optional Channel channel) {
+        public void onChannel(CommandSender commandSender, @Optional @Single Channel channel) {
             // Check if channel specified
             if (getLastCommandOperationContext().getArgs().length == 0) {
                 if (commandSender instanceof Player) {
@@ -152,7 +152,7 @@ public class CrewChatCommand extends BaseCommand {
         @Subcommand("player")
         @Description("Lists info about specified player.")
         @CommandCompletion("@chatters")
-        public void onChannel(CommandSender commandSender, @Values("@chatters") String player) {
+        public void onChannel(CommandSender commandSender, @Values("@chatters") @Single String player) {
             OfflinePlayer requestedPlayer = Bukkit.getOfflinePlayer(player);
             if (playerManager.playerExists(requestedPlayer)) {
                 // Header
@@ -184,7 +184,7 @@ public class CrewChatCommand extends BaseCommand {
         @Subcommand("channel")
         @Description("Allows player to set properties of channel.")
         @CommandCompletion("@channels @properties @values")
-        public void onChannel(CommandSender commandSender, Channel channel, @Single String property, String value) {
+        public void onChannel(CommandSender commandSender, Channel channel, String property, String value) {
             // Channel doesn't exist
             if (channel == null) platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatChannelNoExist(getLastCommandOperationContext().getArgs()[0]));
             // Property doesn't exist
@@ -228,7 +228,7 @@ public class CrewChatCommand extends BaseCommand {
     @Description("Crewchat debug command.")
     @CommandPermission("crewchat.debug")
     @CommandCompletion("@messages")
-    public void onDebug(CommandSender commandSender, String message) {
+    public void onDebug(CommandSender commandSender, @Single String message) {
         // Convert formatting
         message = CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, message);
         // Check for valid method

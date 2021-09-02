@@ -78,7 +78,7 @@ public class PartyCommand extends BaseCommand {
     @Subcommand("join")
     @Description("Join the specified party.")
     @CommandCompletion("@parties")
-    public void onJoin(Player player, Party party) {
+    public void onJoin(Player player, @Single Party party) {
         // Check if party exists
         if (party != null) {
             // Check if player not in party
@@ -108,7 +108,7 @@ public class PartyCommand extends BaseCommand {
     @Subcommand("leave")
     @Description("Leaves the specified party.")
     @CommandCompletion("@parties")
-    public void onLeave(Player player, Party party) {
+    public void onLeave(Player player, @Single Party party) {
         // Check if party exists
         if (party != null) {
             // Check if player is already in party
@@ -138,7 +138,7 @@ public class PartyCommand extends BaseCommand {
     @Subcommand("list")
     @Description("Lists all members of a party.")
     @CommandCompletion("@parties")
-    public void onList(CommandSender commandSender, Party party) {
+    public void onList(CommandSender commandSender, @Single Party party) {
         // Check if party exists
         if (party != null) {
             platform.sender(commandSender).sendMessage(crewChat.getMessages().partyPlayerListHeader(party.getName(), party.getTextColor()));

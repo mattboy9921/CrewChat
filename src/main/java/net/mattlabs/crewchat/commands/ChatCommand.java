@@ -135,7 +135,7 @@ public class ChatCommand extends BaseCommand {
         @Subcommand("channel")
         @Description("Lists info about specified channel.")
         @CommandCompletion("@channels")
-        public void onChannel(CommandSender commandSender, Channel channel) {
+        public void onChannel(CommandSender commandSender, @Single Channel channel) {
             // Check if channel exists
             if (channel == null) {
                 platform.sender(commandSender).sendMessage(crewChat.getMessages().channelNoExist(getLastCommandOperationContext().getArgs()[0]));
@@ -178,7 +178,7 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("subscribe")
     @Description("Subscribes player to channel.")
     @CommandCompletion("@channels")
-    public void onSubscribe(Player player, Channel channel) {
+    public void onSubscribe(Player player, @Single Channel channel) {
         // Check if channel exists
         if (channel != null) {
             // Check permission
@@ -202,7 +202,7 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("unsubscribe")
     @Description("Unsubscribes player from channel.")
     @CommandCompletion("@channels")
-    public void onUnsubscribe(Player player, Channel channel) {
+    public void onUnsubscribe(Player player, @Single Channel channel) {
         // Check if channel exists
         if (channel != null) {
             // Check permission
@@ -230,7 +230,7 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("switch")
     @Description("Switches active channel.")
     @CommandCompletion("@channels-parties")
-    public void onSwitch(Player player, Channel channel) {
+    public void onSwitch(Player player, @Single Channel channel) {
         // Check if channel exists
         if (channel != null) {
             // Check if player has permission
@@ -321,7 +321,7 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("send")
     @Description("Send a message to a specified channel without switching to it.")
     @CommandPermission("crewchat.chat.send")
-    @CommandCompletion("@channels-parties")
+    @CommandCompletion("@channels-parties @nothing")
     public void onSend(Player player, Channel channel, String message) {
         // Check if channel is real
         if (channel == null)
