@@ -321,7 +321,7 @@ public class ChatCommand extends BaseCommand {
     @Subcommand("send")
     @Description("Send a message to a specified channel without switching to it.")
     @CommandPermission("crewchat.chat.send")
-    @CommandCompletion("@channels")
+    @CommandCompletion("@channels-parties")
     public void onSend(Player player, Channel channel, String message) {
         // Check if channel is real
         if (channel == null)
