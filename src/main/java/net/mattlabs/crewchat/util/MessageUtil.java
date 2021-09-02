@@ -71,16 +71,15 @@ public class MessageUtil {
 
         String[] parts = message.split(" ");
         Component componentMessage = Component.text("");
-        ArrayList<Player> mentionedPlayers = getMentionedPlayers(message, subscribedPlayers);
 
-        for (String part : parts) {
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
             Component nextComponent = Component.text(part).color(textColor);
             String mentionedName = null;
 
             // Match player names
             for (Player player : subscribedPlayers)
                 if (Pattern.matches("[@]?" + player.getName() + "((?=([^\\w\\s]|_)).*)?", part)) {
-                    mentionedPlayers.add(player);
                     mentionedName = player.getName();
                 }
 
@@ -120,7 +119,7 @@ public class MessageUtil {
                 }
             }
             componentMessage = componentMessage.append(nextComponent);
-            if (!part.equals(parts[parts.length - 1]))
+            if (i != parts.length - 1)
                 componentMessage = componentMessage.append(Component.space());
         }
         return componentMessage;
