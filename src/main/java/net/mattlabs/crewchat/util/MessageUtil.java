@@ -3,13 +3,11 @@ package net.mattlabs.crewchat.util;
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member;
 import github.scarsz.discordsrv.util.DiscordUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import org.bukkit.entity.Player;
 import org.jsoup.Jsoup;
@@ -42,7 +40,7 @@ public class MessageUtil {
     public static String sanitizeMessage(String message) {
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(message));
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(message));
-        message = MiniMessage.get().stripTokens(message);
+        message = PlainTextComponentSerializer.plainText().serialize(MiniMessage.get().parse(message));
         return message;
     }
 
@@ -55,7 +53,7 @@ public class MessageUtil {
     // Remove dangerous MiniMessage tags
     public static String sanitizeMessageColor(String message) {
         //noinspection unchecked
-        return MiniMessage.get().serialize(MiniMessage.builder().strict(true).transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET).build().parse(message));
+        return MiniMessage.get().serialize(MiniMessage.builder().transformations(COLOR, DECORATION, FONT, GRADIENT, RAINBOW, RESET, PRE).build().parse(message));
     }
 
     // Upgrade legacy color codes to MiniMessage tags
@@ -63,23 +61,27 @@ public class MessageUtil {
         return MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(MiniMessage.get().serialize(LegacyComponentSerializer.legacy('§').deserialize(legacyColorText))));
     }
 
+    // Hopefully *temporary* fix for MiniMessage 4.2.0 weirdness
+    public static Component reparse(Component component) {
+        return MiniMessage.get().parse(MiniMessage.get().serialize(component));
+    }
+
     // Standard process to parse a message
     public static Component parseMessage(String message, TextColor textColor, ArrayList<Player> subscribedPlayers, String discordChannelID, boolean allowColor) {
         // Filter out any legacy codes/MiniMessage tags
-        if (allowColor) message = sanitizeMessageColor(message);
-        else message = sanitizeMessage(message);
+        if (!allowColor) message = sanitizeMessage(message);
 
         String[] parts = message.split(" ");
-        Component componentMessage = Component.text("");
+        StringBuilder finalMessage = new StringBuilder().append("<color:" + textColor.asHexString() + ">");
 
         for (int i = 0; i < parts.length; i++) {
             String part = parts[i];
-            Component nextComponent = Component.text(part).color(textColor);
+            String nextPart = part;
             String mentionedName = null;
 
             // Match player names
             for (Player player : subscribedPlayers)
-                if (Pattern.matches("[@]?" + player.getName() + "((?=([^\\w\\s]|_)).*)?", part)) {
+                if (Pattern.matches("[@]?" + player.getName() + "((?=([^\\w\\s]|_)).*)?", MiniMessage.get().stripTokens(part))) {
                     mentionedName = player.getName();
                 }
 
@@ -87,21 +89,21 @@ public class MessageUtil {
             if (CrewChat.getInstance().getDiscordSRVEnabled()) {
                 if (mentionedName == null)
                     for (Member member :  DiscordUtil.getTextChannelById(discordChannelID).getMembers())
-                        if (Pattern.matches("[@]?" + member.getEffectiveName() + "((?=([^\\w\\s]|_)).*)?", part)) mentionedName = member.getEffectiveName();
+                        if (Pattern.matches("[@]?" + member.getEffectiveName() + "((?=([^\\w\\s]|_)).*)?", MiniMessage.get().stripTokens(part))) mentionedName = member.getEffectiveName();
             }
 
             if (mentionedName != null) {
                 String split = (part.startsWith("@")) ? "@" + mentionedName : mentionedName;
-                String[] mentionParts = part.split(split);
-                nextComponent = Component.text("@" + mentionedName).color(NamedTextColor.GOLD);
+                String[] mentionParts = MiniMessage.get().stripTokens(part).split(split);
+                nextPart = "<gold>@" + mentionedName + "</gold>";
                 if (mentionParts.length > 0) {
                     Component afterMention = Component.text(mentionParts[1]).color(textColor);
-                    nextComponent = nextComponent.append(afterMention);
+                    nextPart = nextPart + mentionParts[1];
                 }
             }
             // Match links
-            else if (Pattern.matches("^(http://www\\.|https://www\\.|http://|https://)[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?.*", part)) {
-                part = part.replaceAll("^(http://www\\.|https://www\\.|http://|https://)[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?", "$0 ");
+            else if (Pattern.matches("^(http://www\\.|https://www\\.|http://|https://)[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?.*", MiniMessage.get().stripTokens(part))) {
+                part = MiniMessage.get().stripTokens(part).replaceAll("^(http://www\\.|https://www\\.|http://|https://)[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?", "$0 ");
                 String[] linkParts = part.split(" ");
                 part = linkParts[0];
                 // Get website description with Jsoup
@@ -112,16 +114,20 @@ public class MessageUtil {
                 }
                 catch (IOException ignored) {}
 
-                nextComponent = Component.text(part).color(TextColor.fromHexString("#0000EE")).hoverEvent(HoverEvent.showText(Component.text(description).color(NamedTextColor.WHITE))).clickEvent(ClickEvent.openUrl(part));
+                nextPart = "<hover:show_text:'<white>" + description + "'><click:open_url:" + part + "><color:#0000EE>" + part + "</color:#0000EE></click></hover>";
                 if (linkParts.length == 2) {
                     Component afterLink = Component.text(linkParts[1]).color(textColor);
-                    nextComponent = nextComponent.append(afterLink);
+                    nextPart = nextPart + linkParts[1];
                 }
             }
-            componentMessage = componentMessage.append(nextComponent);
-            if (i != parts.length - 1)
-                componentMessage = componentMessage.append(Component.space());
+            // Add to whole string
+            finalMessage.append(nextPart);
+            // Add spaces
+            if (i != parts.length - 1) finalMessage.append(" ");
         }
-        return componentMessage;
+        // Parse colors if allowed
+        String finalMessageString = finalMessage.toString();
+        if (allowColor) finalMessageString = sanitizeMessageColor(finalMessageString);
+        return MiniMessage.get().parse(finalMessageString);
     }
 }

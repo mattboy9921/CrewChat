@@ -300,8 +300,8 @@ public class Messages {
     private String channelListActive = "You are currently active in: <channel_name>.";
 
     public Component channelListActive(String name, TextColor textColor) {
-        return MiniMessage.get().parse("<gray>" + MessageUtil.sanitizeMessage(channelListActive),
-                "channel_name", "<" + textColor.toString() + "><bold>" + name + "</color:" + textColor.toString() + "></bold><gray>");
+        return MessageUtil.reparse(MiniMessage.get().parse("<gray>" + MessageUtil.sanitizeMessage(channelListActive),
+                "channel_name", "<color:" + textColor.asHexString() + "><bold>" + name + "</bold></color:" + textColor.asHexString() + "><gray>"));
     }
 
     // Channel List Subscribe Header
@@ -351,8 +351,8 @@ public class Messages {
         return Component.text()
                 .append(hyphenHeader)
                 .append(Component.text(player, WHITE)
-                        .hoverEvent(HoverEvent.showText(MiniMessage.get().parse(
-                                this.timeRemaining + "\n" + clickToUnmute, "time_remaining", timeRemaining)))
+                        .hoverEvent(HoverEvent.showText(MessageUtil.reparse(MiniMessage.get().parse(
+                                this.timeRemaining + "\n" + clickToUnmute, "time_remaining", timeRemaining))))
                         .clickEvent(ClickEvent.runCommand("/chat unmute " + player)))
                 .build();
     }
@@ -404,13 +404,13 @@ public class Messages {
 
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">")))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(channelInfoName + "\n", "channel_name", name))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(channelInfoDescription + "\n", "channel_description", description))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(channelInfoColor, "channel_color", "<color:" + color.toString() + ">" + closestColor + " (" + color.asHexString() + ")" + "</color:" + color.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoColor, "channel_color", "<color:" + color.toString() + ">" + closestColor + " (" + color.asHexString() + ")" + "</color:" + color.toString() + ">")))
                 .build();
     }
 
@@ -446,9 +446,9 @@ public class Messages {
     public Component playerAlreadyMuted(String playerPrefix, String playerName) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerAlreadyMuted,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(playerAlreadyMuted,
                 "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", playerName))
+                "player_name", playerName)))
                 .build();
     }
 
@@ -460,9 +460,9 @@ public class Messages {
     public Component playerAlreadyUnmuted(String playerPrefix, String playerName) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerAlreadyUnmuted,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(playerAlreadyUnmuted,
                 "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", playerName))
+                "player_name", playerName)))
                 .build();
     }
 
@@ -474,9 +474,9 @@ public class Messages {
     public Component playerMuted(String playerPrefix, String player) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerMuted,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(playerMuted,
                 "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", player))
+                "player_name", player)))
                 .build();
     }
 
@@ -488,9 +488,9 @@ public class Messages {
     public Component playerUnmuted(String playerPrefix, String player) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerUnmuted,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(playerUnmuted,
                 "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", player))
+                "player_name", player)))
                 .build();
     }
 
@@ -505,9 +505,9 @@ public class Messages {
         //noinspection unchecked
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(
+                .append(MessageUtil.reparse(MiniMessage.get().parse(
                         MessageUtil.sanitizeMessageColor(statusSet),
-                        "status", MessageUtil.serialize(status) + "<reset>"))
+                        "status", MessageUtil.serialize(status) + "<reset>")))
                 .build();
     }
 
@@ -520,9 +520,9 @@ public class Messages {
         //noinspection unchecked
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(
+                .append(MessageUtil.reparse(MiniMessage.get().parse(
                         MessageUtil.sanitizeMessageColor(statusIs),
-                        "status", MessageUtil.serialize(status) + "<reset>"))
+                        "status", MessageUtil.serialize(status) + "<reset>")))
                 .build();
     }
 
@@ -547,8 +547,8 @@ public class Messages {
     public Component alreadySubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(alreadySubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(alreadySubscribed,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -560,8 +560,8 @@ public class Messages {
     public Component cantSubscribe(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(cantSubscribe,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(cantSubscribe,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -573,8 +573,8 @@ public class Messages {
     public Component cantUnsubscribe(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(cantUnsubscribe,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(cantUnsubscribe,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -586,8 +586,8 @@ public class Messages {
     public Component cantUnsubscribeActive(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(cantUnsubscribeActive,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(cantUnsubscribeActive,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -599,8 +599,8 @@ public class Messages {
     public Component notSubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(notSubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(notSubscribed,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -612,8 +612,8 @@ public class Messages {
     public Component nowSubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(nowSubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(nowSubscribed,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -625,8 +625,8 @@ public class Messages {
     public Component nowUnsubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(nowUnsubscribed,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(nowUnsubscribed,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -640,8 +640,8 @@ public class Messages {
     public Component newActiveChannel(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(newActiveChannel,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(newActiveChannel,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -653,8 +653,8 @@ public class Messages {
     public Component cantSetActive(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(cantSetActive,
-                        "channel_name", "<color:" + textColor.toString() + "><bold>" + channelName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(cantSetActive,
+                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -768,13 +768,14 @@ public class Messages {
 
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">"))
+                .append(Component.text("\n"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">")))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(channelInfoName + "\n", "channel_name", name))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(channelInfoDescription + "\n", "channel_description", description))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(channelInfoColor + "\n", "channel_color", "<color:" + color + ">" + closestColor + " (" + color.asHexString() + ")"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoColor + "\n", "channel_color", "<color:" + color + ">" + closestColor + " (" + color.asHexString() + ")")))
                 .append(hyphenHeader)
                 .append(MiniMessage.get().parse(crewChatChannelInfoSubscribers + "\n", "subscribers", String.valueOf(subscribers)))
                 .append(hyphenHeader)
@@ -809,16 +810,16 @@ public class Messages {
     private transient String crewChatActiveChannel = "<gray>Active channel: <active_channel>";
 
     public Component crewChatActiveChannel(String activeChannel, TextColor textColor) {
-        return MiniMessage.get().parse(crewChatActiveChannel,
-                "active_channel", "<" + textColor.toString() + "><bold>" + activeChannel + "</color:" + textColor.toString() + "></bold><gray>");
+        return MessageUtil.reparse(MiniMessage.get().parse(crewChatActiveChannel,
+                "active_channel", "<color:" + textColor.asHexString() + "><bold>" + activeChannel + "</color:" + textColor.asHexString() + "></bold><gray>"));
     }
 
     // Status
     private transient String crewChatStatus = "<gray>Status:<reset> <status>";
 
     public Component crewChatStatus(String status) {
-        return MiniMessage.get().parse(crewChatStatus,
-                "status", MessageUtil.sanitizeMessageColor(status));
+        return MessageUtil.reparse(MiniMessage.get().parse(crewChatStatus,
+                "status", MessageUtil.sanitizeMessageColor(status)));
     }
 
     // Mute Header
@@ -977,7 +978,7 @@ public class Messages {
 
     public Component meMessage(String playerName, String message, TextColor textColor) {
         // * %playerName% %message% *
-        return MiniMessage.get().parse("<" + textColor.toString() + "><italic>* " + playerName + " " + message + " *");
+        return MiniMessage.get().parse("<" + textColor.asHexString() + "><italic>* " + playerName + " " + message + " *");
     }
 
     /*================================================================================
@@ -1019,8 +1020,8 @@ public class Messages {
     public Component partyAlreadyExists(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyAlreadyExists,
-                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(partyAlreadyExists,
+                "party_name", "<" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
                 .build();
     }
 
@@ -1032,8 +1033,8 @@ public class Messages {
     public Component partyChannelAlreadyExists(String channelName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyChannelAlreadyExists,
-                "channel_name", "<" + textColor.toString() + "><bold>" + channelName + "</color:" + textColor.toString() + "></bold>"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(partyChannelAlreadyExists,
+                "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</color:" + textColor.asHexString() + "></bold>")))
                 .build();
     }
 
@@ -1149,8 +1150,8 @@ public class Messages {
     public Component partyCreated(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyCreated,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(partyCreated,
+                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
                 .build();
     }
 
@@ -1162,8 +1163,8 @@ public class Messages {
     public Component partyJoined(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyJoined,
-                "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(partyJoined,
+                "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
                 .build();
     }
 
@@ -1175,8 +1176,8 @@ public class Messages {
     public Component alreadyInParty(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(alreadyInParty,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(alreadyInParty,
+                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
                 .build();
     }
 
@@ -1188,8 +1189,8 @@ public class Messages {
     public Component partyLeft(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyLeft,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(partyLeft,
+                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
                 .build();
     }
 
@@ -1201,8 +1202,8 @@ public class Messages {
     public Component notInParty(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(notInParty,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</color:" + textColor.toString() + "></bold>"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(notInParty,
+                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
                 .build();
     }
 
@@ -1214,9 +1215,9 @@ public class Messages {
     public Component playerJoinedParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(playerJoinedParty,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(playerJoinedParty,
                         "player_name", MessageUtil.serialize(prefix) + playerName,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold><" + textColor.toString() + ">"))
+                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -1228,9 +1229,9 @@ public class Messages {
     public Component playerLeftParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(playerLeftParty,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(playerLeftParty,
                         "player_name", MessageUtil.serialize(prefix) + playerName,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold><" + textColor.toString() + ">"))
+                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -1241,8 +1242,8 @@ public class Messages {
     public Component partyPlayerListHeader(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyPlayerListHeader,
-                        "party_name", "<" + textColor.toString() + "><bold>" + partyName + "</bold></color:" + textColor.toString() + ">"))
+                .append(MessageUtil.reparse(MiniMessage.get().parse(partyPlayerListHeader,
+                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">")))
                 .build();
     }
 
@@ -1268,11 +1269,11 @@ public class Messages {
                                         String senderStatus, String recipientStatus, String time, String message) {
         // &7[%senderPrefix%me &7-> %recipientPrefix%%recipientName%&7] &r%message%
         return Component.text()
-                .append(MiniMessage.get().parse(privateMessageHeader,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(privateMessageHeader,
                 "sender_prefix", MessageUtil.serialize(senderPrefix),
                 "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you)),
                 "recipient_prefix", MessageUtil.serialize(recipientPrefix),
-                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + recipientName))
+                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + recipientName)))
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(message))
                 .build();
     }
@@ -1285,11 +1286,11 @@ public class Messages {
                                            String senderStatus, String recipientStatus, String time, String message) {
         // &7[%senderPrefix%%senderName% &7-> %recipientPrefix%Me&7] &r%message%
         return Component.text()
-                .append(MiniMessage.get().parse(privateMessageHeader,
+                .append(MessageUtil.reparse(MiniMessage.get().parse(privateMessageHeader,
                 "sender_prefix", MessageUtil.serialize(senderPrefix),
                 "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName,
                 "recipient_prefix", MessageUtil.serialize(recipientPrefix),
-                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you))))
+                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you)))))
                 .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(
                         "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message))
                 .build();
@@ -1342,14 +1343,14 @@ public class Messages {
     public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor, boolean showChannelName, boolean isParty) {
         // %prefix%%playerName%: %message%
         return Component.text()
-                .append(MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
+                .append(MessageUtil.reparse(MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + status + "<reset>\n" +
-                        (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel))) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
-                        (showChannelName ? "<gray>[</gray><" + textColor.toString() + ">" + activeChannel + "</color:" + textColor.toString() + "><gray>]</gray> " : "") +
-                        chatMessageHeader + "<reset><" + textColor.toString() + ">",
+                        (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel))) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
+                        (showChannelName ? "<gray>[</gray><" + textColor.asHexString() + ">" + activeChannel + "</color:" + textColor.asHexString() + "><gray>]</gray> " : "") +
+                        chatMessageHeader + "<reset><" + textColor.asHexString() + ">",
                 "player_prefix", MessageUtil.serialize(prefix),
-                "player_name", playerName))
+                "player_name", playerName)))
                 .append(message)
                 .build();
     }
@@ -1362,13 +1363,13 @@ public class Messages {
     public Component discordMessage(String discordHeader, String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
         // [Discord] %prefix%%playerName%: %message%
         return Component.text()
-                .append(MiniMessage.get().parse("<hover:show_text:'<white>" + time + "\n" +
+                .append(MessageUtil.reparse(MiniMessage.get().parse("<hover:show_text:'<white>" + time + "\n" +
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + status + "\n" +
-                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel)) + ": " + "<" + textColor.toString() + ">" + activeChannel + "'>" +
-                        discordMessageHeader,
+                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel)) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
+                        discordMessageHeader + "</hover>",
                 "discord", discordHeader,
                 "player_prefix", MessageUtil.serialize(prefix),
-                "player_name", playerName))
+                "player_name", playerName)))
                 .append(message)
                 .build();
     }
