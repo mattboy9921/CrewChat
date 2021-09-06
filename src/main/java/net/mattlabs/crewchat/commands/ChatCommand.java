@@ -228,6 +228,7 @@ public class ChatCommand extends BaseCommand {
     }
     
     @Subcommand("switch")
+    @CommandAlias("csw")
     @Description("Switches active channel.")
     @CommandCompletion("@channels-parties")
     public void onSwitch(Player player, @Single Channel channel) {
@@ -319,6 +320,7 @@ public class ChatCommand extends BaseCommand {
     }
 
     @Subcommand("send")
+    @CommandAlias("cs")
     @Description("Send a message to a specified channel without switching to it.")
     @CommandPermission("crewchat.chat.send")
     @CommandCompletion("@channels-parties @nothing")
