@@ -24,16 +24,6 @@ public class PartyCommand extends BaseCommand {
     private final PlayerManager playerManager = crewChat.getPlayerManager();
     private final BukkitAudiences platform = crewChat.getPlatform();
 
-    public PartyCommand() {
-        // Register party completion
-        crewChat.getPaperCommandManager().getCommandCompletions().registerAsyncCompletion("parties", context -> {
-            ArrayList<String> parties = new ArrayList<>();
-            for (Channel channel : channelManager.getChannels())
-                if (channel instanceof Party) parties.add(channel.getName());
-            return parties;
-        });
-    }
-
     @Subcommand("create")
     @Description("Creates a party.")
     @CommandPermission("crewchat.party.create")

@@ -2,7 +2,6 @@ package net.mattlabs.crewchat;
 
 import co.aikar.commands.MessageType;
 import co.aikar.commands.PaperCommandManager;
-import com.google.common.collect.ImmutableList;
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.dependencies.jda.api.requests.GatewayIntent;
 import github.scarsz.discordsrv.dependencies.jda.api.utils.cache.CacheFlag;
@@ -26,8 +25,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class CrewChat extends JavaPlugin{
 
@@ -183,6 +180,12 @@ public class CrewChat extends JavaPlugin{
                 if (!(channel instanceof Party)) channels.add(channel.getName());
             });
             return channels;
+        });
+        paperCommandManager.getCommandCompletions().registerAsyncCompletion("parties", context -> {
+            ArrayList<String> parties = new ArrayList<>();
+            for (Channel channel : channelManager.getChannels())
+                if (channel instanceof Party) parties.add(channel.getName());
+            return parties;
         });
         // Register Commands
         paperCommandManager.registerCommand(new CrewChatCommand());
