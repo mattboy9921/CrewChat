@@ -21,8 +21,10 @@ public class ChannelManager {
         Config config = configurateManager.get("config.conf");
         ArrayList<Channel> channels = (ArrayList<Channel>) config.getChannels();
         channels.forEach(configChannel -> {
-            if (configChannel.equals(channel)) this.channels.put(channel.getName(), channel);
-            CrewChat.getInstance().getLogger().info("Channel \"" + channel.getName() + "\" added!");
+            if (configChannel.equals(channel)) {
+                this.channels.put(channel.getName(), channel);
+                CrewChat.getInstance().getLogger().info("Channel \"" + channel.getName() + "\" added!");
+            }
         });
     }
 
@@ -36,8 +38,8 @@ public class ChannelManager {
     }
 
     // Reloads specified channel
-    public void reloadChannel(Channel channel) {
-        channels.remove(channel.getName());
+    public void reloadChannel(String name, Channel channel) {
+        channels.remove(name);
         loadChannel(channel);
     }
 
@@ -98,6 +100,11 @@ public class ChannelManager {
         @Override
         public Channel get(Object key) {
             return super.get(key.toString().toLowerCase());
+        }
+
+        @Override
+        public Channel remove(Object key) {
+            return super.remove(key.toString().toLowerCase());
         }
 
         @Override

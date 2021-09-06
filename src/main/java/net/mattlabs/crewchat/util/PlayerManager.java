@@ -228,6 +228,23 @@ public class PlayerManager {
         });
     }
 
+    // Update a single channel for a name change
+    public void updateChannel(String oldChannel, String newChannel) {
+        PlayerData playerData = configurateManager.get("playerdata.conf");
+        chatters.values().forEach(chatter -> {
+            // Update subscribed channel list
+            if (chatter.getSubscribedChannels().contains(oldChannel)) {
+                chatter.removeSubscription(oldChannel);
+                chatter.addSubscription(newChannel);
+            }
+            // Update active channel
+            if (chatter.getActiveChannel().equalsIgnoreCase(oldChannel)) chatter.setActiveChannel(newChannel);
+            playerData.setChatter(chatter);
+        });
+        configurateManager.save("playerdata.conf");
+        reloadPlayers();
+    }
+
     // Updates channels/parties for a specified player
     public void updateChannels(Player player) {
         Chatter chatter = chatters.get(player.getUniqueId());

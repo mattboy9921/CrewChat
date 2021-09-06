@@ -191,7 +191,7 @@ public class CrewChatCommand extends BaseCommand {
             else if (!properties.contains(property)) platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatPropertyNoExist(property));
             else {
                 Object valueObj = value;
-                Channel actualChannel = channelManager.channelFromString(channel.getName());
+                String channelName = channel.getName();
                 try {
                     // Change property
                     if (channelFields.get(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, property)).getType().equals(boolean.class))
@@ -199,13 +199,15 @@ public class CrewChatCommand extends BaseCommand {
                         else valueObj = Boolean.parseBoolean(value);
                     else if (channelFields.get(CaseFormat.LOWER_HYPHEN.to(CaseFormat.LOWER_CAMEL, property)).getType().equals(TextColor.class))
                         valueObj = TextColorSerializer.INSTANCE.deserialize(TextColor.class, value);
-                    channelMethods.get("set" + CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, property)).invoke(actualChannel, valueObj);
+                    channelMethods.get("set" + CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, property)).invoke(channel, valueObj);
                     // Save and reload
-                    crewChat.getConfigCC().setChannel(actualChannel);
+                    crewChat.getLogger().info("Updating channel \"" + channelName + "\"...");
+                    crewChat.getConfigCC().setChannel(channelName, channel);
+                    crewChat.getChannelManager().reloadChannel(channelName, channel);
                     crewChat.getConfigurateManager().save("config.conf");
-                    crewChat.getChannelManager().reloadChannel(actualChannel);
+                    playerManager.updateChannel(channelName, channel.getName());
 
-                    platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatPropertyChanged(actualChannel.getName(), property, value));
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatPropertyChanged(channelName, property, value));
                 }
                 catch (IllegalAccessException | InvocationTargetException | NullPointerException e) {
                     e.printStackTrace();

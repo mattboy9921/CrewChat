@@ -75,7 +75,8 @@ public class Config {
         return channels;
     }
 
-    public void setChannel(Channel channel) {
-        channelsMap.replace(channel.getName(), channel);
+    public void setChannel(String oldChannelName, Channel updatedChannel) {
+        channelsMap.remove(oldChannelName);
+        channelsMap.put(updatedChannel.getName(), updatedChannel);
     }
 }
