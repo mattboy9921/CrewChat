@@ -74,4 +74,8 @@ public class Config {
         channelsMap.forEach((name, channel) -> channels.add(new Channel(name, channel.getDescription(), channel.getTextColor(), channel.isAutoSubscribe(), channel.isShowChannelNameInGame(), channel.isShowChannelNameDiscord(), channel.isExcludeFromDiscord())));
         return channels;
     }
+
+    public void setChannel(Channel channel) {
+        channelsMap.replace(channel.getName(), channel);
+    }
 }

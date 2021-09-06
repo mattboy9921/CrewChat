@@ -201,6 +201,7 @@ public class CrewChatCommand extends BaseCommand {
                         valueObj = TextColorSerializer.INSTANCE.deserialize(TextColor.class, value);
                     channelMethods.get("set" + CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, property)).invoke(actualChannel, valueObj);
                     // Save and reload
+                    crewChat.getConfigCC().setChannel(actualChannel);
                     crewChat.getConfigurateManager().save("config.conf");
                     crewChat.getChannelManager().reloadChannel(actualChannel);
 
