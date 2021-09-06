@@ -53,7 +53,7 @@ Broadcast:
  
 Msg:
  - `/msg <player> <message>` - Sends a private message to a player
- - Alias: `/tell`, `/whisper`, `/w`
+ - Alias: `/tell`, `/whisper`, `/w`, `/pm`
  
 Reply:
  - `/reply <message>` - Replies to the last received private message.
