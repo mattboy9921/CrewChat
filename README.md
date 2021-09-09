@@ -97,4 +97,4 @@ Administrative:
 - `crewchat.info` - Allows player to use `/crewchat info`
 - `crewchat.reload` - Allows player to use `/crewchat reload`
  
-Tested working on Paper 1.8.0-1.16.5. Not tested but should support 1.17.1.
+Tested working on Paper 1.8.0-1.17.1.
