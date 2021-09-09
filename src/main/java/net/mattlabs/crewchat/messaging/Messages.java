@@ -10,7 +10,9 @@ import net.kyori.adventure.text.minimessage.parser.ParsingException;
 import net.kyori.adventure.util.HSVLike;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.MessageUtil;
+import net.mattlabs.crewchat.util.Versions;
 import org.apache.commons.lang.WordUtils;
+import org.bukkit.Bukkit;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
@@ -1097,35 +1099,95 @@ public class Messages {
                 .append(Component.text("\n"))
                 .build();
 
+        // Determine version
+        String version = Bukkit.getVersion();
+        int start = version.indexOf("MC: ") + 4;
+        int end = version.length() - 1;
+        version = version.substring(start, end);
 
-        // Color squares
-        for (float value = 1.0f; value >= 0.5f; value -= 0.5f) {
-            for (float hue = 0.0f; hue <= 1.0f; hue += 0.05f) {
-                message = message.append(Component.text("█")
-                        .color(TextColor.color(HSVLike.of(hue, 1.0f, value)))
-                        .hoverEvent(pickAColorHover(partyName, TextColor.color(HSVLike.of(hue, 1.0f, value))))
-                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + TextColor.color(HSVLike.of(hue, 1.0f, value)).asHexString())));
+        // Show all colors if version 1.16 or higher
+        if (Versions.versionCompare("1.16.0", version) < 0) {
+            // Color squares
+            for (float value = 1.0f; value >= 0.5f; value -= 0.5f) {
+                for (float hue = 0.0f; hue <= 1.0f; hue += 0.05f) {
+                    message = message.append(Component.text("█")
+                            .color(TextColor.color(HSVLike.of(hue, 1.0f, value)))
+                            .hoverEvent(pickAColorHover(partyName, TextColor.color(HSVLike.of(hue, 1.0f, value))))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + TextColor.color(HSVLike.of(hue, 1.0f, value)).asHexString())));
+                }
+                if (value == 1.0f) {
+                    message = message.append(Component.text("█")
+                            .color(GRAY)
+                            .hoverEvent(pickAColorHover(partyName, GRAY))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + GRAY.asHexString())));
+                    message = message.append(Component.text("█\n")
+                            .color(WHITE)
+                            .hoverEvent(pickAColorHover(partyName, WHITE))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + WHITE.asHexString())));
+                } else if (value == 0.5f) {
+                    message = message.append(Component.text("█")
+                            .color(DARK_GRAY)
+                            .hoverEvent(pickAColorHover(partyName, DARK_GRAY))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_GRAY.asHexString())));
+                    message = message.append(Component.text("█", BLACK)
+                            .hoverEvent(pickAColorHover(partyName, BLACK))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + BLACK.asHexString())));
+                }
             }
-            if (value == 1.0f) {
-                message = message.append(Component.text("█")
-                        .color(GRAY)
-                        .hoverEvent(pickAColorHover(partyName, GRAY))
-                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + GRAY.asHexString())));
-                message = message.append(Component.text("█\n")
-                        .color(WHITE)
-                        .hoverEvent(pickAColorHover(partyName, WHITE))
-                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + WHITE.asHexString())));
-            }
-            else if (value == 0.5f) {
-                message = message.append(Component.text("█")
-                        .color(DARK_GRAY)
-                        .hoverEvent(pickAColorHover(partyName, DARK_GRAY))
-                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_GRAY.asHexString())));
-                message = message.append(Component.text("█")
-                        .color(BLACK)
-                        .hoverEvent(pickAColorHover(partyName, BLACK))
-                        .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + BLACK.asHexString())));
-            }
+        }
+        // Show named colors
+        else {
+            message = Component.text()
+                    .append(message)
+                    .append(Component.text("█", DARK_RED)
+                            .hoverEvent(pickAColorHover(partyName, DARK_RED))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_RED.asHexString())))
+                    .append(Component.text("█", RED)
+                            .hoverEvent(pickAColorHover(partyName, RED))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + RED.asHexString())))
+                    .append(Component.text("█", GOLD)
+                            .hoverEvent(pickAColorHover(partyName, GOLD))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + GOLD.asHexString())))
+                    .append(Component.text("█", YELLOW)
+                            .hoverEvent(pickAColorHover(partyName, YELLOW))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + YELLOW.asHexString())))
+                    .append(Component.text("█", GREEN)
+                            .hoverEvent(pickAColorHover(partyName, GREEN))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + GREEN.asHexString())))
+                    .append(Component.text("█", DARK_GREEN)
+                            .hoverEvent(pickAColorHover(partyName, DARK_GREEN))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_GREEN.asHexString())))
+                    .append(Component.text("█", AQUA)
+                            .hoverEvent(pickAColorHover(partyName, AQUA))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + AQUA.asHexString())))
+                    .append(Component.text("█", DARK_AQUA)
+                            .hoverEvent(pickAColorHover(partyName, DARK_AQUA))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_AQUA.asHexString())))
+                    .append(Component.text("█", BLUE)
+                            .hoverEvent(pickAColorHover(partyName, BLUE))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + BLUE.asHexString())))
+                    .append(Component.text("█", DARK_BLUE)
+                            .hoverEvent(pickAColorHover(partyName, DARK_BLUE))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_BLUE.asHexString())))
+                    .append(Component.text("█", LIGHT_PURPLE)
+                            .hoverEvent(pickAColorHover(partyName, LIGHT_PURPLE))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + LIGHT_PURPLE.asHexString())))
+                    .append(Component.text("█", DARK_PURPLE)
+                            .hoverEvent(pickAColorHover(partyName, DARK_PURPLE))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_PURPLE.asHexString())))
+                    .append(Component.text("█", WHITE)
+                            .hoverEvent(pickAColorHover(partyName, WHITE))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + WHITE.asHexString())))
+                    .append(Component.text("█", GRAY)
+                            .hoverEvent(pickAColorHover(partyName, GRAY))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + GRAY.asHexString())))
+                    .append(Component.text("█", DARK_GRAY)
+                            .hoverEvent(pickAColorHover(partyName, DARK_GRAY))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + DARK_GRAY.asHexString())))
+                    .append(Component.text("█", BLACK)
+                            .hoverEvent(pickAColorHover(partyName, BLACK))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + BLACK.asHexString())))
+                    .build();
         }
         return message;
     }
