@@ -33,7 +33,11 @@ It also adds fun features like muting, deafening, status messages, mentions and 
 - [DiscordSRV](https://www.spigotmc.org/resources/vault.34315/) ([SpigotMC](https://www.spigotmc.org/resources/vault.34315/)) (Not required but strongly suggested)
 
 **Downloads**
+- [SpigotMC Release](https://www.spigotmc.org/resources/crewchat.96107/)
 - [GitHub Release](https://github.com/mattboy9921/CrewChat/releases/latest)
+
+**Help & Support**
+- For all help, support inquiries, suggestions and feature requests please open an issue on [CrewChat's issue tracker](https://github.com/mattboy9921/CrewChat/issues).
 
 **Commands**
 
