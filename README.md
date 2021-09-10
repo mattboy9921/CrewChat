@@ -1,4 +1,4 @@
-# CrewChat
+![CrewChat](https://i.imgur.com/kZ2b3LS.png)
 CrewChat is a general purpose chat plugin originally developed for the [Crew Craft Server](https://crewcraftserver.net). 
 It is now avaiable here as a standalone plugin designed to take over all aspects of chat from general messaging to private messages and even Discord bridging.
 CrewChat extends basic chat functionality with the introduction of channels to organize different chat streams.
