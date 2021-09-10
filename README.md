@@ -17,6 +17,13 @@ CrewChat is a chat plugin developed for the Crew Craft Server.
  - Mute/deafen functions
  - DiscordSRV integration
 
+**Requirements**
+- [Vault](https://github.com/mattboy9921/CrewChat/releases/latest) ([SpigotMC](https://www.spigotmc.org/resources/vault.34315/))
+- [DiscordSRV](https://www.spigotmc.org/resources/vault.34315/) ([SpigotMC](https://www.spigotmc.org/resources/vault.34315/)) (Not required but strongly suggested)
+
+**Downloads**
+- [GitHub Release](https://github.com/mattboy9921/CrewChat/releases/latest)
+
 **Commands**
 
 CrewChat:
