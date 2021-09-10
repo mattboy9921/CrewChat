@@ -1,6 +1,12 @@
 CrewChat is a chat plugin developed for the Crew Craft Server.
 
 ![Build Status](https://github.com/mattboy9921/CrewChat/actions/workflows/maven.yml/badge.svg)
+[![Servers Using CrewChat](https://img.shields.io/bstats/servers/5799?style=flat&label=Servers&logo=bookmeter&logoColor=94A0A5&labelColor=384142&color=00695C)](https://bstats.org/plugin/bukkit/CrewChat/5799)
+[![Players Using CrewChat](https://img.shields.io/bstats/players/5799?style=flat&label=Players&logo=bookmeter&logoColor=94A0A5&labelColor=384142&color=00695C)](https://bstats.org/plugin/bukkit/CrewChat/5799)
+![CrewChat Downloads](https://img.shields.io/github/downloads/mattboy9921/crewchat/total?label=Downloads&logo=docusign&logoColor=94A0A5&labelColor=384142)
+[![CrewChat Latest Release](https://img.shields.io/github/v/release/mattboy9921/crewchat?label=Release&logo=dropbox&logoColor=94A0A5&labelColor=384142)](https://github.com/mattboy9921/CrewChat/releases/latest)
+![CrewChat Tested Versions](https://img.shields.io/badge/Tested%20Versions-1.8.0--1.17.1-success?&logo=verizon&logoColor=94A0A5&labelColor=384142)
+![CrewChat Made with Love](https://img.shields.io/badge/Made-with%20Love-red?&logo=undertale&logoColor=94A0A5&labelColor=384142)
 
 **Features**
  - General chat
