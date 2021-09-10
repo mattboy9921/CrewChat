@@ -1,4 +1,8 @@
-CrewChat is a chat plugin developed for the Crew Craft Server.
+# CrewChat
+CrewChat is a general purpose chat plugin originally developed for the [Crew Craft Server](https://crewcraftserver.net). 
+It is now avaiable here as a standalone plugin designed to take over all aspects of chat from general messaging to private messages and even Discord bridging.
+CrewChat extends basic chat functionality with the introduction of channels to organize different chat streams.
+It also adds fun features like muting, deafening, status messages, mentions and party chat.
 
 ![Build Status](https://github.com/mattboy9921/CrewChat/actions/workflows/maven.yml/badge.svg)
 [![Servers Using CrewChat](https://img.shields.io/bstats/servers/5799?style=flat&label=Servers&logo=bookmeter&logoColor=94A0A5&labelColor=384142&color=00695C)](https://bstats.org/plugin/bukkit/CrewChat/5799)
