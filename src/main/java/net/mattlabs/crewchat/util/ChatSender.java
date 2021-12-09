@@ -94,7 +94,8 @@ public class ChatSender implements Runnable{
         allowColor = false;
 
         // Gather info
-        prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
+        if (sender.getColor() == null) prefix = "<color:#ffffff>";
+        else prefix = "<color:#" + Integer.toHexString(sender.getColor().getRGB()).substring(2) + ">";
         name = sender.getEffectiveName();
         discordHeader = crewChat.getConfigCC().isShowDiscordChannelNameInGame() ? "Discord #" + channel.getName() : "Discord";
         if (!sender.getActivities().isEmpty()) status = sender.getActivities().get(0).getName();
