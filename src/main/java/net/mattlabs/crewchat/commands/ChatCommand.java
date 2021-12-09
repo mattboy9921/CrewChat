@@ -61,7 +61,7 @@ public class ChatCommand extends BaseCommand {
 
             // Discord channel
             if (crewChat.getDiscordSRVEnabled()) {
-                if (channelManager.channelFromString(activeChannel).isExcludeFromDiscord()) {
+                if (!channelManager.channelFromString(activeChannel).isExcludeFromDiscord()) {
                     TextChannel discordChannel;
                     if (DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel) == null) discordChannel = DiscordSRV.getPlugin().getMainTextChannel();
                     else discordChannel = DiscordSRV.getPlugin().getDestinationTextChannelForGameChannelName(activeChannel);
