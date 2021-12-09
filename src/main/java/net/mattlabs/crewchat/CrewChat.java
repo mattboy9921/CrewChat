@@ -205,6 +205,7 @@ public class CrewChat extends JavaPlugin{
     public void onDisable() {
         this.getLogger().info("Shutting down CrewChat...");
         // Config
+        configurateManager.reload();
         configurateManager.save("config.conf");
         configurateManager.save("playerdata.conf");
 
