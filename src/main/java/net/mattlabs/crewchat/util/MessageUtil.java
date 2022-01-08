@@ -38,7 +38,7 @@ public class MessageUtil {
 
     // Parses strings for unescaped single quotes (') and escapes them
     public static String escapeSingleQuotes(String message) {
-        return message.replaceAll("/(?<!\\\\)'/", "\\'");
+        return message.replace("'", "\\'");
     }
 
     // Removes any legacy codes/MiniMessage tags
