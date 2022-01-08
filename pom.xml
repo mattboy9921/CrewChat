@@ -228,6 +228,11 @@
                             <pattern>org.jsoup</pattern>
                             <shadedPattern>net.mattlabs.jsoup</shadedPattern>
                         </relocation>
+                        <!-- DiscordSRV -->
+                        <relocation>
+                            <pattern>com.discordsrv</pattern>
+                            <shadedPattern>net.mattlabs.discordsrv</shadedPattern>
+                        </relocation>
                     </relocations>
                     <!-- Fix signed dependency JARs -->
                     <filters>
