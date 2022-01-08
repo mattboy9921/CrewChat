@@ -36,6 +36,11 @@ public class MessageUtil {
         return mentionedPlayers;
     }
 
+    // Parses strings for unescaped single quotes (') and escapes them
+    public static String escapeSingleQuotes(String message) {
+        return message.replaceAll("/(?<!\\\\)'/", "\\'");
+    }
+
     // Removes any legacy codes/MiniMessage tags
     public static String sanitizeMessage(String message) {
         message = MiniMessage.get().serialize(LegacyComponentSerializer.legacy('&').deserialize(message));

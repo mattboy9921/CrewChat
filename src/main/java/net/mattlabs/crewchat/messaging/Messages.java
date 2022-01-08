@@ -1407,7 +1407,7 @@ public class Messages {
         return Component.text()
                 .append(MessageUtil.reparse(MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
-                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + status + "<reset>\n" +
+                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + MessageUtil.escapeSingleQuotes(status) + "<reset>\n" +
                         (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel))) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
                         (showChannelName ? "<gray>[</gray><" + textColor.asHexString() + ">" + activeChannel + "</color:" + textColor.asHexString() + "><gray>]</gray> " : "") +
                         chatMessageHeader + "<reset><" + textColor.asHexString() + ">",
@@ -1426,7 +1426,7 @@ public class Messages {
         // [Discord] %prefix%%playerName%: %message%
         return Component.text()
                 .append(MessageUtil.reparse(MiniMessage.get().parse("<hover:show_text:'<white>" + time + "\n" +
-                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + status + "\n" +
+                        MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + MessageUtil.escapeSingleQuotes(status) + "\n" +
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel)) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
                         discordMessageHeader + "</hover>",
                 "discord", discordHeader,
