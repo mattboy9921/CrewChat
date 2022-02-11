@@ -4,6 +4,7 @@ import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.api.Subscribe;
 import github.scarsz.discordsrv.api.events.DiscordGuildMessagePreProcessEvent;
 import github.scarsz.discordsrv.api.events.DiscordReadyEvent;
+import github.scarsz.discordsrv.dependencies.emoji.EmojiParser;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.ChatSender;
 
@@ -14,7 +15,7 @@ public class DiscordSRVListener {
 
     @Subscribe
     public void discordMessageReceivedPre(DiscordGuildMessagePreProcessEvent event) {
-        chatSender.sendDiscordMessage(event.getMember(), event.getChannel(), event.getMessage().getContentDisplay());
+        chatSender.sendDiscordMessage(event.getMember(), event.getChannel(), EmojiParser.parseToAliases(event.getMessage().getContentDisplay()));
         event.setCancelled(true);
     }
 
