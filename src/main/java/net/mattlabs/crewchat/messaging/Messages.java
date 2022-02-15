@@ -5,8 +5,9 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
-import net.kyori.adventure.text.minimessage.parser.ParsingException;
+import net.kyori.adventure.text.minimessage.ParsingException;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.util.HSVLike;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.MessageUtil;
@@ -82,10 +83,10 @@ public class Messages {
     public Component chatBaseCommand() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(welcomeToChat))
+                .append(MiniMessage.miniMessage().deserialize(welcomeToChat))
                 .append(Component.text(" [" + MessageUtil.sanitizeMessage(WordUtils.capitalize(help)) + "]", BLUE, BOLD)
                         .hoverEvent(HoverEvent.showText(Component.text()
-                                .append(MiniMessage.get().parse(clickForHelp))))
+                                .append(MiniMessage.miniMessage().deserialize(clickForHelp))))
                         .clickEvent(ClickEvent.runCommand("/chat help")))
                 .build();
     }
@@ -99,7 +100,7 @@ public class Messages {
     public Component playerDeafened() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerDeafened))
+                .append(MiniMessage.miniMessage().deserialize(playerDeafened))
                 .build();
     }
 
@@ -110,7 +111,7 @@ public class Messages {
     public Component playerUndeafened() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerUndeafened))
+                .append(MiniMessage.miniMessage().deserialize(playerUndeafened))
                 .build();
     }
 
@@ -121,7 +122,7 @@ public class Messages {
     public Component playerIsDeafened() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerIsDeafened))
+                .append(MiniMessage.miniMessage().deserialize(playerIsDeafened))
                 .build();
     }
 
@@ -136,7 +137,7 @@ public class Messages {
         // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(channelNoExist, "channel_name", name))
+                .append(MiniMessage.miniMessage().deserialize(channelNoExist, TagResolver.resolver(Placeholder.parsed("channel_name", name))))
                 .build();
     }
 
@@ -302,8 +303,8 @@ public class Messages {
     private String channelListActive = "You are currently active in: <channel_name>.";
 
     public Component channelListActive(String name, TextColor textColor) {
-        return MessageUtil.reparse(MiniMessage.get().parse("<gray>" + MessageUtil.sanitizeMessage(channelListActive),
-                "channel_name", "<color:" + textColor.asHexString() + "><bold>" + name + "</bold></color:" + textColor.asHexString() + "><gray>"));
+        return MiniMessage.miniMessage().deserialize("<gray>" + MessageUtil.sanitizeMessage(channelListActive),
+                TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + name + "</bold></color:" + textColor.asHexString() + "><gray>")));
     }
 
     // Channel List Subscribe Header
@@ -353,9 +354,9 @@ public class Messages {
         return Component.text()
                 .append(hyphenHeader)
                 .append(Component.text(player, WHITE)
-                        .hoverEvent(HoverEvent.showText(MessageUtil.reparse(MiniMessage.get().parse(
-                                this.timeRemaining + "\n" + clickToUnmute, "time_remaining", timeRemaining))))
-                        .clickEvent(ClickEvent.runCommand("/chat unmute " + player)))
+                        .hoverEvent(HoverEvent.showText(MiniMessage.miniMessage().deserialize(
+                                this.timeRemaining + "\n" + clickToUnmute, TagResolver.resolver(Placeholder.parsed("time_remaining", timeRemaining))))))
+                        .clickEvent(ClickEvent.runCommand("/chat unmute " + player))
                 .build();
     }
 
@@ -406,13 +407,13 @@ public class Messages {
 
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoHeader + "\n", TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">"))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(channelInfoName + "\n", "channel_name", name))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoName + "\n", TagResolver.resolver(Placeholder.parsed("channel_name", name))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(channelInfoDescription + "\n", "channel_description", description))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoDescription + "\n", TagResolver.resolver(Placeholder.parsed("channel_description", description))))
                 .append(hyphenHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoColor, "channel_color", "<color:" + color.toString() + ">" + closestColor + " (" + color.asHexString() + ")" + "</color:" + color.toString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoColor, TagResolver.resolver(Placeholder.parsed("channel_color", "<color:" + color.toString() + ">" + closestColor + " (" + color.asHexString() + ")" + "</color:" + color.toString() + ">"))))
                 .build();
     }
 
@@ -425,7 +426,7 @@ public class Messages {
     public Component cantMuteSelf() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(cantMuteSelf))
+                .append(MiniMessage.miniMessage().deserialize(cantMuteSelf))
                 .build();
     }
 
@@ -436,7 +437,7 @@ public class Messages {
     public Component cantUnmuteSelf() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(cantUnmuteSelf))
+                .append(MiniMessage.miniMessage().deserialize(cantUnmuteSelf))
                 .build();
     }
 
@@ -448,9 +449,9 @@ public class Messages {
     public Component playerAlreadyMuted(String playerPrefix, String playerName) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(playerAlreadyMuted,
-                "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", playerName)))
+                .append(MiniMessage.miniMessage().deserialize(playerAlreadyMuted,
+                TagResolver.resolver(Placeholder.parsed("player_prefix", MessageUtil.serialize(playerPrefix)),
+                        Placeholder.parsed("player_name", playerName))))
                 .build();
     }
 
@@ -462,9 +463,9 @@ public class Messages {
     public Component playerAlreadyUnmuted(String playerPrefix, String playerName) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(playerAlreadyUnmuted,
-                "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", playerName)))
+                .append(MiniMessage.miniMessage().deserialize(playerAlreadyUnmuted,
+                TagResolver.resolver(Placeholder.parsed("player_prefix", MessageUtil.serialize(playerPrefix)),
+                        Placeholder.parsed("player_name", playerName))))
                 .build();
     }
 
@@ -476,9 +477,9 @@ public class Messages {
     public Component playerMuted(String playerPrefix, String player) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(playerMuted,
-                "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", player)))
+                .append(MiniMessage.miniMessage().deserialize(playerMuted,
+                TagResolver.resolver(Placeholder.parsed("player_prefix", MessageUtil.serialize(playerPrefix)),
+                        Placeholder.parsed("player_name", player))))
                 .build();
     }
 
@@ -490,9 +491,9 @@ public class Messages {
     public Component playerUnmuted(String playerPrefix, String player) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(playerUnmuted,
-                "player_prefix", MessageUtil.serialize(playerPrefix),
-                "player_name", player)))
+                .append(MiniMessage.miniMessage().deserialize(playerUnmuted,
+                TagResolver.resolver(Placeholder.parsed("player_prefix", MessageUtil.serialize(playerPrefix)),
+                        Placeholder.parsed("player_name", player))))
                 .build();
     }
 
@@ -507,9 +508,9 @@ public class Messages {
         //noinspection unchecked
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(
+                .append(MiniMessage.miniMessage().deserialize(
                         MessageUtil.sanitizeMessageColor(statusSet),
-                        "status", MessageUtil.serialize(status) + "<reset>")))
+                        TagResolver.resolver(Placeholder.parsed("status", MessageUtil.serialize(status) + "<reset>"))))
                 .build();
     }
 
@@ -522,9 +523,9 @@ public class Messages {
         //noinspection unchecked
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(
+                .append(MiniMessage.miniMessage().deserialize(
                         MessageUtil.sanitizeMessageColor(statusIs),
-                        "status", MessageUtil.serialize(status) + "<reset>")))
+                        TagResolver.resolver(Placeholder.parsed("status", MessageUtil.serialize(status) + "<reset>"))))
                 .build();
     }
 
@@ -535,7 +536,7 @@ public class Messages {
     public Component statusSyntaxError() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(statusSyntaxError))
+                .append(MiniMessage.miniMessage().deserialize(statusSyntaxError))
                 .build();
     }
 
@@ -549,8 +550,8 @@ public class Messages {
     public Component alreadySubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(alreadySubscribed,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(alreadySubscribed,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -562,8 +563,8 @@ public class Messages {
     public Component cantSubscribe(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(cantSubscribe,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(cantSubscribe,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -575,8 +576,8 @@ public class Messages {
     public Component cantUnsubscribe(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(cantUnsubscribe,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(cantUnsubscribe,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -588,8 +589,8 @@ public class Messages {
     public Component cantUnsubscribeActive(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(cantUnsubscribeActive,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(cantUnsubscribeActive,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -601,8 +602,8 @@ public class Messages {
     public Component notSubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(notSubscribed,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(notSubscribed,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -614,8 +615,8 @@ public class Messages {
     public Component nowSubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(nowSubscribed,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(nowSubscribed,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -627,8 +628,8 @@ public class Messages {
     public Component nowUnsubscribed(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(nowUnsubscribed,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(nowUnsubscribed,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -642,8 +643,8 @@ public class Messages {
     public Component newActiveChannel(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(newActiveChannel,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(newActiveChannel,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -655,8 +656,8 @@ public class Messages {
     public Component cantSetActive(String channelName, TextColor textColor) {
         return Component.text()
                 .append(chatHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(cantSetActive,
-                        "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(cantSetActive,
+                        TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -709,16 +710,16 @@ public class Messages {
     public Component crewChatInfo(int channelsLoaded, int playersLoaded, int onlinePlayersLoaded, boolean discordIntegration) {
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatInfoHeader,
-                "version", CrewChat.getInstance().getDescription().getVersion())
+                .append(MiniMessage.miniMessage().deserialize(crewChatInfoHeader,
+                TagResolver.resolver(Placeholder.parsed("version", CrewChat.getInstance().getDescription().getVersion())))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatChannelsLoaded + "\n", "channels", String.valueOf(channelsLoaded)))
+                .append(MiniMessage.miniMessage().deserialize(crewChatChannelsLoaded + "\n", TagResolver.resolver(Placeholder.parsed("channels", String.valueOf(channelsLoaded)))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatPlayersLoaded + "\n", "players", String.valueOf(playersLoaded)))
+                .append(MiniMessage.miniMessage().deserialize(crewChatPlayersLoaded + "\n", TagResolver.resolver(Placeholder.parsed("players", String.valueOf(playersLoaded)))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatOnlinePlayersLoaded + "\n", "players", String.valueOf(onlinePlayersLoaded)))
+                .append(MiniMessage.miniMessage().deserialize(crewChatOnlinePlayersLoaded + "\n", TagResolver.resolver(Placeholder.parsed("players", String.valueOf(onlinePlayersLoaded)))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatDiscordIntegration, "enabled", discordIntegration ? "True" : "False")))
+                .append(MiniMessage.miniMessage().deserialize(crewChatDiscordIntegration, TagResolver.resolver(Placeholder.parsed("enabled", discordIntegration ? "True" : "False")))))
                 .build();
     }
 
@@ -771,21 +772,21 @@ public class Messages {
         return Component.text()
                 .append(crewChatHeader)
                 .append(Component.text("\n"))
-                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoHeader + "\n", "channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoHeader + "\n", TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + color.toString() + ">" + name + "</color:" + color.toString() + ">"))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(channelInfoName + "\n", "channel_name", name))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoName + "\n", TagResolver.resolver(Placeholder.parsed("channel_name", name))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(channelInfoDescription + "\n", "channel_description", description))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoDescription + "\n", TagResolver.resolver(Placeholder.parsed("channel_description", description))))
                 .append(hyphenHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(channelInfoColor + "\n", "channel_color", "<color:" + color + ">" + closestColor + " (" + color.asHexString() + ")")))
+                .append(MiniMessage.miniMessage().deserialize(channelInfoColor + "\n", TagResolver.resolver(Placeholder.parsed("channel_color", "<color:" + color + ">" + closestColor + " (" + color.asHexString() + ")"))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatChannelInfoSubscribers + "\n", "subscribers", String.valueOf(subscribers)))
+                .append(MiniMessage.miniMessage().deserialize(crewChatChannelInfoSubscribers + "\n", TagResolver.resolver(Placeholder.parsed("subscribers", String.valueOf(subscribers)))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatChannelInfoAutoSubscribe + "\n", "auto_subscribe", isAutoSubscribe ? "True" : "False"))
+                .append(MiniMessage.miniMessage().deserialize(crewChatChannelInfoAutoSubscribe + "\n", TagResolver.resolver(Placeholder.parsed("auto_subscribe", isAutoSubscribe ? "True" : "False"))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatChannelInfoExcludeFromDiscord + "\n", "exclude_from_discord", isExcludeFromDiscord ? "True" : "False"))
+                .append(MiniMessage.miniMessage().deserialize(crewChatChannelInfoExcludeFromDiscord + "\n", TagResolver.resolver(Placeholder.parsed("exclude_from_discord", isExcludeFromDiscord ? "True" : "False"))))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(crewChatChannelInfoShowChannelNameDiscord, "show_channel_name_discord", isShowChannelNameDiscord ? "True" : "False"))
+                .append(MiniMessage.miniMessage().deserialize(crewChatChannelInfoShowChannelNameDiscord, TagResolver.resolver(Placeholder.parsed("show_channel_name_discord", isShowChannelNameDiscord ? "True" : "False"))))
                 .build();
     }
 
@@ -797,7 +798,7 @@ public class Messages {
     public Component crewChatInfoPlayerHeader(String player) {
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatInfoPlayerHeader, "player", player))
+                .append(MiniMessage.miniMessage().deserialize(crewChatInfoPlayerHeader, TagResolver.resolver(Placeholder.parsed("player", player))))
                 .build();
     }
 
@@ -805,30 +806,30 @@ public class Messages {
     private transient String crewChatChannelListHeader = "<gray>Subscribed channel(s):";
 
     public Component crewChatChannelListHeaderSmall() {
-        return MiniMessage.get().parse(crewChatChannelListHeader);
+        return MiniMessage.miniMessage().deserialize(crewChatChannelListHeader);
     }
 
     // Active Channel
     private transient String crewChatActiveChannel = "<gray>Active channel: <active_channel>";
 
     public Component crewChatActiveChannel(String activeChannel, TextColor textColor) {
-        return MessageUtil.reparse(MiniMessage.get().parse(crewChatActiveChannel,
-                "active_channel", "<color:" + textColor.asHexString() + "><bold>" + activeChannel + "</color:" + textColor.asHexString() + "></bold><gray>"));
+        return MiniMessage.miniMessage().deserialize(crewChatActiveChannel,
+                TagResolver.resolver(Placeholder.parsed("active_channel", "<color:" + textColor.asHexString() + "><bold>" + activeChannel + "</color:" + textColor.asHexString() + "></bold><gray>")));
     }
 
     // Status
     private transient String crewChatStatus = "<gray>Status:<reset> <status>";
 
     public Component crewChatStatus(String status) {
-        return MessageUtil.reparse(MiniMessage.get().parse(crewChatStatus,
-                "status", MessageUtil.sanitizeMessageColor(status)));
+        return MiniMessage.miniMessage().deserialize(crewChatStatus,
+                TagResolver.resolver(Placeholder.parsed("status", MessageUtil.sanitizeMessageColor(status))));
     }
 
     // Mute Header
     private transient String crewChatMuteHeader = "<gray>Muted player(s):";
 
     public Component crewChatMuteHeader() {
-        return MiniMessage.get().parse(crewChatMuteHeader);
+        return MiniMessage.miniMessage().deserialize(crewChatMuteHeader);
     }
 
     // ** Set **
@@ -840,7 +841,7 @@ public class Messages {
         // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatChannelNoExist, "channel_name", name))
+                .append(MiniMessage.miniMessage().deserialize(crewChatChannelNoExist, TagResolver.resolver(Placeholder.parsed("channel_name", name))))
                 .build();
     }
 
@@ -850,7 +851,7 @@ public class Messages {
     public Component crewChatPropertyNoExist(String property) {
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatPropertyNoExist, "property", property))
+                .append(MiniMessage.miniMessage().deserialize(crewChatPropertyNoExist, TagResolver.resolver(Placeholder.parsed("property", property))))
                 .build();
     }
     
@@ -860,7 +861,7 @@ public class Messages {
     public Component crewChatValueIncorrect(String value) {
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatValueIncorrect, "value", value))
+                .append(MiniMessage.miniMessage().deserialize(crewChatValueIncorrect, TagResolver.resolver(Placeholder.parsed("value", value))))
                 .build();
     }
 
@@ -870,10 +871,10 @@ public class Messages {
     public Component crewChatPropertyChanged(String channel, String property, String value) {
         return Component.text()
                 .append(crewChatHeader)
-                .append(MiniMessage.get().parse(crewChatPropertyChanged,
-                "channel", channel,
-                "property", property,
-                "value", value))
+                .append(MiniMessage.miniMessage().deserialize(crewChatPropertyChanged,
+                TagResolver.resolver(Placeholder.parsed("channel", channel),
+                        Placeholder.parsed("property", property),
+                        Placeholder.parsed("value", value))))
                 .build();
     }
 
@@ -980,7 +981,7 @@ public class Messages {
 
     public Component meMessage(String playerName, String message, TextColor textColor) {
         // * %playerName% %message% *
-        return MiniMessage.get().parse("<" + textColor.asHexString() + "><italic>* " + playerName + " " + message + " *");
+        return MiniMessage.miniMessage().deserialize("<" + textColor.asHexString() + "><italic>* " + playerName + " " + message + " *");
     }
 
     /*================================================================================
@@ -995,8 +996,8 @@ public class Messages {
     public Component broadcastMessage(String message) {
         // [Broadcast] <message>
         return Component.text()
-                .append(MiniMessage.get().parse(broadcastMessageHeader))
-                .append(MiniMessage.get().parse(message))
+                .append(MiniMessage.miniMessage().deserialize(broadcastMessageHeader))
+                .append(MiniMessage.miniMessage().deserialize(message))
                 .build();
     }
 
@@ -1012,7 +1013,7 @@ public class Messages {
     private String party = "party";
 
     // Party Header
-    private transient Component partyHeader = MiniMessage.get().parse("<gray>[<dark_green>" + WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) + "<gray>] ");
+    private transient Component partyHeader = MiniMessage.miniMessage().deserialize("<gray>[<dark_green>" + WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) + "<gray>] ");
 
     // Party Exists
     @Comment("\nAppears if a party already exists during creation.\n" +
@@ -1022,8 +1023,8 @@ public class Messages {
     public Component partyAlreadyExists(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(partyAlreadyExists,
-                "party_name", "<" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
+                .append(MiniMessage.miniMessage().deserialize(partyAlreadyExists,
+                TagResolver.resolver(Placeholder.parsed("party_name", "<" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>"))))
                 .build();
     }
 
@@ -1035,8 +1036,8 @@ public class Messages {
     public Component partyChannelAlreadyExists(String channelName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(partyChannelAlreadyExists,
-                "channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</color:" + textColor.asHexString() + "></bold>")))
+                .append(MiniMessage.miniMessage().deserialize(partyChannelAlreadyExists,
+                TagResolver.resolver(Placeholder.parsed("channel_name", "<color:" + textColor.asHexString() + "><bold>" + channelName + "</color:" + textColor.asHexString() + "></bold>"))))
                 .build();
     }
 
@@ -1049,7 +1050,7 @@ public class Messages {
         // &7[&2Chat&7] &fChannel &l%name%&r doesn't exist!
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyNoExist, "party_name", partyName))
+                .append(MiniMessage.miniMessage().deserialize(partyNoExist, TagResolver.resolver(Placeholder.parsed("party_name", partyName))))
                 .build();
     }
 
@@ -1082,7 +1083,7 @@ public class Messages {
                 .append(Component.text(WordUtils.capitalize(MessageUtil.sanitizeMessage(preview)) + ": ", WHITE))
                 .append(Component.text(partyName, textColor, BOLD))
                 .append(Component.text("\n"))
-                .append(MiniMessage.get().parse(clickToPick))
+                .append(MiniMessage.miniMessage().deserialize(clickToPick))
                 .build());
     }
 
@@ -1090,12 +1091,12 @@ public class Messages {
     public Component pickAColor(String partyName) {
         Component message = Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(partyWillBeCreated, "party_name", partyName))
+                .append(MiniMessage.miniMessage().deserialize(partyWillBeCreated, TagResolver.resolver(Placeholder.parsed("party_name", partyName))))
                 .append(Component.text("\n"))
-                .append(MiniMessage.get().parse(pickAColor,
-                        "hex_color", MiniMessage.get().parse(hexColor)
-                                .hoverEvent(HoverEvent.showText(clickToRun))
-                                .clickEvent(ClickEvent.suggestCommand("/party create " + partyName + " #"))))
+                .append(MiniMessage.miniMessage().deserialize(pickAColor,
+                        TagResolver.resolver(Placeholder.component("hex_color", MiniMessage.miniMessage().deserialize(hexColor))))
+                        .hoverEvent(HoverEvent.showText(clickToRun))
+                        .clickEvent(ClickEvent.suggestCommand("/party create " + partyName + " #")))
                 .append(Component.text("\n"))
                 .build();
 
@@ -1111,9 +1112,9 @@ public class Messages {
             for (float value = 1.0f; value >= 0.5f; value -= 0.5f) {
                 for (float hue = 0.0f; hue <= 1.0f; hue += 0.05f) {
                     message = message.append(Component.text("█")
-                            .color(TextColor.color(HSVLike.of(hue, 1.0f, value)))
-                            .hoverEvent(pickAColorHover(partyName, TextColor.color(HSVLike.of(hue, 1.0f, value))))
-                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + TextColor.color(HSVLike.of(hue, 1.0f, value)).asHexString())));
+                            .color(TextColor.color(HSVLike.hsvLike(hue, 1.0f, value)))
+                            .hoverEvent(pickAColorHover(partyName, TextColor.color(HSVLike.hsvLike(hue, 1.0f, value))))
+                            .clickEvent(ClickEvent.runCommand("/party create " + partyName + " " + TextColor.color(HSVLike.hsvLike(hue, 1.0f, value)).asHexString())));
                 }
                 if (value == 1.0f) {
                     message = message.append(Component.text("█")
@@ -1200,7 +1201,7 @@ public class Messages {
     public Component invalidColor(String invalidHex) {
         return Component.text()
                 .append(partyHeader)
-                .append(MiniMessage.get().parse(invalidColor, "hex_color", invalidHex))
+                .append(MiniMessage.miniMessage().deserialize(invalidColor, TagResolver.resolver(Placeholder.parsed("hex_color", invalidHex))))
                 .build();
     }
 
@@ -1212,8 +1213,8 @@ public class Messages {
     public Component partyCreated(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(partyCreated,
-                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
+                .append(MiniMessage.miniMessage().deserialize(partyCreated,
+                        TagResolver.resolver(Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>"))))
                 .build();
     }
 
@@ -1225,8 +1226,8 @@ public class Messages {
     public Component partyJoined(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(partyJoined,
-                "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
+                .append(MiniMessage.miniMessage().deserialize(partyJoined,
+                TagResolver.resolver(Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>"))))
                 .build();
     }
 
@@ -1238,8 +1239,8 @@ public class Messages {
     public Component alreadyInParty(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(alreadyInParty,
-                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
+                .append(MiniMessage.miniMessage().deserialize(alreadyInParty,
+                        TagResolver.resolver(Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>"))))
                 .build();
     }
 
@@ -1251,8 +1252,8 @@ public class Messages {
     public Component partyLeft(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(partyLeft,
-                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
+                .append(MiniMessage.miniMessage().deserialize(partyLeft,
+                        TagResolver.resolver(Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>"))))
                 .build();
     }
 
@@ -1264,8 +1265,8 @@ public class Messages {
     public Component notInParty(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(notInParty,
-                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>")))
+                .append(MiniMessage.miniMessage().deserialize(notInParty,
+                        TagResolver.resolver(Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</color:" + textColor.asHexString() + "></bold>"))))
                 .build();
     }
 
@@ -1277,9 +1278,9 @@ public class Messages {
     public Component playerJoinedParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(playerJoinedParty,
-                        "player_name", MessageUtil.serialize(prefix) + playerName,
-                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(playerJoinedParty,
+                        TagResolver.resolver(Placeholder.parsed("player_name", MessageUtil.serialize(prefix) + playerName),
+                                Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -1291,9 +1292,9 @@ public class Messages {
     public Component playerLeftParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(playerLeftParty,
-                        "player_name", MessageUtil.serialize(prefix) + playerName,
-                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(playerLeftParty,
+                        TagResolver.resolver(Placeholder.parsed("player_name", MessageUtil.serialize(prefix) + playerName),
+                                Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
@@ -1304,15 +1305,15 @@ public class Messages {
     public Component partyPlayerListHeader(String partyName, TextColor textColor) {
         return Component.text()
                 .append(partyHeader)
-                .append(MessageUtil.reparse(MiniMessage.get().parse(partyPlayerListHeader,
-                        "party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">")))
+                .append(MiniMessage.miniMessage().deserialize(partyPlayerListHeader,
+                        TagResolver.resolver(Placeholder.parsed("party_name", "<color:" + textColor.asHexString() + "><bold>" + partyName + "</bold></color:" + textColor.asHexString() + ">"))))
                 .build();
     }
 
     public Component partyPlayerListEntry(String prefix, String playerName) {
         return Component.text()
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(MessageUtil.serialize(prefix) + playerName))
+                .append(MiniMessage.miniMessage().deserialize(MessageUtil.serialize(prefix) + playerName))
                 .build();
     }
 
@@ -1331,12 +1332,12 @@ public class Messages {
                                         String senderStatus, String recipientStatus, String time, String message) {
         // &7[%senderPrefix%me &7-> %recipientPrefix%%recipientName%&7] &r%message%
         return Component.text()
-                .append(MessageUtil.reparse(MiniMessage.get().parse(privateMessageHeader,
-                "sender_prefix", MessageUtil.serialize(senderPrefix),
-                "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you)),
-                "recipient_prefix", MessageUtil.serialize(recipientPrefix),
-                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + recipientName)))
-                .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(message))
+                .append(MiniMessage.miniMessage().deserialize(privateMessageHeader,
+                TagResolver.resolver(Placeholder.parsed("sender_prefix", MessageUtil.serialize(senderPrefix)),
+                        Placeholder.parsed("sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you))),
+                        Placeholder.parsed("recipient_prefix", MessageUtil.serialize(recipientPrefix)),
+                        Placeholder.parsed("recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + recipientName))))
+                .append(MessageUtil.parseMarkdown(MiniMessage.miniMessage().deserialize(message)))
                 .build();
     }
 
@@ -1348,13 +1349,13 @@ public class Messages {
                                            String senderStatus, String recipientStatus, String time, String message) {
         // &7[%senderPrefix%%senderName% &7-> %recipientPrefix%Me&7] &r%message%
         return Component.text()
-                .append(MessageUtil.reparse(MiniMessage.get().parse(privateMessageHeader,
-                "sender_prefix", MessageUtil.serialize(senderPrefix),
-                "sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName,
-                "recipient_prefix", MessageUtil.serialize(recipientPrefix),
-                "recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you)))))
-                .append(MiniMessage.withMarkdownFlavor(DiscordFlavor.get()).parse(
-                        "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message))
+                .append(MiniMessage.miniMessage().deserialize(privateMessageHeader,
+                TagResolver.resolver(Placeholder.parsed("sender_prefix", MessageUtil.serialize(senderPrefix)),
+                        Placeholder.parsed("sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName),
+                        Placeholder.parsed("recipient_prefix", MessageUtil.serialize(recipientPrefix)),
+                        Placeholder.parsed("recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + MessageUtil.sanitizeMessage(WordUtils.capitalize(you))))))
+                .append(MessageUtil.parseMarkdown(MiniMessage.miniMessage().deserialize(
+                        "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message)))
                 .build();
     }
 
@@ -1365,7 +1366,7 @@ public class Messages {
     public Component cantMessageSelf() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(cantMessageSelf))
+                .append(MiniMessage.miniMessage().deserialize(cantMessageSelf))
                 .build();
     }
 
@@ -1376,7 +1377,7 @@ public class Messages {
     public Component noPMReceived() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(noPMReceived))
+                .append(MiniMessage.miniMessage().deserialize(noPMReceived))
                 .build();
     }
 
@@ -1387,7 +1388,7 @@ public class Messages {
     public Component playerNoExist() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(playerNoExist))
+                .append(MiniMessage.miniMessage().deserialize(playerNoExist))
                 .build();
     }
 
@@ -1405,14 +1406,14 @@ public class Messages {
     public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor, boolean showChannelName, boolean isParty) {
         // %prefix%%playerName%: %message%
         return Component.text()
-                .append(MessageUtil.reparse(MiniMessage.get().parse("<click:suggest_command:/msg " + playerName + " >" +
+                .append(MiniMessage.miniMessage().deserialize("<click:suggest_command:/msg " + playerName + " >" +
                         "<hover:show_text:'<white>" + time + "\n" +
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + MessageUtil.escapeSingleQuotes(status) + "<reset>\n" +
                         (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel))) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
                         (showChannelName ? "<gray>[</gray><" + textColor.asHexString() + ">" + activeChannel + "</color:" + textColor.asHexString() + "><gray>]</gray> " : "") +
                         chatMessageHeader + "<reset><" + textColor.asHexString() + ">",
-                "player_prefix", MessageUtil.serialize(prefix),
-                "player_name", playerName)))
+                        TagResolver.resolver(Placeholder.parsed("player_prefix", MessageUtil.serialize(prefix)),
+                                Placeholder.parsed("player_name", playerName))))
                 .append(message)
                 .build();
     }
@@ -1425,13 +1426,13 @@ public class Messages {
     public Component discordMessage(String discordHeader, String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
         // [Discord] %prefix%%playerName%: %message%
         return Component.text()
-                .append(MessageUtil.reparse(MiniMessage.get().parse("<hover:show_text:'<white>" + time + "\n" +
+                .append(MiniMessage.miniMessage().deserialize("<hover:show_text:'<white>" + time + "\n" +
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + MessageUtil.escapeSingleQuotes(status) + "\n" +
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel)) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
                         discordMessageHeader + "</hover>",
-                "discord", discordHeader,
-                "player_prefix", MessageUtil.serialize(prefix),
-                "player_name", playerName)))
+                TagResolver.resolver(Placeholder.parsed("discord", discordHeader),
+                        Placeholder.parsed("player_prefix", MessageUtil.serialize(prefix)),
+                        Placeholder.parsed("player_name", playerName))))
                 .append(message)
                 .build();
     }
@@ -1494,10 +1495,10 @@ public class Messages {
     public Component badConfig() {
         return Component.text()
                 .append(chatHeader)
-                .append(MiniMessage.get().parse(pluginNotConfigured))
+                .append(MiniMessage.miniMessage().deserialize(pluginNotConfigured))
                 .append(Component.text("\n"))
                 .append(hyphenHeader)
-                .append(MiniMessage.get().parse(permError))
+                .append(MiniMessage.miniMessage().deserialize(permError))
                 .build();
     }
 
@@ -1513,6 +1514,6 @@ public class Messages {
         // I'm sorry but you do not have permission to perform this
         //  command. Please contact the server administrators if you
         //  believe that this is in error.
-        return MiniMessage.get().parse(noPermission);
+        return MiniMessage.miniMessage().deserialize(noPermission);
     }
 }
