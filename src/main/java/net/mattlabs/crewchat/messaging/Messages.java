@@ -1405,15 +1405,29 @@ public class Messages {
 
     public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor, boolean showChannelName, boolean isParty) {
         // %prefix%%playerName%: %message%
+
+        TagResolver placeholders = TagResolver.resolver(Placeholder.parsed(
+                "player_prefix", MessageUtil.serialize(prefix)),
+                Placeholder.parsed("player_name", playerName));
+
         return Component.text()
-                .append(MiniMessage.miniMessage().deserialize("<click:suggest_command:/msg " + playerName + " >" +
+                // Message header
+                .append(MiniMessage.miniMessage().deserialize(
+                        // Click action
+                        "<click:suggest_command:/msg " + playerName + " >" +
+                        // * Hover text
+                        // Message sent time
                         "<hover:show_text:'<white>" + time + "\n" +
+                        // Message sender status
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + MessageUtil.escapeSingleQuotes(status) + "<reset>\n" +
+                        // Message sender channel or party
                         (isParty ? WordUtils.capitalize(MessageUtil.sanitizeMessage(party)) : MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel))) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
+                        // Channel shown in prefix
                         (showChannelName ? "<gray>[</gray><" + textColor.asHexString() + ">" + activeChannel + "</color:" + textColor.asHexString() + "><gray>]</gray> " : "") +
+                        // Header
                         chatMessageHeader + "<reset><" + textColor.asHexString() + ">",
-                        TagResolver.resolver(Placeholder.parsed("player_prefix", MessageUtil.serialize(prefix)),
-                                Placeholder.parsed("player_name", playerName))))
+                        placeholders))
+                // Message body
                 .append(message)
                 .build();
     }
@@ -1425,14 +1439,26 @@ public class Messages {
 
     public Component discordMessage(String discordHeader, String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor) {
         // [Discord] %prefix%%playerName%: %message%
+
+        TagResolver placeholders = TagResolver.resolver(
+                Placeholder.parsed("discord", discordHeader),
+                Placeholder.parsed("player_prefix", MessageUtil.serialize(prefix)),
+                Placeholder.parsed("player_name", playerName));
+
         return Component.text()
-                .append(MiniMessage.miniMessage().deserialize("<hover:show_text:'<white>" + time + "\n" +
+                // Message header
+                .append(MiniMessage.miniMessage().deserialize(
+                        // * Hover text
+                        // Message sent time
+                        "<hover:show_text:'<white>" + time + "\n" +
+                        // Message sender status
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.status)) + ": " + MessageUtil.escapeSingleQuotes(status) + "\n" +
+                        // Message channel
                         MessageUtil.sanitizeMessage(WordUtils.capitalize(this.channel)) + ": " + "<" + textColor.asHexString() + ">" + activeChannel + "'>" +
+                        // Header
                         discordMessageHeader + "</hover>",
-                TagResolver.resolver(Placeholder.parsed("discord", discordHeader),
-                        Placeholder.parsed("player_prefix", MessageUtil.serialize(prefix)),
-                        Placeholder.parsed("player_name", playerName))))
+                        placeholders))
+                // Message body
                 .append(message)
                 .build();
     }
