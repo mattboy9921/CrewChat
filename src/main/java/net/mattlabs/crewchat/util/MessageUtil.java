@@ -62,7 +62,7 @@ public class MessageUtil {
         return MiniMessage.miniMessage().serialize(MiniMessage.builder()
                 .tags(TagResolver.builder()
                         .resolver(StandardTags.color())
-                        .resolver(StandardTags.decoration())
+                        .resolver(StandardTags.decorations())
                         .resolver(StandardTags.font())
                         .resolver(StandardTags.gradient())
                         .resolver(StandardTags.rainbow()).build())
