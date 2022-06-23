@@ -15,7 +15,7 @@ import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.ChannelManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.mattlabs.crewchat.util.TextColorSerializer;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;

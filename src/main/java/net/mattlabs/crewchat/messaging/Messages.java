@@ -12,7 +12,7 @@ import net.kyori.adventure.util.HSVLike;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.util.MessageUtil;
 import net.mattlabs.crewchat.util.Versions;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
