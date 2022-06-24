@@ -62,7 +62,7 @@ public class ChatSender implements Runnable{
             // Gather relavent info
             this.player = player;
             if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
-            prefix = chat.getPlayerPrefix(player);
+            prefix = MessageUtil.serialize(chat.getPlayerPrefix(player));
             name = player.getName();
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
             time = format.format(new Date());
