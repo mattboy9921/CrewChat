@@ -145,7 +145,7 @@ public class ChatSender implements Runnable{
                     name,
                     time,
                     status,
-                    MessageUtil.parseMarkdown(message),
+                    message,
                     intendedChannel,
                     channelColor);
             messageComponentMD = crewChat.getMessages().discordMessage(discordHeader,
@@ -162,7 +162,7 @@ public class ChatSender implements Runnable{
                     name,
                     time,
                     status,
-                    MessageUtil.parseMarkdown(message),
+                    message,
                     intendedChannel,
                     channelColor,
                     showChannelName,

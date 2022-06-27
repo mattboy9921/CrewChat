@@ -997,7 +997,7 @@ public class Messages {
         // [Broadcast] <message>
         return Component.text()
                 .append(MiniMessage.miniMessage().deserialize(broadcastMessageHeader))
-                .append(MiniMessage.miniMessage().deserialize(message))
+                .append(Component.text(message))
                 .build();
     }
 
@@ -1337,7 +1337,7 @@ public class Messages {
                         Placeholder.parsed("sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + WordUtils.capitalize(you)),
                         Placeholder.parsed("recipient_prefix", recipientPrefix),
                         Placeholder.parsed("recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + recipientName))))
-                .append(MessageUtil.parseMarkdown(MiniMessage.miniMessage().deserialize(message)))
+                .append(MiniMessage.miniMessage().deserialize(MessageUtil.parseMarkdown(message)))
                 .build();
     }
 
@@ -1354,8 +1354,7 @@ public class Messages {
                         Placeholder.parsed("sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName),
                         Placeholder.parsed("recipient_prefix", recipientPrefix),
                         Placeholder.parsed("recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + WordUtils.capitalize(you)))))
-                .append(MessageUtil.parseMarkdown(MiniMessage.miniMessage().deserialize(
-                        "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message)))
+                .append(MiniMessage.miniMessage().deserialize(MessageUtil.parseMarkdown(                        "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message)))
                 .build();
     }
 

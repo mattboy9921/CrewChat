@@ -5,7 +5,7 @@ import net.mattlabs.crewchat.CrewChat;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public class BroadcastSender implements Runnable{
+public class BroadcastSender implements Runnable {
 
     private final CrewChat crewChat = CrewChat.getInstance();
 
@@ -14,8 +14,7 @@ public class BroadcastSender implements Runnable{
     private String message;
 
     public void sendBroadcast(String message) {
-
-        this.message = MessageUtil.sanitizeMessage(message);
+        this.message = message;
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
     }
 
