@@ -11,7 +11,6 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.Party;
 import net.milkbowl.vault.chat.Chat;
@@ -62,7 +61,7 @@ public class ChatSender implements Runnable{
             // Gather relavent info
             this.player = player;
             if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
-            prefix = MessageUtil.serialize(chat.getPlayerPrefix(player));
+            prefix = chat.getPlayerPrefix(player);
             name = player.getName();
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
             time = format.format(new Date());
@@ -78,7 +77,7 @@ public class ChatSender implements Runnable{
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
             isPartyMessage = channelManager.channelFromString(intendedChannel) instanceof Party;
             showChannelName = (isPartyMessage || channelManager.channelFromString(intendedChannel).isShowChannelNameInGame());
-            this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
+            this.message = MessageUtil.parseChatMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
             // Schedule message to be sent
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
@@ -123,12 +122,12 @@ public class ChatSender implements Runnable{
         if (channelCount > 1) {
             intendedChannel = "<color:#7289DA>(Discord)<reset> " + channel.getName();
             channelColor = NamedTextColor.WHITE;
-            this.message = MessageUtil.parseMessage(message, NamedTextColor.WHITE, subscribedPlayers, discordChannelID, allowColor);
+            this.message = MessageUtil.parseChatMessage(message, NamedTextColor.WHITE, subscribedPlayers, discordChannelID, allowColor);
         }
         else {
             intendedChannel = channelManager.channelFromString(DiscordSRV.getPlugin().getDestinationGameChannelNameForTextChannel(channel)).getName();
             channelColor = channelManager.getTextColor(channelManager.channelFromString(intendedChannel));
-            this.message = MessageUtil.parseMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
+            this.message = MessageUtil.parseChatMessage(message, channelManager.getTextColor(channelManager.channelFromString(intendedChannel)), subscribedPlayers, discordChannelID, allowColor);
         }
 
         // Schedule message to be sent
@@ -138,17 +137,9 @@ public class ChatSender implements Runnable{
     // Handles actually sending messages to Discord/Minecraft
     public void run() {
         // Create messages
-        Component messageComponent, messageComponentMD;
+        Component messageComponent;
         if (isDiscordMessage) {
             messageComponent = crewChat.getMessages().discordMessage(discordHeader,
-                    prefix,
-                    name,
-                    time,
-                    status,
-                    message,
-                    intendedChannel,
-                    channelColor);
-            messageComponentMD = crewChat.getMessages().discordMessage(discordHeader,
                     prefix,
                     name,
                     time,
@@ -159,15 +150,6 @@ public class ChatSender implements Runnable{
         }
         else {
             messageComponent = crewChat.getMessages().chatMessage(prefix,
-                    name,
-                    time,
-                    status,
-                    message,
-                    intendedChannel,
-                    channelColor,
-                    showChannelName,
-                    isPartyMessage);
-            messageComponentMD = crewChat.getMessages().chatMessage(prefix,
                     name,
                     time,
                     status,
@@ -206,11 +188,11 @@ public class ChatSender implements Runnable{
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(discordChannelID),
                             name,
                             DiscordSRV.getAvatarUrl(player),
-                            DiscordUtil.convertMentionsFromNames(PlainComponentSerializer.plain().serialize(message), DiscordSRV.getPlugin().getMainGuild()),
+                            DiscordUtil.convertMentionsFromNames(MessageUtil.discordMarkdown(message), DiscordSRV.getPlugin().getMainGuild()),
                             null);
                 } else {
                     // Add channel name (if needed) to message
-                    String messageStrMD = channelManager.channelFromString(intendedChannel).isShowChannelNameDiscord() ? "[" + intendedChannel + "] " + PlainComponentSerializer.plain().serialize(messageComponentMD) : PlainComponentSerializer.plain().serialize(messageComponentMD);
+                    String messageStrMD = channelManager.channelFromString(intendedChannel).isShowChannelNameDiscord() ? "[" + intendedChannel + "] " + MessageUtil.discordMarkdown(message) : MessageUtil.discordMarkdown(message);
                     DiscordUtil.sendMessage(DiscordUtil.getTextChannelById(discordChannelID),
                             DiscordUtil.convertMentionsFromNames(messageStrMD, DiscordSRV.getPlugin().getMainGuild()));
                 }

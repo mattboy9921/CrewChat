@@ -6,6 +6,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.ParsingException;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.util.HSVLike;
@@ -510,7 +511,7 @@ public class Messages {
                 .append(chatHeader)
                 .append(MiniMessage.miniMessage().deserialize(
                         statusSet,
-                        TagResolver.resolver(Placeholder.parsed("status", MessageUtil.sanitizeMessageColor(status) + "<reset>"))))
+                        Placeholder.component("status", MessageUtil.getSafeMM().deserialize(status))))
                 .build();
     }
 
@@ -520,12 +521,11 @@ public class Messages {
     private String statusIs = "<white>Your status is: \"<status>\".";
 
     public Component statusIs(String status) throws ParsingException {
-        //noinspection unchecked
         return Component.text()
                 .append(chatHeader)
                 .append(MiniMessage.miniMessage().deserialize(
                         statusIs,
-                        TagResolver.resolver(Placeholder.parsed("status", MessageUtil.sanitizeMessageColor(status) + "<reset>"))))
+                        Placeholder.component("status", MessageUtil.getSafeMM().deserialize(status))))
                 .build();
     }
 
@@ -1333,28 +1333,28 @@ public class Messages {
         // &7[%senderPrefix%me &7-> %recipientPrefix%%recipientName%&7] &r%message%
         return Component.text()
                 .append(MiniMessage.miniMessage().deserialize(privateMessageHeader,
-                TagResolver.resolver(Placeholder.parsed("sender_prefix", senderPrefix),
+                TagResolver.resolver(TagResolver.resolver("sender_prefix", Tag.inserting(MessageUtil.legacyDeserialize(senderPrefix))),
                         Placeholder.parsed("sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + WordUtils.capitalize(you)),
-                        Placeholder.parsed("recipient_prefix", recipientPrefix),
+                        TagResolver.resolver("recipient_prefix", Tag.inserting(MessageUtil.legacyDeserialize(recipientPrefix))),
                         Placeholder.parsed("recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + recipientName))))
-                .append(MiniMessage.miniMessage().deserialize(MessageUtil.parseMarkdown(message)))
+                .append(MessageUtil.parsePrivateMessage(message))
                 .build();
     }
 
     // Click to reply
     @Comment("\nAppears when hovering over private messages.")
-    private String clickToReply = "<bold><dark_green>Click</bold><white> this message to reply.";
+    private String clickToReply = "<bold><dark_green>Click</bold><white> here to reply.";
 
     public Component privateMessageReceive(String senderPrefix, String recipientPrefix, String senderName,
                                            String senderStatus, String recipientStatus, String time, String message) {
         // &7[%senderPrefix%%senderName% &7-> %recipientPrefix%Me&7] &r%message%
         return Component.text()
                 .append(MiniMessage.miniMessage().deserialize(privateMessageHeader,
-                TagResolver.resolver(Placeholder.parsed("sender_prefix", senderPrefix),
-                        Placeholder.parsed("sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "'>" + senderName),
-                        Placeholder.parsed("recipient_prefix", recipientPrefix),
+                TagResolver.resolver(TagResolver.resolver("sender_prefix", Tag.inserting(MessageUtil.legacyDeserialize(senderPrefix))),
+                        Placeholder.parsed("sender_name", "<hover:show_text:'<white>" + time + "\n" + senderStatus + "\n" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + senderName),
+                        TagResolver.resolver("recipient_prefix", Tag.inserting(MessageUtil.legacyDeserialize(recipientPrefix))),
                         Placeholder.parsed("recipient_name", "<hover:show_text:'<white>" + time + "\n" + recipientStatus + "'>" + WordUtils.capitalize(you)))))
-                .append(MiniMessage.miniMessage().deserialize(MessageUtil.parseMarkdown(                        "<hover:show_text:'" + clickToReply + "'><click:suggest_command:/msg " + senderName + " >" + message)))
+                .append(MessageUtil.parsePrivateMessage(message))
                 .build();
     }
 
@@ -1405,8 +1405,8 @@ public class Messages {
     public Component chatMessage(String prefix, String playerName, String time, String status, Component message, String activeChannel, TextColor textColor, boolean showChannelName, boolean isParty) {
         // %prefix%%playerName%: %message%
 
-        TagResolver placeholders = TagResolver.resolver(Placeholder.parsed(
-                "player_prefix", prefix),
+        TagResolver placeholders = TagResolver.resolver(
+                TagResolver.resolver("player_prefix", Tag.inserting(MessageUtil.legacyDeserialize(prefix))),
                 Placeholder.parsed("player_name", playerName));
 
         return Component.text()
