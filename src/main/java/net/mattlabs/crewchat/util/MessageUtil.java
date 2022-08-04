@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class MessageUtil {
-    private static final Pattern urlPattern = Pattern.compile("https?://[\\w$\\-\\.+!*'(),]+\\.[a-z]+\\.?[a-z]+(/([\\w$\\-+!*'()?=&%#]|\\.(?=\\w))*)*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern urlPattern = Pattern.compile("https?://[\\w$\\-.+!*'(),]+\\.[a-z]+\\.?[a-z]+(/([\\w$\\-+!*'()?=&%#]|\\.(?=\\w))*)*", Pattern.CASE_INSENSITIVE);
 
     // MiniMessage that only allows color and style tags
     private static final MiniMessage safeMM = MiniMessage.builder()
@@ -54,6 +54,9 @@ public class MessageUtil {
     // MiniMessage for serializing only style tags, strict
     private static final MiniMessage serStyleStrictMM = MiniMessage.builder().tags(StandardTags.decorations()).strict(true).build();
 
+    // MiniMessage for serializing nothing
+    private static final MiniMessage serNothingMM = MiniMessage.builder().build();
+
     // Parses message for player names given, returns list of players
     public static ArrayList<Player> getMentionedPlayers(String message, ArrayList<Player> playersToCheck) {
         String[] parts = message.split(" ");
@@ -69,11 +72,6 @@ public class MessageUtil {
         }
 
         return mentionedPlayers;
-    }
-
-    // Parses strings for unescaped single quotes (') and escapes them
-    public static String escapeSingleQuotes(String message) {
-        return message.replace("'", "\\'");
     }
 
     // Parse Discord markdown
@@ -96,19 +94,6 @@ public class MessageUtil {
                 .replace("</obfuscated>", "||");
     }
 
-    // Remove dangerous MiniMessage tags
-    public static String sanitizeMessageColor(String message) {
-        //noinspection unchecked
-        return MiniMessage.miniMessage().serialize(MiniMessage.builder()
-                .tags(TagResolver.builder()
-                        .resolver(StandardTags.color())
-                        .resolver(StandardTags.decorations())
-                        .resolver(StandardTags.font())
-                        .resolver(StandardTags.gradient())
-                        .resolver(StandardTags.rainbow()).build())
-                .build().deserialize(message));
-    }
-
     // Upgrade legacy color codes to MiniMessage tags
     public static Component legacyDeserialize(String legacyColorText) {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(legacyColorText);
@@ -122,7 +107,7 @@ public class MessageUtil {
         else message = escStyleMM.escapeTags(message);
 
         String[] parts = message.split(" ");
-        StringBuilder finalMessage = new StringBuilder().append("<color:" + textColor.asHexString() + ">");
+        StringBuilder finalMessage = new StringBuilder().append("<color:").append(textColor.asHexString()).append(">");
 
         for (int i = 0; i < parts.length; i++) {
             String part = parts[i];
@@ -153,7 +138,14 @@ public class MessageUtil {
             // Parse Links
             else if (parseLinks) {
                 // Match links
-                nextPart = urlPattern.matcher(part).replaceAll("<click:open_url:$0><color:#0000EE>$0</color:#0000EE></click>");
+                nextPart = urlPattern.matcher(part).replaceAll(
+                        "<hover:show_text:'" + CrewChat.getInstance().getMessages().chatLinkHoverText() + "'>" +
+                                "<click:open_url:$0>" +
+                                "<color:#5394EC>" +
+                                "$0" +
+                                "</color:#5394EC>" +
+                                "</click>" +
+                                "</hover>");
             }
 
             // Add to whole string
@@ -178,5 +170,9 @@ public class MessageUtil {
 
     public static MiniMessage getSafeMM() {
         return safeMM;
+    }
+
+    public static MiniMessage getSerNothingMM() {
+        return serNothingMM;
     }
 }
