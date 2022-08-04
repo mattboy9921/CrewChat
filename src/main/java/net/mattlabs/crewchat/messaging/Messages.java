@@ -1028,7 +1028,7 @@ public class Messages {
 
     public Component partyCreated(String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(partyCreated,
-                        TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD)))));
+                        TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD)))));
     }
 
     // Party Joined
@@ -1038,7 +1038,7 @@ public class Messages {
 
     public Component partyJoined(String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(partyJoined,
-                        TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD)))));
+                        TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD)))));
     }
 
     // Already in Party
@@ -1048,7 +1048,7 @@ public class Messages {
 
     public Component alreadyInParty(String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(alreadyInParty,
-                        TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD)))));
+                        TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD)))));
     }
 
     // Party Left
@@ -1058,7 +1058,7 @@ public class Messages {
 
     public Component partyLeft(String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(partyLeft,
-                        TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD)))));
+                        TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD)))));
     }
 
     // Not in Party
@@ -1068,7 +1068,7 @@ public class Messages {
 
     public Component notInParty(String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(notInParty,
-                        TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD)))));
+                        TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD)))));
     }
 
     // Player Joined Party
@@ -1079,7 +1079,7 @@ public class Messages {
     public Component playerJoinedParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(playerJoinedParty,
                         TagResolver.resolver(Placeholder.parsed("player_name", prefix + playerName),
-                                TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD))))));
+                                TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD))))));
     }
 
     // Player Joined Party
@@ -1090,7 +1090,7 @@ public class Messages {
     public Component playerLeftParty(String prefix, String playerName, String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(playerLeftParty,
                         TagResolver.resolver(Placeholder.parsed("player_name", prefix + playerName),
-                                TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD))))));
+                                TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD))))));
     }
 
     @Comment("\nAppears in the party player list command.\n" +
@@ -1099,11 +1099,11 @@ public class Messages {
 
     public Component partyPlayerListHeader(String partyName, TextColor textColor) {
         return partyHeader.append(MiniMessage.miniMessage().deserialize(partyPlayerListHeader,
-                        TagResolver.resolver("party_name", Tag.inserting(Component.text(partyName, textColor, BOLD)))));
+                        TagResolver.resolver("party_name", Tag.selfClosingInserting(Component.text(partyName, textColor, BOLD)))));
     }
 
     public Component partyPlayerListEntry(String prefix, String playerName) {
-        return hyphenHeader.append(MiniMessage.miniMessage().deserialize(prefix + playerName));
+        return hyphenHeader.append(MessageUtil.legacyDeserialize(prefix).append(MiniMessage.miniMessage().deserialize(playerName)));
     }
 
     /*================================================================================
@@ -1286,7 +1286,7 @@ public class Messages {
 
     // Click to run
     private transient Component clickToRun = Component.text("Click", DARK_GREEN, BOLD)
-            .append(Component.text(" to run.", WHITE));
+            .append(Component.text(" to run.", WHITE).decoration(BOLD, false));
 
     // ** Bad Config **
 
