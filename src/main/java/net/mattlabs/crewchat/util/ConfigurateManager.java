@@ -69,7 +69,6 @@ public class ConfigurateManager {
             }
             catch (IOException | StackOverflowError e) {
                 CrewChat.getInstance().getLogger().severe("Failed to save \"" + fileName + "\"!");
-                e.printStackTrace();
                 CrewChat.getInstance().getPluginLoader().disablePlugin(CrewChat.getInstance());
             }
         }
@@ -99,23 +98,17 @@ public class ConfigurateManager {
             node = loader.load();
             // Transformations
             if (transformation != null) {
-                CrewChat.getInstance().getLogger().info("Transform");
                 int startVersion = transformation.version(node);
-                CrewChat.getInstance().getLogger().info(Integer.toString(startVersion));
                 transformation.apply(node);
-                CrewChat.getInstance().getLogger().info("Applied");
                 int endVersion = transformation.version(node);
-                CrewChat.getInstance().getLogger().info(Integer.toString(endVersion));
                 if (startVersion != endVersion)
                     CrewChat.getInstance().getLogger().info("Updated " + fileName + " schema from " + startVersion + " to " + endVersion);
-                //loader.save(node);
             }
             // Load
             T t = node.get(configNode.getTypeToken(), configNode.getConfigSerializableSupplier());
             configNode.setConfigSerializable(t);
         }
         catch (IOException e) {
-            e.printStackTrace();
             CrewChat.getInstance().getLogger().severe("Failed to load \"" + fileName + "\" - using a default!");
         }
     }
