@@ -20,7 +20,7 @@ public class BroadcastSender implements Runnable {
 
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers())
-            platform.player(player).sendMessage(crewChat.getMessages().broadcastMessage(message));
+            platform.player(player).sendMessage(crewChat.getMessages().broadcast().broadcastMessage(message));
 
         message = null;
     }

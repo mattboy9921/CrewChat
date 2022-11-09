@@ -139,7 +139,7 @@ public class MessageUtil {
             else if (parseLinks) {
                 // Match links
                 nextPart = urlPattern.matcher(part).replaceAll(
-                        "<hover:show_text:'" + CrewChat.getInstance().getMessages().chatLinkHoverText() + "'>" +
+                        "<hover:show_text:'" + CrewChat.getInstance().getMessages().chatMessage().chatLinkHoverText() + "'>" +
                                 "<click:open_url:$0>" +
                                 "<color:#5394EC>" +
                                 "$0" +

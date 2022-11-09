@@ -8,7 +8,6 @@ import net.mattlabs.crewchat.util.MsgManager;
 import net.mattlabs.crewchat.util.PlayerManager;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
@@ -32,10 +31,10 @@ public class MsgCommand extends BaseCommand {
 
         Player recipient = Bukkit.getPlayerExact(recipientString);
         // Check if player exists
-        if (recipient == null) platform.player(sender).sendMessage(crewChat.getMessages().playerNoExist());
+        if (recipient == null) platform.player(sender).sendMessage(crewChat.getMessages().privateMessage().playerNoExist());
         // Check if messaging self
         else if (sender.getName().equalsIgnoreCase(recipient.getName())) {
-            platform.player(sender).sendMessage(crewChat.getMessages().cantMessageSelf());
+            platform.player(sender).sendMessage(crewChat.getMessages().privateMessage().cantMessageSelf());
         }
         else {
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
@@ -43,13 +42,13 @@ public class MsgCommand extends BaseCommand {
 
             msgManager.updatePlayer(recipient.getName(), sender.getName());
             // Send message to sender
-            platform.player(sender).sendMessage(crewChat.getMessages().privateMessageSend(chat.getPlayerPrefix(sender),
+            platform.player(sender).sendMessage(crewChat.getMessages().privateMessage().privateMessageSend(chat.getPlayerPrefix(sender),
                     chat.getPlayerPrefix(recipient), recipient.getName(),
                     playerManager.getStatus(sender),
                     playerManager.getStatus(recipient), time, message));
             // Check if recipient is muted, otherwise send message
             if (!playerManager.hasMuted(recipient, sender))
-                platform.player(recipient).sendMessage(crewChat.getMessages().privateMessageReceive(chat.getPlayerPrefix(sender),
+                platform.player(recipient).sendMessage(crewChat.getMessages().privateMessage().privateMessageReceive(chat.getPlayerPrefix(sender),
                         chat.getPlayerPrefix(recipient), sender.getName(),
                         playerManager.getStatus(sender),
                         playerManager.getStatus(recipient), time, message));

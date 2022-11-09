@@ -60,7 +60,7 @@ public class ChatSender implements Runnable{
         if (playerManager.isOnline(player)) {
             // Gather relavent info
             this.player = player;
-            if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().playerIsDeafened());
+            if (playerManager.isDeafened(player)) platform.player(player).sendMessage(crewChat.getMessages().chat().deafen().playerIsDeafened());
             prefix = chat.getPlayerPrefix(player);
             name = player.getName();
             SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d, HH:mm:ss");
@@ -82,7 +82,7 @@ public class ChatSender implements Runnable{
             CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
         }
         else {
-            platform.player(player).sendMessage(crewChat.getMessages().badConfig());
+            platform.player(player).sendMessage(crewChat.getMessages().general().badConfig());
             CrewChat.getInstance().getLogger().info("Player " + player.getDisplayName() + " can't send messages, check permissions!");
         }
     }
@@ -139,7 +139,7 @@ public class ChatSender implements Runnable{
         // Create messages
         Component messageComponent;
         if (isDiscordMessage) {
-            messageComponent = crewChat.getMessages().discordMessage(discordHeader,
+            messageComponent = crewChat.getMessages().chatMessage().discordMessage(discordHeader,
                     prefix,
                     name,
                     time,
@@ -149,7 +149,7 @@ public class ChatSender implements Runnable{
                     channelColor);
         }
         else {
-            messageComponent = crewChat.getMessages().chatMessage(prefix,
+            messageComponent = crewChat.getMessages().chatMessage().chatMessage(prefix,
                     name,
                     time,
                     status,

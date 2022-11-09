@@ -135,7 +135,7 @@ public class CrewChatCommand extends BaseCommand {
             else {
                 // Check if channel exists
                 if (channel == null) {
-                    platform.sender(commandSender).sendMessage(crewChat.getMessages().channelNoExist(getLastCommandOperationContext().getArgs()[0]));
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().chat().general().channelNoExist(getLastCommandOperationContext().getArgs()[0]));
                 }
                 else {
                     platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatChannelInfo(channel.getName(),
@@ -171,7 +171,7 @@ public class CrewChatCommand extends BaseCommand {
                     // Mute Header
                     platform.sender(commandSender).sendMessage(crewChat.getMessages().crewChatMuteHeader());
                     for (Mutee mutee : playerManager.getMutedPlayers(requestedPlayer))
-                        platform.sender(commandSender).sendMessage(crewChat.getMessages().mutedListEntry(mutee.getName(), mutee.getTimeRemaining()));
+                        platform.sender(commandSender).sendMessage(crewChat.getMessages().chat().info().mutedListEntry(mutee.getName(), mutee.getTimeRemaining()));
                 }
             }
         }

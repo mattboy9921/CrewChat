@@ -221,7 +221,7 @@ public class PlayerManager {
                     if (LocalDateTime.now().isAfter(mutee.getTime().plusHours(24))) {
                         removedMutees.add(mutee);
                         if (Bukkit.getOfflinePlayer(chatter.getUuid()).isOnline())
-                            platform.player(Objects.requireNonNull(Bukkit.getPlayer(chatter.getUuid()))).sendMessage(crewChat.getMessages().playerUnmuted(mutee.getPrefix(), mutee.getName()));
+                            platform.player(Objects.requireNonNull(Bukkit.getPlayer(chatter.getUuid()))).sendMessage(crewChat.getMessages().chat().muting().playerUnmuted(mutee.getPrefix(), mutee.getName()));
                     }
                 for (Mutee mutee : removedMutees) chatter.removeMutedPlayer(mutee.getUuid());
             }

@@ -15,6 +15,7 @@ import net.mattlabs.crewchat.listeners.JoinListener;
 import net.mattlabs.crewchat.listeners.QuitListener;
 import net.mattlabs.crewchat.messaging.Messages;
 import net.mattlabs.crewchat.util.*;
+import net.mattlabs.crewchat.util.transformations.MessagesTransformations;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bstats.bukkit.Metrics;
@@ -96,7 +97,7 @@ public class CrewChat extends JavaPlugin{
                 opts -> opts.serializers(build -> build.register(TextColor.class, TextColorSerializer.INSTANCE)));
         configurateManager.add("playerdata.conf", TypeToken.get(PlayerData.class), new PlayerData(), PlayerData::new,
                 opts -> opts.serializers(build -> build.register(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE)));
-        configurateManager.add("messages.conf", TypeToken.get(Messages.class), new Messages(), Messages::new);
+        configurateManager.add("messages.conf", TypeToken.get(Messages.class), new Messages(), Messages::new, MessagesTransformations.create());
 
         configurateManager.saveDefaults("config.conf");
         configurateManager.saveDefaults("playerdata.conf");
