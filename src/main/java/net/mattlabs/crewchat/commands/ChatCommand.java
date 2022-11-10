@@ -89,8 +89,7 @@ public class ChatCommand extends BaseCommand {
         @Default
         @Description("Lists all channels, active channel and subscribed channels.")
         public void onInfo(CommandSender commandSender) {
-            if (commandSender instanceof Player) {
-                Player player = (Player) commandSender;
+            if (commandSender instanceof Player player) {
                 // Channel List
                 platform.player(player).sendMessage(crewChat.getMessages().chat().info().channelListHeader());
                 for (Channel channel : channelManager.getChannels())
@@ -256,6 +255,7 @@ public class ChatCommand extends BaseCommand {
     @Description("Mutes another player.")
     @CommandPermission("crewchat.chat.mute")
     @CommandCompletion("@players")
+    @SuppressWarnings("ConstantConditions")
     public void onMute(Player player, @Single String mutee) {
         // Check if player exists
         if (!playerManager.playerExists(Bukkit.getOfflinePlayer(mutee))) platform.player(player).sendMessage(crewChat.getMessages().privateMessage().playerNoExist());
@@ -266,7 +266,7 @@ public class ChatCommand extends BaseCommand {
         else if (playerManager.getMutedPlayerNames(player).contains(mutee))
             platform.player(player).sendMessage(crewChat.getMessages().chat().muting().playerAlreadyMuted(chat.getPlayerPrefix(Bukkit.getPlayerExact(mutee)), mutee));
         else {
-            playerManager.addMutedPlayer(player, Bukkit.getPlayerExact(mutee));
+            playerManager.addMutedPlayer(player, Bukkit.getPlayerExact(mutee)); // Never will be null, checked in first if
             platform.player(player).sendMessage(crewChat.getMessages().chat().muting().playerMuted(chat.getPlayerPrefix(Bukkit.getPlayerExact(mutee)), mutee));
         }
     }
@@ -275,6 +275,7 @@ public class ChatCommand extends BaseCommand {
     @Description("Unmutes another player.")
     @CommandPermission("crewchat.chat.mute")
     @CommandCompletion("@players")
+    @SuppressWarnings("ConstantConditions")
     public void onUnmute(Player player, @Single String mutee) {
         // Check if unmuting self
         if (player.getName().equalsIgnoreCase(mutee))
@@ -346,16 +347,17 @@ public class ChatCommand extends BaseCommand {
         if (commandSender instanceof Player) {
             platform.player((Player) commandSender).sendMessage(crewChat.getMessages().chat().help().chatHelpCommand());
         }
-        else CrewChat.getInstance().getLogger().info("Command Help:\n" +
-                "Alias: /c <args>\n" +
-                "/chat - Base CrewChat command.\n" +
-                "/chat help - Shows this screen.\n" +
-                "/chat info - Lists all channels, active channel and subscribed channels.\n" +
-                "/chat info channel <channel> - Lists info about specified channel.\n" +
-                "Not available through console:\n" +
-                "/chat status <status> - Sets player's status.\n" +
-                "/chat subscribe <channel> - Subscribes player to channel.\n" +
-                "/chat unsubscribe <channel> - Unsubscribes player from channel.\n" +
-                "/chat switch <channel> - Switches active channel.");
+        else CrewChat.getInstance().getLogger().info("""
+                Command Help:
+                Alias: /c <args>
+                /chat - Base CrewChat command.
+                /chat help - Shows this screen.
+                /chat info - Lists all channels, active channel and subscribed channels.
+                /chat info channel <channel> - Lists info about specified channel.
+                Not available through console:
+                /chat status <status> - Sets player's status.
+                /chat subscribe <channel> - Subscribes player to channel.
+                /chat unsubscribe <channel> - Unsubscribes player from channel.
+                /chat switch <channel> - Switches active channel.""");
     }
 }

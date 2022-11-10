@@ -1366,9 +1366,9 @@ public class Messages {
             ================================================================================
 
             All strings related to the "/party" command.""")
-    private static Party party = new Party();
+    private Party party = new Party();
 
-    public static Party party() {
+    public Party party() {
         return party;
     }
 
@@ -1494,7 +1494,7 @@ public class Messages {
                     Placeholder.parsed("player_name", playerName));
 
             String statusHeader = WordUtils.capitalize(Messages.statusString()) + ": ";
-            String channelHeader = (isParty ? WordUtils.capitalize(party().partyString()) : WordUtils.capitalize(Messages.channelString())) + ": ";
+            String channelHeader = (isParty ? WordUtils.capitalize(Messages.partyString()) : WordUtils.capitalize(Messages.channelString())) + ": ";
             Component channelNameHeader = showChannelName ? Component.text("[", GRAY).append(Component.text(activeChannel, textColor)).append(Component.text("] ", GRAY)) : Component.text("");
 
             return channelNameHeader.append(MiniMessage.miniMessage().deserialize(chatMessageHeader, placeholders) // Header, optional channel name
@@ -1688,6 +1688,10 @@ public class Messages {
 
     public static String helpString() {
         return CrewChat.getInstance().getMessages().general().helpString();
+    }
+
+    public static String partyString() {
+        return CrewChat.getInstance().getMessages().party().partyString();
     }
 
     public static String statusString() {

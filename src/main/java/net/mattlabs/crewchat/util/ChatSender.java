@@ -15,6 +15,7 @@ import net.mattlabs.crewchat.CrewChat;
 import net.mattlabs.crewchat.Party;
 import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
+import org.intellij.lang.annotations.Subst;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class ChatSender implements Runnable{
     private String prefix, name, time, status, intendedChannel, discordHeader, discordChannelID;
     private Player player;
     private TextColor channelColor;
+    @Subst("block.note_block.pling")
     private final String notificationSound;
     private ArrayList<Player> subscribedPlayers, mentionedPlayers;
     private Component message;
@@ -51,6 +53,7 @@ public class ChatSender implements Runnable{
     }
 
     // Send a message originating from an in game channel
+    @SuppressWarnings("deprecation")
     public void sendChatMessage(Player player, String intendedChannel, String message) {
         playerManager.updateMutedPlayers();
         isDiscordMessage = false;

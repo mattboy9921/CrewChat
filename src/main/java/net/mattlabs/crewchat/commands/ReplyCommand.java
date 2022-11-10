@@ -26,6 +26,7 @@ public class ReplyCommand extends BaseCommand {
     @Default
     @Description("Replies to last received private message.")
     @CommandCompletion("@nothing")
+    @SuppressWarnings("ConstantConditions")
     public void onDefault(Player sender, String message) {
         playerManager.updateMutedPlayers();
 
@@ -40,7 +41,7 @@ public class ReplyCommand extends BaseCommand {
 
 
                 Player recipient = Bukkit.getPlayer(msgManager.getLastSender(sender.getName()));
-                msgManager.updatePlayer(recipient.getName(), sender.getName());
+                msgManager.updatePlayer(recipient.getName(), sender.getName()); // Never null, check for online
                 // Send message to sender
                 platform.player(sender).sendMessage(crewChat.getMessages().privateMessage().privateMessageSend(chat.getPlayerPrefix(sender),
                         chat.getPlayerPrefix(recipient), recipient.getName(),

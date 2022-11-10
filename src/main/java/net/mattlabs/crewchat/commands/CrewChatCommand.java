@@ -120,8 +120,7 @@ public class CrewChatCommand extends BaseCommand {
         public void onChannel(CommandSender commandSender, @Optional @Single Channel channel) {
             // Check if channel specified
             if (getLastCommandOperationContext().getArgs().length == 0) {
-                if (commandSender instanceof Player) {
-                    Player player = (Player) commandSender;
+                if (commandSender instanceof Player player) {
                     platform.player(player).sendMessage(crewChat.getMessages().crewChatChannelListHeader());
                     for (Channel listChannel : channelManager.getChannels())
                         platform.player(player).sendMessage(crewChat.getMessages().crewChatChannelListEntry(listChannel.getName(), listChannel.getTextColor()));
@@ -246,18 +245,13 @@ public class CrewChatCommand extends BaseCommand {
             Random random = new Random();
             for (int count = 0; count < types.length; count++) {
                 switch (types[count].getTypeName()) {
-                    case "java.lang.String":
-                        args[count] = "{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2) + "}";
-                        break;
-                    case "net.mattlabs.crewchat.adventure.text.Component":
-                        args[count] = Component.text("{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2)+ "}");
-                        break;
-                    case "net.mattlabs.crewchat.adventure.text.format.TextColor":
-                        args[count] = TextColor.color(random.nextFloat(), random.nextFloat(), random.nextFloat());
-                        break;
-                    case "boolean":
-                        args[count] = random.nextBoolean();
-                        break;
+                    case "java.lang.String" ->
+                            args[count] = "{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2) + "}";
+                    case "net.mattlabs.crewchat.adventure.text.Component" ->
+                            args[count] = Component.text("{" + parameters[count].getName() + "-" + RandomStringUtils.randomAlphanumeric(2) + "}");
+                    case "net.mattlabs.crewchat.adventure.text.format.TextColor" ->
+                            args[count] = TextColor.color(random.nextFloat(), random.nextFloat(), random.nextFloat());
+                    case "boolean" -> args[count] = random.nextBoolean();
                 }
             }
             try {

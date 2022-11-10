@@ -31,6 +31,7 @@ package net.mattlabs.crewchat.util.markdown;
  *
  * @since 4.0.0
  */
+@SuppressWarnings("unused")
 public final class Tokens {
     // vanilla components
     public static final String CLICK = "click";

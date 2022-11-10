@@ -13,24 +13,25 @@ public class Config {
 
     // Header fields
     @Setting(value = "_schema-version")
-    @Comment("#######################################################################################################\n" +
-            "    ________  ________  _______   ___       __   ________  ___  ___  ________  _________   \n" +
-            "   |\\   ____\\|\\   __  \\|\\  ___ \\ |\\  \\     |\\  \\|\\   ____\\|\\  \\|\\  \\|\\   __  \\|\\___   ___\\ \n" +
-            "   \\ \\  \\___|\\ \\  \\|\\  \\ \\   __/|\\ \\  \\    \\ \\  \\ \\  \\___|\\ \\  \\\\\\  \\ \\  \\|\\  \\|___ \\  \\_| \n" +
-            "    \\ \\  \\    \\ \\   _  _\\ \\  \\_|/_\\ \\  \\  __\\ \\  \\ \\  \\    \\ \\   __  \\ \\   __  \\   \\ \\  \\  \n" +
-            "     \\ \\  \\____\\ \\  \\\\  \\\\ \\  \\_|\\ \\ \\  \\|\\__\\_\\  \\ \\  \\____\\ \\  \\ \\  \\ \\  \\ \\  \\   \\ \\  \\ \n" +
-            "      \\ \\_______\\ \\__\\\\ _\\\\ \\_______\\ \\____________\\ \\_______\\ \\__\\ \\__\\ \\__\\ \\__\\   \\ \\__\\\n" +
-            "       \\|_______|\\|__|\\|__|\\|_______|\\|____________|\\|_______|\\|__|\\|__|\\|__|\\|__|    \\|__|\n\n" +
+    @Comment("""
+            #######################################################################################################
+                ________  ________  _______   ___       __   ________  ___  ___  ________  _________  \s
+               |\\   ____\\|\\   __  \\|\\  ___ \\ |\\  \\     |\\  \\|\\   ____\\|\\  \\|\\  \\|\\   __  \\|\\___   ___\\\s
+               \\ \\  \\___|\\ \\  \\|\\  \\ \\   __/|\\ \\  \\    \\ \\  \\ \\  \\___|\\ \\  \\\\\\  \\ \\  \\|\\  \\|___ \\  \\_|\s
+                \\ \\  \\    \\ \\   _  _\\ \\  \\_|/_\\ \\  \\  __\\ \\  \\ \\  \\    \\ \\   __  \\ \\   __  \\   \\ \\  \\ \s
+                 \\ \\  \\____\\ \\  \\\\  \\\\ \\  \\_|\\ \\ \\  \\|\\__\\_\\  \\ \\  \\____\\ \\  \\ \\  \\ \\  \\ \\  \\   \\ \\  \\\s
+                  \\ \\_______\\ \\__\\\\ _\\\\ \\_______\\ \\____________\\ \\_______\\ \\__\\ \\__\\ \\__\\ \\__\\   \\ \\__\\
+                   \\|_______|\\|__|\\|__|\\|_______|\\|____________|\\|_______|\\|__|\\|__|\\|__|\\|__|    \\|__|
 
-            "CrewChat Configuration\n" +
-            "By Mattboy9921\n" +
-            "https://github.com/mattboy9921/CrewChat\n\n" +
+            CrewChat Configuration
+            By Mattboy9921
+            https://github.com/mattboy9921/CrewChat
 
-            "This is the main configuration file for CrewChat.\n\n" +
+            This is the main configuration file for CrewChat.
 
-            "#######################################################################################################\n\n" +
+            #######################################################################################################
 
-            "Config version. Do not change this!")
+            Config version. Do not change this!""")
     private int schemaVersion = 0;
 
     @Setting(value = "enable-discordsrv")
@@ -63,8 +64,10 @@ public class Config {
     }
 
     @Setting(value = "channels")
-    @Comment("\nChannel Configuration\n" +
-            "Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes (\"#ff2acb\").")
+    @Comment("""
+
+            Channel Configuration
+            Define each channel here. Text colors can be either a named color or a hex code surrounded by quotes ("#ff2acb").""")
     private Map<String, Channel> channelsMap = new HashMap<>(Collections.singletonMap("Global", new Channel("Global", "Global chat channel", NamedTextColor.WHITE, true, false, false, false)));
 
     public List<Channel> getChannels() {

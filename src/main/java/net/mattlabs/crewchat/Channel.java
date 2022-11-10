@@ -17,6 +17,7 @@ public class Channel {
     private boolean excludeFromDiscord = false;
 
     // Empty constructor for Configurate
+    @SuppressWarnings("unused")
     public Channel() { }
 
     public Channel(String name, String description, TextColor textColor, boolean autoSubscribe, boolean showChannelNameInGame, boolean showChannelNameDiscord, boolean excludeFromDiscord) {
@@ -77,18 +78,22 @@ public class Channel {
 
     // Used reflectively
 
+    @SuppressWarnings("unused")
     public void setAutoSubscribe(boolean autoSubscribe) {
         this.autoSubscribe = autoSubscribe;
     }
 
+    @SuppressWarnings("unused")
     public void setShowChannelNameDiscord(boolean showChannelNameDiscord) {
         this.showChannelNameDiscord = showChannelNameDiscord;
     }
 
+    @SuppressWarnings("unused")
     public void setShowChannelNameInGame(boolean showChannelNameInGame) {
         this.showChannelNameInGame = showChannelNameInGame;
     }
 
+    @SuppressWarnings("unused")
     public void setExcludeFromDiscord(boolean excludeFromDiscord) {
         this.excludeFromDiscord = excludeFromDiscord;
     }

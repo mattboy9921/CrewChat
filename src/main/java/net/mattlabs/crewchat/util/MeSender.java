@@ -31,6 +31,7 @@ public class MeSender implements Runnable {
         CrewChat.getInstance().getServer().getScheduler().runTaskAsynchronously(CrewChat.getInstance(), this);
     }
 
+    @SuppressWarnings("deprecation") // Paper API
     public void run() {
         // In game
         for (Player subbedPlayer : subscribedPlayers)

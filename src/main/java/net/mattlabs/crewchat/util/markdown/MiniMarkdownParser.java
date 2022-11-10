@@ -54,6 +54,7 @@ public final class MiniMarkdownParser {
      * @return the stripped input
      * @since 4.1.0
      */
+    @SuppressWarnings("unused")
     public static @NonNull String stripMarkdown(final @NonNull String input, final @NonNull MarkdownFlavor markdownFlavor) {
         return handle(input, true, markdownFlavor);
     }

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class MsgManager {
 
-    private Map<String, String> replyMap;
+    private final Map<String, String> replyMap;
 
     public MsgManager() {
         replyMap = new HashMap<>();

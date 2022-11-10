@@ -313,11 +313,7 @@ public class CrewChat extends JavaPlugin{
 
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-        if (rsp != null) {
-            rsp.getProvider();
-            return true;
-        }
-        else return false;
+        return rsp != null;
     }
 
     // DiscordSRV Helper Methods

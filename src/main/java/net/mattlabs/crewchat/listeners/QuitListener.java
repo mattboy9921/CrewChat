@@ -14,6 +14,7 @@ public class QuitListener implements Listener {
     private final PlayerManager playerManager  = CrewChat.getInstance().getPlayerManager();
 
     @EventHandler
+    @SuppressWarnings("deprecation") // Paper API
     public void onPlayerQuit(PlayerQuitEvent event) {
         playerManager.updateMutedPlayers();
 

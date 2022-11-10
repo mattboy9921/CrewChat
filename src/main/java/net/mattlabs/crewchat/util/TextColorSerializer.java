@@ -20,7 +20,12 @@ public class TextColorSerializer extends ScalarSerializer<TextColor> {
     public TextColor deserialize(Type type, Object obj) throws SerializationException {
         String value = obj.toString();
         try {
-            if (!value.startsWith("#")) value = NamedTextColor.NAMES.value(value).asHexString();
+            NamedTextColor namedTextColor;
+            if (!value.startsWith("#")) {
+                namedTextColor = NamedTextColor.NAMES.value(value);
+                if (namedTextColor != null) value = namedTextColor.asHexString();
+                else throw new NullPointerException();
+            }
         }
         catch (NullPointerException e) {
             CrewChat.getInstance().getLogger().severe("Failed to convert TextColor: " + value);

@@ -41,6 +41,7 @@ public interface MarkdownFlavor {
      * @return the default flavour
      * @since 4.1.0
      */
+    @SuppressWarnings("unused")
     static MarkdownFlavor defaultFlavor() {
         return DiscordFlavor.get();
     }

@@ -5,6 +5,7 @@ import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.function.Predicate;
 
 public class LocalDateTimeSerializer extends ScalarSerializer<LocalDateTime> {
@@ -18,7 +19,12 @@ public class LocalDateTimeSerializer extends ScalarSerializer<LocalDateTime> {
     public LocalDateTime deserialize(Type type, Object obj) throws SerializationException {
         final String value = obj.toString();
         final LocalDateTime result;
-        result = LocalDateTime.parse(value);
+        try {
+            result = LocalDateTime.parse(value);
+        }
+        catch (DateTimeParseException e) {
+            throw new SerializationException();
+        }
         return result;
     }
 

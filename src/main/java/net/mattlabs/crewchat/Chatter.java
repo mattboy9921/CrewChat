@@ -4,10 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @ConfigSerializable
 public class Chatter {
@@ -19,6 +16,7 @@ public class Chatter {
     private transient boolean deafened;
 
     // Empty constructor for Configurate
+    @SuppressWarnings("unused")
     public Chatter() {}
 
     public Chatter(UUID uuid, String activeChannel, ArrayList<String> subscribedChannels, ArrayList<Mutee> mutedPlayers, String status) {
@@ -90,7 +88,7 @@ public class Chatter {
 
     public void addMutedPlayer(UUID uuid) {
         if (mutedPlayers.containsKey(uuid)) mutedPlayers.get(uuid).updateTime();
-        else mutedPlayers.put(uuid, new Mutee(uuid, CrewChat.getChat().getPlayerPrefix(Bukkit.getPlayer(uuid)), Bukkit.getPlayer(uuid).getName()));
+        else mutedPlayers.put(uuid, new Mutee(uuid, CrewChat.getChat().getPlayerPrefix(Bukkit.getPlayer(uuid)), Objects.requireNonNull(Bukkit.getPlayer(uuid)).getName()));
     }
 
     public void removeMutedPlayer(UUID uuid) {

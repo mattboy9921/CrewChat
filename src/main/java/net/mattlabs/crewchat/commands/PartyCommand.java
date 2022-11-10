@@ -129,9 +129,8 @@ public class PartyCommand extends BaseCommand {
         // Check if party exists
         if (party != null) {
             platform.sender(commandSender).sendMessage(crewChat.getMessages().party().partyPlayerListHeader(party.getName(), party.getTextColor()));
-            playerManager.getSubscribedPlayers(party.getName()).forEach(subbedPlayer -> {
-                platform.sender(commandSender).sendMessage(crewChat.getMessages().party().partyPlayerListEntry(CrewChat.getChat().getPlayerPrefix(subbedPlayer), subbedPlayer.getName()));
-            });
+            playerManager.getSubscribedPlayers(party.getName()).forEach(subbedPlayer ->
+                    platform.sender(commandSender).sendMessage(crewChat.getMessages().party().partyPlayerListEntry(CrewChat.getChat().getPlayerPrefix(subbedPlayer), subbedPlayer.getName())));
         }
         else
             platform.sender(commandSender).sendMessage(crewChat.getMessages().party().partyNoExist(getLastCommandOperationContext().getArgs()[0]));
