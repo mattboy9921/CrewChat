@@ -8,7 +8,7 @@
 
     <groupId>net.mattlabs.crewchat</groupId>
     <artifactId>CrewChat</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <description>
         Chat plugin for CCS
@@ -50,6 +50,11 @@
         </repository>
         <!-- For DiscordSRV -->
         <repository>
+            <id>dv8tion</id>
+            <name>m2-dv8tion</name>
+            <url>https://m2.dv8tion.net/releases</url>
+        </repository>
+        <repository>
             <id>Scarsz-Nexus</id>
             <url>https://nexus.scarsz.me/content/groups/public/</url>
         </repository>
@@ -70,14 +75,14 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.19.1-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- For ACF -->
         <dependency>
             <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
-            <version>0.5.0-SNAPSHOT</version>
+            <version>0.5.1-SNAPSHOT</version>
         </dependency>
         <!-- For Vault -->
         <dependency>
@@ -90,14 +95,14 @@
         <dependency>
             <groupId>com.discordsrv</groupId>
             <artifactId>discordsrv</artifactId>
-            <version>1.25.0</version>
+            <version>1.26.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- For bStats -->
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
         <!-- For Configurate -->
@@ -110,33 +115,33 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
-            <version>4.11.0</version>
+            <version>4.14.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.1.2</version>
+            <version>4.3.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.11.0</version>
+            <version>4.14.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.11.0</version>
+            <version>4.14.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.11.0</version>
+            <version>4.14.0</version>
         </dependency>
         <!-- Jsoup -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.14.3</version>
+            <version>1.16.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -274,7 +279,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.8</version>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>copy</id>

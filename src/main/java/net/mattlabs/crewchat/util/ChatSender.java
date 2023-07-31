@@ -189,10 +189,8 @@ public class ChatSender implements Runnable{
                     // Add channel name (if needed) to name
                     if (channelManager.channelFromString(intendedChannel).isShowChannelNameDiscord()) name = "[" + intendedChannel + "] " + name;
                     WebhookUtil.deliverMessage(DiscordUtil.getTextChannelById(discordChannelID),
-                            name,
-                            DiscordSRV.getAvatarUrl(player),
-                            DiscordUtil.convertMentionsFromNames(MessageUtil.discordMarkdown(message), DiscordSRV.getPlugin().getMainGuild()),
-                            null);
+                            player,
+                            DiscordUtil.convertMentionsFromNames(MessageUtil.discordMarkdown(message), DiscordSRV.getPlugin().getMainGuild()));
                 } else {
                     // Add channel name (if needed) to message
                     String messageStrMD = channelManager.channelFromString(intendedChannel).isShowChannelNameDiscord() ? "[" + intendedChannel + "] " + MessageUtil.discordMarkdown(message) : MessageUtil.discordMarkdown(message);
