@@ -29,8 +29,8 @@ It also adds fun features like muting, deafening, status messages, mentions and 
  - Fully customizable/translatable messages configuration
 
 **Requirements**
-- [Vault](https://github.com/mattboy9921/CrewChat/releases/latest) ([SpigotMC](https://www.spigotmc.org/resources/vault.34315/))
-- [DiscordSRV](https://www.spigotmc.org/resources/vault.34315/) ([SpigotMC](https://www.spigotmc.org/resources/vault.34315/)) (Not required but strongly suggested)
+- [Vault](https://github.com/milkbowl/Vault) ([SpigotMC](https://www.spigotmc.org/resources/vault.34315/))
+- [DiscordSRV](https://github.com/DiscordSRV/DiscordSRV) ([SpigotMC](https://www.spigotmc.org/resources/discordsrv.18494/)) (Not required but strongly suggested)
 
 **Downloads**
 - [SpigotMC Release](https://www.spigotmc.org/resources/crewchat.96107/)
