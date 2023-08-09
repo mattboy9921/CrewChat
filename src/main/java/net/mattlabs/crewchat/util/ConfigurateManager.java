@@ -1,7 +1,8 @@
 package net.mattlabs.crewchat.util;
 
 import io.leangen.geantyref.TypeToken;
-import net.mattlabs.crewchat.CrewChat;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
@@ -21,13 +22,15 @@ public class ConfigurateManager {
 
     @SuppressWarnings("rawtypes")
     private final Map<String, ConfigNode> configMap;
+    private Plugin plugin;
 
-    public ConfigurateManager() {
+    public ConfigurateManager(Plugin plugin) {
         configMap = new HashMap<>();
+        this.plugin = plugin;
 
         // Create Data Directory
         //noinspection ResultOfMethodCallIgnored
-        CrewChat.getInstance().getDataFolder().mkdir();
+        plugin.getDataFolder().mkdir();
     }
 
     // Basic add
@@ -47,7 +50,7 @@ public class ConfigurateManager {
 
     // Add with configuration options and transformations
     public <T> void add(String fileName, TypeToken<T> typeToken, T configSerializable, Supplier<T> configSerializableSupplier, UnaryOperator<ConfigurationOptions> configurationOptions, ConfigurationTransformation.Versioned transformation) {
-        File file = new File(CrewChat.getInstance().getDataFolder(), fileName);
+        File file = new File(plugin.getDataFolder(), fileName);
         ConfigurationLoader<CommentedConfigurationNode> loader =
                 HoconConfigurationLoader.builder()
                         .path(file.toPath())
@@ -63,13 +66,13 @@ public class ConfigurateManager {
         ConfigurationLoader<CommentedConfigurationNode> loader = configNode.getLoader();
 
         if (!file.exists()) {
-            CrewChat.getInstance().getLogger().info("\"" + fileName + "\" file doesn't exist, creating...");
+            Bukkit.getLogger().info("\"" + fileName + "\" file doesn't exist, creating...");
             try {
                 loader.save(loader.createNode().set(configNode.getTypeToken(), configNode.getConfigSerializable()));
             }
             catch (IOException | StackOverflowError e) {
-                CrewChat.getInstance().getLogger().severe("Failed to save \"" + fileName + "\"!");
-                CrewChat.getInstance().getPluginLoader().disablePlugin(CrewChat.getInstance());
+                Bukkit.getLogger().severe("Failed to save \"" + fileName + "\"!");
+                Bukkit.getPluginManager().disablePlugin(plugin);
             }
         }
     }
@@ -83,7 +86,7 @@ public class ConfigurateManager {
             loader.save(loader.createNode().set(configNode.getTypeToken(), configNode.getConfigSerializable()));
         }
         catch (IOException e) {
-            CrewChat.getInstance().getLogger().severe("Failed to save \"" + fileName + "\"!");
+            Bukkit.getLogger().severe("Failed to save \"" + fileName + "\"!");
         }
     }
 
@@ -102,14 +105,14 @@ public class ConfigurateManager {
                 transformation.apply(node);
                 int endVersion = transformation.version(node);
                 if (startVersion != endVersion)
-                    CrewChat.getInstance().getLogger().info("Updated " + fileName + " schema from " + startVersion + " to " + endVersion);
+                    Bukkit.getLogger().info("Updated " + fileName + " schema from " + startVersion + " to " + endVersion);
             }
             // Load
             T t = node.get(configNode.getTypeToken(), configNode.getConfigSerializableSupplier());
             configNode.setConfigSerializable(t);
         }
         catch (IOException e) {
-            CrewChat.getInstance().getLogger().severe("Failed to load \"" + fileName + "\" - using a default!");
+            Bukkit.getLogger().severe("Failed to load \"" + fileName + "\" - using a default!");
         }
     }
 

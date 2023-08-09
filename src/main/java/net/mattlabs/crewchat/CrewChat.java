@@ -91,7 +91,7 @@ public class CrewChat extends JavaPlugin{
         }
 
         // Configuration Section
-        configurateManager = new ConfigurateManager();
+        configurateManager = new ConfigurateManager(this);
 
         configurateManager.add("config.conf", TypeToken.get(Config.class), new Config(), Config::new,
                 opts -> opts.serializers(build -> build.register(TextColor.class, TextColorSerializer.INSTANCE)));
