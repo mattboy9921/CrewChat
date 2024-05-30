@@ -64,9 +64,9 @@
             <url>https://repo.spongepowered.org/maven</url>
         </repository>
         <!-- For Adventure -->
-        <repository> <!-- for development builds -->
-            <id>sonatype-oss</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <repository>
+            <id>sonatype-oss-snapshots1</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
