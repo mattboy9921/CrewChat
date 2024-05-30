@@ -8,7 +8,7 @@
 
     <groupId>net.mattlabs.crewchat</groupId>
     <artifactId>CrewChat</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 
     <description>
         Chat plugin for CCS
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.20.6-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- For ACF -->
@@ -115,27 +115,27 @@
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
-            <version>4.15.0</version>
+            <version>4.17.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
-            <version>4.3.2</version>
+            <version>4.3.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-legacy</artifactId>
-            <version>4.15.0</version>
+            <version>4.17.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.15.0</version>
+            <version>4.17.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.15.0</version>
+            <version>4.17.0</version>
         </dependency>
         <!-- Jsoup -->
         <dependency>
